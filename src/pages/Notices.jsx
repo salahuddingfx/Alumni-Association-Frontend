@@ -2,21 +2,25 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import api from '../api/api';
 import { Megaphone, Pin, X, Calendar, AlertTriangle } from 'lucide-react';
+import NoticeSkeleton from '../components/ui/NoticeSkeleton.jsx';
 
 const Notices = () => {
   const { i18n } = useTranslation();
   const [notices, setNotices] = useState([]);
   const [selectedNotice, setSelectedNotice] = useState(null);
+  const [loading, setLoading] = useState(true);
   const isBn = i18n.language === 'bn';
 
   useEffect(() => {
+    setLoading(true);
     api.get('/notices')
       .then(res => {
         if (res.data.success) {
           setNotices(res.data.data);
         }
       })
-      .catch(err => console.log('Error fetching notices:', err));
+      .catch(err => console.log('Error fetching notices:', err))
+      .finally(() => setLoading(false));
   }, []);
 
   const displayNotices = notices.length > 0 ? notices : [
@@ -50,40 +54,48 @@ const Notices = () => {
       </div>
 
       <div className="space-y-6">
-        {displayNotices.map((notice) => (
-          <div key={notice._id} className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm relative flex flex-col justify-between hover:shadow-md transition">
-            {notice.isSticky && (
-              <span className="absolute top-4 right-4 text-secondary flex items-center space-x-1 text-xs font-bold uppercase">
-                <Pin size={14} className="transform rotate-45" />
-                <span>Featured</span>
-              </span>
-            )}
-            <div>
-              <div className="flex items-center space-x-2.5 mb-2">
-                <span className={`px-2 py-0.5 text-xs font-bold rounded-full uppercase ${
-                  notice.priority === 'high' ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700'
-                }`}>
-                  {notice.priority}
+        {loading ? (
+          Array.from({ length: 3 }).map((_, i) => <NoticeSkeleton key={i} />)
+        ) : displayNotices.length > 0 ? (
+          displayNotices.map((notice) => (
+            <div key={notice._id} className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm relative flex flex-col justify-between hover:shadow-md transition">
+              {notice.isSticky && (
+                <span className="absolute top-4 right-4 text-secondary flex items-center space-x-1 text-xs font-bold uppercase">
+                  <Pin size={14} className="transform rotate-45" />
+                  <span>Featured</span>
                 </span>
-                <span className="text-xs text-gray-500">{new Date(notice.publishDate).toLocaleDateString()}</span>
+              )}
+              <div>
+                <div className="flex items-center space-x-2.5 mb-2">
+                  <span className={`px-2 py-0.5 text-xs font-bold rounded-full uppercase ${
+                    notice.priority === 'high' ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700'
+                  }`}>
+                    {notice.priority}
+                  </span>
+                  <span className="text-xs text-gray-500">{new Date(notice.publishDate).toLocaleDateString()}</span>
+                </div>
+                <h3 className="text-xl font-bold text-primary font-bn">
+                  {isBn ? notice.title.bn : notice.title.en}
+                </h3>
+                <p className="mt-3 text-gray-600 font-bn text-sm line-clamp-2">
+                  {isBn ? notice.content.bn : notice.content.en}
+                </p>
               </div>
-              <h3 className="text-xl font-bold text-primary font-bn">
-                {isBn ? notice.title.bn : notice.title.en}
-              </h3>
-              <p className="mt-3 text-gray-600 font-bn text-sm line-clamp-2">
-                {isBn ? notice.content.bn : notice.content.en}
-              </p>
+              <div className="mt-4 pt-4 border-t border-gray-100 flex justify-end">
+                <button
+                  onClick={() => setSelectedNotice(notice)}
+                  className="text-secondary hover:text-primary text-sm font-bold flex items-center space-x-1"
+                >
+                  <span>{isBn ? 'বিস্তারিত দেখুন' : 'Read Notice Detail'} &rarr;</span>
+                </button>
+              </div>
             </div>
-            <div className="mt-4 pt-4 border-t border-gray-100 flex justify-end">
-              <button
-                onClick={() => setSelectedNotice(notice)}
-                className="text-secondary hover:text-primary text-sm font-bold flex items-center space-x-1"
-              >
-                <span>{isBn ? 'বিস্তারিত দেখুন' : 'Read Notice Detail'} &rarr;</span>
-              </button>
-            </div>
+          ))
+        ) : (
+          <div className="text-center py-12 text-gray-500 font-bn">
+            {isBn ? 'কোনো নোটিশ পাওয়া যায়নি।' : 'No notices found.'}
           </div>
-        ))}
+        )}
       </div>
 
       {/* Notice Detail Preview Modal */}
