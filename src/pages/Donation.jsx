@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import api from '../api/api';
 import { Heart, Landmark, Smartphone, Trophy, UserCheck, ShieldAlert } from 'lucide-react';
+import { useSettings } from '../context/settings.jsx';
 
 const Donation = () => {
   const { i18n } = useTranslation();
+  const { settings } = useSettings();
   const [amount, setAmount] = useState('');
   const [donorName, setDonorName] = useState('');
   const [email, setEmail] = useState('');
@@ -248,6 +250,39 @@ const Donation = () => {
                   style={{ width: `${progressPercent}%` }} 
                 />
               </div>
+            </div>
+          </div>
+
+          {/* Manual Payment Numbers from Settings */}
+          <div className="bg-slate-100 p-6 rounded-2xl border border-gray-200">
+            <h3 className="text-lg font-bold text-primary font-bn flex items-center space-x-2 mb-4">
+              <Smartphone className="text-secondary" size={20} />
+              <span>{isBn ? 'সরাসরি মোবাইল ব্যাংকিং অনুদান' : 'Manual Mobile Donation'}</span>
+            </h3>
+            <div className="space-y-3 text-sm text-gray-700 font-bn">
+              <p className="text-xs text-gray-500 mb-2 leading-relaxed">
+                {isBn 
+                  ? 'আপনারা চাইলে সরাসরি নিচের অ্যাকাউন্টসমূহে "Send Money" বা "Payment" করতে পারেন:' 
+                  : 'You can also directly send money or pay to the following official numbers:'}
+              </p>
+              {settings.bkash && (
+                <div className="flex justify-between p-2.5 bg-white rounded-lg border border-slate-200">
+                  <span className="font-bold text-[#E2125B]">bKash (বিকাশ)</span>
+                  <span className="font-mono text-primary font-bold">{settings.bkash}</span>
+                </div>
+              )}
+              {settings.nagad && (
+                <div className="flex justify-between p-2.5 bg-white rounded-lg border border-slate-200">
+                  <span className="font-bold text-[#F7941D]">Nagad (নগদ)</span>
+                  <span className="font-mono text-primary font-bold">{settings.nagad}</span>
+                </div>
+              )}
+              {settings.rocket && (
+                <div className="flex justify-between p-2.5 bg-white rounded-lg border border-slate-200">
+                  <span className="font-bold text-[#8C3494]">Rocket (রকেট)</span>
+                  <span className="font-mono text-primary font-bold">{settings.rocket}</span>
+                </div>
+              )}
             </div>
           </div>
 
