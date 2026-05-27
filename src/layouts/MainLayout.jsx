@@ -36,8 +36,8 @@ const MainLayout = ({ children }) => {
                 প
               </div>
               <div className="flex flex-col">
-                <span className="text-lg font-bold text-primary font-bn tracking-wide">প্রাক্তন পরিষদ</span>
-                <span className="text-xs text-gray-500 font-medium">Practon Alumni Association</span>
+                <span className="text-lg font-bold text-primary font-bn tracking-wide">প্রাক্তন শিক্ষার্থী পরিষদ</span>
+                <span className="text-xs text-gray-500 font-medium">Dhuapalong Govt. Primary School</span>
               </div>
             </Link>
 
@@ -172,7 +172,7 @@ const MainLayout = ({ children }) => {
                 <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-primary font-bold text-lg">
                   প
                 </div>
-                <span className="text-xl font-bold font-bn tracking-wide">প্রাক্তন পরিষদ</span>
+                <span className="text-xl font-bold font-bn tracking-wide">প্রাক্তন শিক্ষার্থী পরিষদ</span>
               </div>
               <p className="text-gray-400 text-sm leading-relaxed font-bn">
                 ঐতিহ্যবাহী শিক্ষাপ্রতিষ্ঠানের প্রাক্তন শিক্ষার্থীদের একটি সংযোগ ও উন্নয়নের সেতু বন্ধন।
@@ -277,7 +277,7 @@ const MainLayout = ({ children }) => {
           </div>
 
           <div className="mt-12 pt-8 border-t border-slate-800 text-center text-sm text-gray-500">
-            &copy; {new Date().getFullYear()} Practon Alumni Association. All rights reserved.
+            &copy; {new Date().getFullYear()} Dhuapalong Govt. Primary School. All rights reserved.
           </div>
         </div>
       </footer>
