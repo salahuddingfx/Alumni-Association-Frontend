@@ -1,9 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { Send } from 'lucide-react';
 
 const Footer = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const [email, setEmail] = useState('');
+  const [newsletterStatus, setNewsletterStatus] = useState('');
+
+  const handleNewsletterSubmit = (e) => {
+    e.preventDefault();
+    if (email) {
+      setNewsletterStatus(
+        i18n.language === 'bn' 
+          ? 'নিবন্ধন সফল হয়েছে!' 
+          : 'Subscribed successfully!'
+      );
+      setEmail('');
+      setTimeout(() => setNewsletterStatus(''), 4000);
+    }
+  };
 
   const navItems = [
     { path: '/', labelKey: 'home' },
@@ -17,15 +33,15 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="bg-dark text-white relative mt-20 pt-16">
+    <footer className="bg-dark text-white relative mt-28 pt-20">
       {/* Animated wave separator placeholder/SVG */}
-      <div className="absolute top-0 left-0 right-0 w-full overflow-hidden leading-none transform -translate-y-full">
-        <svg className="relative block w-full h-[30px]" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+      <div className="absolute top-0 left-0 right-0 w-full overflow-hidden leading-none transform -translate-y-[98%] pointer-events-none">
+        <svg className="relative block w-full h-[60px] md:h-[80px]" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
           <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V0C26.9,8.75,57.05,18.3,90.35,26.85,160.85,45,228.87,63.7,321.39,56.44Z" className="fill-dark"></path>
         </svg>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-12">
         <div className="grid grid-cols-2 md:grid-cols-6 gap-8">
           {/* About Widget */}
           <div className="col-span-2 md:col-span-2 space-y-4">
@@ -124,16 +140,33 @@ const Footer = () => {
 
           {/* Newsletter / Contact Info */}
           <div className="col-span-2 md:col-span-1 space-y-4">
-            <h3 className="text-white font-bold text-sm uppercase tracking-wider">Contact Info</h3>
+            <h3 className="text-white font-bold text-sm uppercase tracking-wider">Contact & Newsletter</h3>
             <p className="text-sm text-gray-400">Email: info@practonalumni.org</p>
             <p className="text-sm text-gray-400">Phone: +880 1234 567890</p>
-            <div className="pt-2">
-              <input
-                type="email"
-                placeholder="Enter email for Newsletter"
-                className="w-full bg-slate-800 text-white border border-slate-700 px-3 py-2 rounded text-sm focus:outline-none focus:border-secondary"
-              />
-            </div>
+            <form onSubmit={handleNewsletterSubmit} className="pt-2">
+              <div className="relative flex items-center">
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Enter email for Newsletter"
+                  className="w-full bg-slate-800 text-white border border-slate-700 pl-3 pr-10 py-2 rounded text-sm focus:outline-none focus:border-secondary transition-all"
+                  required
+                />
+                <button
+                  type="submit"
+                  className="absolute right-1 top-1 bottom-1 px-3 bg-secondary hover:bg-secondary/90 text-primary font-bold rounded flex items-center justify-center transition-colors"
+                  aria-label="Subscribe"
+                >
+                  <Send size={16} />
+                </button>
+              </div>
+              {newsletterStatus && (
+                <p className="text-xs text-secondary mt-1.5 font-medium animate-fadeIn">
+                  {newsletterStatus}
+                </p>
+              )}
+            </form>
           </div>
         </div>
 
