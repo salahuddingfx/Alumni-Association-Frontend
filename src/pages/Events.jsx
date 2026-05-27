@@ -189,6 +189,10 @@ const Events = () => {
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
+    if (!userImage && !existingPhoto) {
+      alert(isBn ? 'অনুগ্রহ করে আপনার একটি ছবি আপলোড করুন!' : 'Please upload your photo!');
+      return;
+    }
     if (paymentType === 'digital') {
       setShowCheckoutOverlay(true);
       setCheckoutStep(1);
