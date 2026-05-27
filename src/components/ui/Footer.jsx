@@ -36,7 +36,7 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="bg-dark text-white relative mt-28 pt-20">
+    <footer className="bg-dark text-white relative mt-16 pt-12">
       {/* Animated wave separator placeholder/SVG */}
       <div className="absolute top-0 left-0 right-0 w-full overflow-hidden leading-none transform -translate-y-[98%] pointer-events-none">
         <svg className="relative block w-full h-[60px] md:h-[80px]" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
@@ -44,10 +44,10 @@ const Footer = () => {
         </svg>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-8">
         <div className="grid grid-cols-2 md:grid-cols-6 gap-8">
           {/* About Widget */}
-          <div className="col-span-2 md:col-span-2 space-y-4">
+          <div className="col-span-2 md:col-span-2 space-y-3">
             <div className="flex items-center space-x-3">
               <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-primary font-bold text-lg shrink-0">
                 প
@@ -81,8 +81,8 @@ const Footer = () => {
 
           {/* Quick Links */}
           <div className="col-span-1">
-            <h3 className="text-white font-bold text-sm uppercase tracking-wider mb-4">Quick Links</h3>
-            <ul className="space-y-2 text-sm text-gray-400">
+            <h3 className="text-white font-bold text-sm uppercase tracking-wider mb-2">Quick Links</h3>
+            <ul className="space-y-1 text-sm text-gray-400">
               {navItems.slice(0, 4).map((item) => (
                 <li key={item.path}>
                   <Link to={item.path} className="hover:text-secondary transition-colors">
@@ -95,8 +95,8 @@ const Footer = () => {
 
           {/* Dynamic Pages */}
           <div className="col-span-1">
-            <h3 className="text-white font-bold text-sm uppercase tracking-wider mb-4">Information</h3>
-            <ul className="space-y-2 text-sm text-gray-400">
+            <h3 className="text-white font-bold text-sm uppercase tracking-wider mb-2">Information</h3>
+            <ul className="space-y-1 text-sm text-gray-400">
               {navItems.slice(4).map((item) => (
                 <li key={item.path}>
                   <Link to={item.path} className="hover:text-secondary transition-colors">
@@ -124,8 +124,8 @@ const Footer = () => {
 
           {/* Policies Column */}
           <div className="col-span-1">
-            <h3 className="text-white font-bold text-sm uppercase tracking-wider mb-4">Policies</h3>
-            <ul className="space-y-2 text-sm text-gray-400">
+            <h3 className="text-white font-bold text-sm uppercase tracking-wider mb-2">Policies</h3>
+            <ul className="space-y-1 text-sm text-gray-400">
               <li>
                 <Link to="/privacy-policy" className="hover:text-secondary transition-colors">
                   Privacy Policy
@@ -150,8 +150,8 @@ const Footer = () => {
           </div>
 
           {/* Newsletter / Contact Info */}
-          <div className="col-span-2 md:col-span-1 space-y-4">
-            <h3 className="text-white font-bold text-sm uppercase tracking-wider">Contact & Newsletter</h3>
+          <div className="col-span-2 md:col-span-1 space-y-2">
+            <h3 className="text-white font-bold text-sm uppercase tracking-wider mb-2">Contact & Newsletter</h3>
             <p className="text-sm text-gray-400">Email: {settings.email}</p>
             <p className="text-sm text-gray-400">Phone: {settings.phone}</p>
             <form onSubmit={handleNewsletterSubmit} className="pt-2">
@@ -181,7 +181,7 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="mt-12 pt-8 border-t border-slate-800 text-center text-sm text-gray-500">
+        <div className="mt-6 pt-4 border-t border-slate-800 text-center text-sm text-gray-500">
           &copy; {new Date().getFullYear()} {isBn ? settings.schoolNameBn : settings.schoolNameEn}. All rights reserved.
         </div>
       </div>
