@@ -17,10 +17,12 @@ import Policies from './pages/Policies.jsx';
 import UserDashboard from './pages/UserDashboard.jsx';
 import Blog from './pages/Blog.jsx';
 import BlogDetail from './pages/BlogDetail.jsx';
+import ScrollToTop from './components/ScrollToTop.jsx';
 
 const App = () => {
   return (
     <MainLayout>
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
