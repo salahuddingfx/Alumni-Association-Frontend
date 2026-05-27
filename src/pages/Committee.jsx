@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import api from '../api/api';
+import api, { API_URL } from '../api/api';
 import { Mail, Facebook, Linkedin } from 'lucide-react';
 
 const Committee = () => {
@@ -64,7 +64,7 @@ const Committee = () => {
           <div key={member._id} className="bg-white rounded-2xl overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition duration-300">
             <div className="h-64 bg-slate-200 relative flex items-center justify-center">
               {member.image ? (
-                <img src={`${window.API_URL}${member.image}`} className="w-full h-full object-cover" alt={member.name.en} />
+                <img src={`${API_URL}${member.image}`} className="w-full h-full object-cover" alt={member.name.en} />
               ) : (
                 <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-3xl font-bn">
                   {isBn ? member.name.bn[0] : member.name.en[0]}

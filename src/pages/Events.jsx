@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import api from '../api/api';
+import api, { API_URL } from '../api/api';
 import { Calendar, MapPin, X, User, Phone, CheckCircle, Upload, CreditCard } from 'lucide-react';
 import { convertBanglishToBengali } from '../utils/banglish';
 
@@ -95,7 +95,7 @@ const Events = () => {
                 setWhatsappNumber(m.phone);
               }
               if (m.profilePhoto) {
-                const photoUrl = m.profilePhoto.startsWith('http') ? m.profilePhoto : `${window.API_URL}${m.profilePhoto}`;
+                const photoUrl = m.profilePhoto.startsWith('http') ? m.profilePhoto : `${API_URL}${m.profilePhoto}`;
                 setExistingPhoto(photoUrl);
               }
             }

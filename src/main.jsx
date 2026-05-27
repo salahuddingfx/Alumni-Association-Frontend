@@ -6,9 +6,6 @@ import { HelmetProvider } from 'react-helmet-async';
 import App from './App.jsx';
 import './styles/index.css';
 import './i18n/config.js'; // load translations
-
-window.API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {

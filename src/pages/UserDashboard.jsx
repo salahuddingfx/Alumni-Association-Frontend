@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import api from '../api/api';
+import api, { API_URL } from '../api/api';
 import { User, Calendar, LogOut, Ticket, Mail, Phone, Tag, Edit, Save, X, Key, Upload, ShieldAlert, CheckCircle, AlertCircle } from 'lucide-react';
 
 const UserDashboard = () => {
@@ -54,7 +54,7 @@ const UserDashboard = () => {
           setEditPhone(user.phone || '');
           setEditFullName(user.fullName || '');
           if (user.profilePhoto) {
-            setUserPhotoPreview(user.profilePhoto.startsWith('http') ? user.profilePhoto : `${window.API_URL}${user.profilePhoto}`);
+            setUserPhotoPreview(user.profilePhoto.startsWith('http') ? user.profilePhoto : `${API_URL}${user.profilePhoto}`);
           } else {
             setUserPhotoPreview('');
           }
@@ -85,7 +85,7 @@ const UserDashboard = () => {
           setBioBn(m.bio?.bn || '');
           setIsPublic(m.isPublic !== false);
           if (m.profilePhoto) {
-            setProfilePhotoPreview(m.profilePhoto.startsWith('http') ? m.profilePhoto : `${window.API_URL}${m.profilePhoto}`);
+            setProfilePhotoPreview(m.profilePhoto.startsWith('http') ? m.profilePhoto : `${API_URL}${m.profilePhoto}`);
           }
         }
       })
@@ -190,7 +190,7 @@ const UserDashboard = () => {
         fetchProfile(token);
         setMemberMsg(isBn ? 'ডিরেক্টরি প্রোফাইল সফলভাবে আপডেট করা হয়েছে!' : 'Directory profile updated successfully!');
         if (res.data.data.profilePhoto) {
-          setProfilePhotoPreview(res.data.data.profilePhoto.startsWith('http') ? res.data.data.profilePhoto : `${window.API_URL}${res.data.data.profilePhoto}`);
+          setProfilePhotoPreview(res.data.data.profilePhoto.startsWith('http') ? res.data.data.profilePhoto : `${API_URL}${res.data.data.profilePhoto}`);
         }
         setTimeout(() => setMemberMsg(''), 3000);
       }
