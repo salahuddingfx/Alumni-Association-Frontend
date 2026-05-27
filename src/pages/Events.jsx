@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import api, { API_URL } from '../api/api';
 import { Calendar, MapPin, X, User, Phone, CheckCircle, Upload, CreditCard } from 'lucide-react';
+import EventSkeleton from '../components/ui/EventSkeleton.jsx';
 import { convertBanglishToBengali } from '../utils/banglish';
 import { useSettings } from '../context/settings.jsx';
 
@@ -10,6 +11,7 @@ const Events = () => {
   const { settings } = useSettings();
   const [events, setEvents] = useState([]);
   const [registeringEvent, setRegisteringEvent] = useState(null);
+  const [loading, setLoading] = useState(true);
   
   // Registration Form State
   const [fullName, setFullName] = useState('');
@@ -98,13 +100,15 @@ const Events = () => {
   const totalFee = currentFee + processingFee;
 
   useEffect(() => {
+    setLoading(true);
     api.get('/events')
       .then(res => {
         if (res.data.success) {
           setEvents(res.data.data);
         }
       })
-      .catch(err => console.log('Error fetching events:', err));
+      .catch(err => console.log('Error fetching events:', err))
+      .finally(() => setLoading(false));
   }, []);
 
   // Lock body scroll when event modal is open
@@ -299,45 +303,53 @@ const Events = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {displayEvents.map((event) => (
-          <div key={event._id} className="bg-white rounded-2xl overflow-hidden border border-gray-200 shadow-sm flex flex-col hover:shadow-md transition">
-            <div className="h-48 bg-primary/10 relative flex items-center justify-center">
-              <span className="absolute top-4 left-4 bg-secondary text-white text-xs font-bold px-3 py-1 rounded-full uppercase">
-                {event.category}
-              </span>
-              <Calendar size={48} className="text-primary/30" />
-            </div>
-            <div className="p-6 flex-grow flex flex-col justify-between">
-              <div>
-                <h3 className="font-bold text-xl text-primary font-bn">
-                  {isBn ? event.title.bn : event.title.en}
-                </h3>
-                <p className="mt-2 text-sm text-gray-600 font-bn">
-                  {isBn ? event.description.bn : event.description.en}
-                </p>
+        {loading ? (
+          Array.from({ length: 4 }).map((_, i) => <EventSkeleton key={i} />)
+        ) : displayEvents.length > 0 ? (
+          displayEvents.map((event) => (
+            <div key={event._id} className="bg-white rounded-2xl overflow-hidden border border-gray-200 shadow-sm flex flex-col hover:shadow-md transition">
+              <div className="h-48 bg-primary/10 relative flex items-center justify-center">
+                <span className="absolute top-4 left-4 bg-secondary text-white text-xs font-bold px-3 py-1 rounded-full uppercase">
+                  {event.category}
+                </span>
+                <Calendar size={48} className="text-primary/30" />
               </div>
-              <div className="mt-6 pt-4 border-t border-gray-100 flex flex-col sm:flex-row justify-between text-xs text-gray-500 space-y-4 sm:space-y-0 sm:items-center">
-                <div className="space-y-1">
-                  <div className="flex items-center space-x-1">
-                    <Calendar size={12} />
-                    <span>{new Date(event.date).toLocaleDateString()}</span>
-                  </div>
-                  <div className="flex items-center space-x-1">
-                    <MapPin size={12} />
-                    <span className="font-bn">{isBn ? event.location.bn : event.location.en}</span>
-                  </div>
+              <div className="p-6 flex-grow flex flex-col justify-between">
+                <div>
+                  <h3 className="font-bold text-xl text-primary font-bn">
+                    {isBn ? event.title.bn : event.title.en}
+                  </h3>
+                  <p className="mt-2 text-sm text-gray-600 font-bn">
+                    {isBn ? event.description.bn : event.description.en}
+                  </p>
                 </div>
-                
-                <button
-                  onClick={() => setRegisteringEvent(event)}
-                  className="bg-secondary hover:bg-yellow-500 text-white font-bold px-5 py-2 rounded-full shadow transition text-xs uppercase tracking-wide text-center"
-                >
-                  {isBn ? 'নিবন্ধন করুন' : 'Register Now'}
-                </button>
+                <div className="mt-6 pt-4 border-t border-gray-100 flex flex-col sm:flex-row justify-between text-xs text-gray-500 space-y-4 sm:space-y-0 sm:items-center">
+                  <div className="space-y-1">
+                    <div className="flex items-center space-x-1">
+                      <Calendar size={12} />
+                      <span>{new Date(event.date).toLocaleDateString()}</span>
+                    </div>
+                    <div className="flex items-center space-x-1">
+                      <MapPin size={12} />
+                      <span className="font-bn">{isBn ? event.location.bn : event.location.en}</span>
+                    </div>
+                  </div>
+                  
+                  <button
+                    onClick={() => setRegisteringEvent(event)}
+                    className="bg-secondary hover:bg-yellow-500 text-white font-bold px-5 py-2 rounded-full shadow transition text-xs uppercase tracking-wide text-center"
+                  >
+                    {isBn ? 'নিবন্ধন করুন' : 'Register Now'}
+                  </button>
+                </div>
               </div>
             </div>
+          ))
+        ) : (
+          <div className="col-span-full text-center py-12 text-gray-500 font-bn">
+            {isBn ? 'কোনো ইভেন্ট পাওয়া যায়নি।' : 'No events found.'}
           </div>
-        ))}
+        )}
       </div>
 
       {/* Event Registration Modal Form */}
