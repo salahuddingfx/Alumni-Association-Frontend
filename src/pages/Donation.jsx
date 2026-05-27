@@ -86,8 +86,8 @@ const Donation = () => {
     }
   ];
 
-  const currentStats = stats.totalAmount > 0 ? stats : { totalAmount: 120000, totalCount: 3 };
-  const donationsList = recentDonations.length > 0 ? recentDonations : mockDonations;
+  const currentStats = stats;
+  const donationsList = recentDonations;
 
   // Calculate percentages
   const progressPercent = Math.min((currentStats.totalAmount / targetAmount) * 100, 100);
@@ -259,37 +259,43 @@ const Donation = () => {
             </h3>
 
             <div className="space-y-3">
-              {donationsList.map((d, index) => {
-                const isAnon = d.isAnonymous;
-                const name = isAnon 
-                  ? (isBn ? 'বেনামী দাতা' : 'Anonymous Donor') 
-                  : (isBn ? d.donorName.bn : d.donorName.en);
+              {donationsList.length > 0 ? (
+                donationsList.map((d, index) => {
+                  const isAnon = d.isAnonymous;
+                  const name = isAnon 
+                    ? (isBn ? 'বেনামী দাতা' : 'Anonymous Donor') 
+                    : (isBn ? d.donorName.bn : d.donorName.en);
 
-                return (
-                  <div key={d._id || index} className="flex items-center justify-between p-3 rounded-xl border border-slate-50 hover:bg-slate-50 transition-colors">
-                    <div className="flex items-center space-x-3">
-                      {isAnon ? (
-                        <div className="w-9 h-9 rounded-lg bg-slate-100 text-slate-400 flex items-center justify-center">
-                          <ShieldAlert size={18} />
+                  return (
+                    <div key={d._id || index} className="flex items-center justify-between p-3 rounded-xl border border-slate-50 hover:bg-slate-50 transition-colors">
+                      <div className="flex items-center space-x-3">
+                        {isAnon ? (
+                          <div className="w-9 h-9 rounded-lg bg-slate-100 text-slate-400 flex items-center justify-center">
+                            <ShieldAlert size={18} />
+                          </div>
+                        ) : (
+                          <div className="w-9 h-9 rounded-lg bg-secondary/10 text-secondary font-extrabold flex items-center justify-center text-sm">
+                            {name ? name[0] : 'U'}
+                          </div>
+                        )}
+                        <div>
+                          <span className="block font-bold text-sm text-primary font-bn">{name}</span>
+                          <span className="text-[10px] text-gray-400">
+                            {new Date(d.createdAt || d.date).toLocaleDateString()}
+                          </span>
                         </div>
-                      ) : (
-                        <div className="w-9 h-9 rounded-lg bg-secondary/10 text-secondary font-extrabold flex items-center justify-center text-sm">
-                          {name[0]}
-                        </div>
-                      )}
-                      <div>
-                        <span className="block font-bold text-sm text-primary font-bn">{name}</span>
-                        <span className="text-[10px] text-gray-400">
-                          {new Date(d.createdAt).toLocaleDateString()}
-                        </span>
                       </div>
+                      <span className="font-extrabold text-sm text-secondary">
+                        ৳{d.amount.toLocaleString()}
+                      </span>
                     </div>
-                    <span className="font-extrabold text-sm text-secondary">
-                      ৳{d.amount.toLocaleString()}
-                    </span>
-                  </div>
-                );
-              })}
+                  );
+                })
+              ) : (
+                <div className="text-center py-6 text-xs text-gray-500 font-semibold font-bn">
+                  {isBn ? 'এখনো কোনো অনুদান পাওয়া যায়নি।' : 'No donations recorded yet.'}
+                </div>
+              )}
             </div>
           </div>
 

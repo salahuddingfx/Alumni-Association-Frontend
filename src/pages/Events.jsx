@@ -22,6 +22,7 @@ const Events = () => {
   const [email, setEmail] = useState('');
   const [fullAddress, setFullAddress] = useState('');
   const [userImage, setUserImage] = useState(null);
+  const [existingPhoto, setExistingPhoto] = useState('');
   const [paymentType, setPaymentType] = useState('cash'); // 'cash' or 'digital'
   const [digitalProvider, setDigitalProvider] = useState('bKash'); // 'bKash' or 'Nagad'
   
@@ -55,6 +56,53 @@ const Events = () => {
     return () => {
       document.body.style.overflow = 'unset';
     };
+  }, [registeringEvent]);
+
+  // Auto-populate user and member details when registering for an event
+  useEffect(() => {
+    if (registeringEvent) {
+      const token = localStorage.getItem('accessToken');
+      if (token) {
+        // Fetch user auth details
+        axios.get('http://localhost:5000/api/v1/auth/me', {
+          headers: { Authorization: `Bearer ${token}` }
+        })
+          .then(res => {
+            if (res.data.success && res.data.data?.user) {
+              const u = res.data.data.user;
+              if (u.email) setEmail(u.email);
+              if (u.phone) {
+                setContactNumber(u.phone);
+                setWhatsappNumber(u.phone);
+              }
+            }
+          })
+          .catch(err => console.log('Error fetching user auth for event registration:', err));
+
+        // Fetch member profile details
+        axios.get('http://localhost:5000/api/v1/members/my/profile', {
+          headers: { Authorization: `Bearer ${token}` }
+        })
+          .then(res => {
+            if (res.data.success && res.data.data) {
+              const m = res.data.data;
+              if (m.name?.en) setFullName(m.name.en);
+              else if (m.name?.bn) setFullName(m.name.bn);
+              
+              if (m.pscBatch) setPscBatch(m.pscBatch);
+              if (m.phone) {
+                setContactNumber(m.phone);
+                setWhatsappNumber(m.phone);
+              }
+              if (m.profilePhoto) {
+                const photoUrl = m.profilePhoto.startsWith('http') ? m.profilePhoto : `http://localhost:5000${m.profilePhoto}`;
+                setExistingPhoto(photoUrl);
+              }
+            }
+          })
+          .catch(err => console.log('Error fetching member profile for event registration:', err));
+      }
+    }
   }, [registeringEvent]);
 
   const displayEvents = events.length > 0 ? events : [
@@ -106,6 +154,8 @@ const Events = () => {
       
       if (userImage) {
         formData.append('userImage', userImage);
+      } else if (existingPhoto) {
+        formData.append('userImage', existingPhoto);
       }
 
       const res = await axios.post(
@@ -136,6 +186,7 @@ const Events = () => {
     setEmail('');
     setFullAddress('');
     setUserImage(null);
+    setExistingPhoto('');
     setPaymentType('cash');
     setShowCheckoutOverlay(false);
     setCheckoutStep(1);
@@ -245,7 +296,7 @@ const Events = () => {
             </div>
 
             {/* Modal Content / Form */}
-            <div className="p-8 max-h-[70vh] overflow-y-auto relative">
+            <div className="p-8 max-h-[70vh] overflow-y-auto relative custom-scrollbar">
               
               {/* simulated checkout overlay */}
               {showCheckoutOverlay && (
@@ -496,16 +547,32 @@ const Events = () => {
                   </div>
 
                   {/* Profile Photo Upload */}
-                  <div className="bg-slate-50 p-4 rounded-lg border border-dashed border-gray-300 text-center">
-                    <label className="cursor-pointer block">
+                  <div className="bg-slate-50 p-4 rounded-lg border border-dashed border-gray-300 text-center flex flex-col items-center justify-center">
+                    {userImage ? (
+                      <div className="mb-2 relative">
+                        <img src={URL.createObjectURL(userImage)} alt="Selected preview" className="w-16 h-16 object-cover rounded-full border border-gray-300" />
+                        <button type="button" onClick={() => setUserImage(null)} className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full p-0.5 hover:bg-red-600">
+                          <X size={12} />
+                        </button>
+                      </div>
+                    ) : existingPhoto ? (
+                      <div className="mb-2 relative">
+                        <img src={existingPhoto} alt="Profile preview" className="w-16 h-16 object-cover rounded-full border border-gray-300" />
+                        <span className="text-[10px] bg-emerald-500 text-white px-2 py-0.5 rounded-full absolute -bottom-1 left-1/2 -translate-x-1/2 truncate whitespace-nowrap">Profile Photo</span>
+                      </div>
+                    ) : (
                       <Upload className="mx-auto text-primary mb-2" size={24} />
-                      <span className="text-xs font-bold text-primary block uppercase">Upload Member Photo</span>
+                    )}
+                    <label className="cursor-pointer block">
+                      <span className="text-xs font-bold text-primary block uppercase">
+                        {existingPhoto ? 'Change Photo' : 'Upload Member Photo'}
+                      </span>
                       <input
                         type="file"
                         accept="image/*"
                         className="hidden"
                         onChange={e => setUserImage(e.target.files[0])}
-                        required
+                        required={!existingPhoto}
                       />
                     </label>
                     {userImage && <span className="text-xs text-gray-500 font-semibold mt-1 block">Selected: {userImage.name}</span>}

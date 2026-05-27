@@ -1,11 +1,14 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, useScroll, useTransform } from 'framer-motion';
+import axios from 'axios';
 
 const About = () => {
   const { i18n } = useTranslation();
   const isBn = i18n.language === 'bn';
   const containerRef = useRef(null);
+  const [timelineEvents, setTimelineEvents] = useState([]);
+  const [advisors, setAdvisors] = useState([]);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -14,7 +17,7 @@ const About = () => {
 
   const scaleY = useTransform(scrollYProgress, [0, 1], [0, 1]);
 
-  const timelineEvents = [
+  const defaultTimeline = [
     {
       year: isBn ? '২০২৫ (জানুয়ারি)' : 'January 2025',
       titleEn: 'Foundation & Setup',
@@ -34,7 +37,7 @@ const About = () => {
       titleEn: 'Advisory Panel Selection',
       titleBn: 'উপদেষ্টা পরিষদ ও আহ্বায়ক কমিটি গঠন',
       descEn: 'Selection of our respected advisory panel and operational core committee to manage general tasks.',
-      descBn: 'সংগঠনের সঠিক দিকনির্দেশনা ও দৈনন্দিন কার্যক্রম পরিচালনায় সম্মানিত উপদেষ্টা পরিষদ গঠন।'
+      descBn: 'সংগঠনের সঠিক দিকনির্দেশনা ও দৈনন্দิน কার্যক্রম পরিচালনায় সম্মানিত উপদেষ্টা পরিষদ গঠন।'
     },
     {
       year: isBn ? '২০২৫ (ডিসেম্বর)' : 'December 2025',
@@ -73,6 +76,60 @@ const About = () => {
     }
   ];
 
+  const defaultAdvisors = [
+    {
+      titleEn: 'Message from Chief Advisor',
+      titleBn: 'প্রধান উপদেষ্টার বাণী',
+      messageEn: '"The success of our alumni is always our pride. Together, we will elevate this association to greater heights."',
+      messageBn: '"আমাদের প্রাক্তন শিক্ষার্থীদের সাফল্য সবসময় আমাদের অনুপ্রেরণা জোগায়। আমরা সবাই একত্রিত হয়ে এই পরিষদকে আরও উচ্চতায় নিয়ে যাবো।"',
+      nameEn: 'Prof. Dr. Abdul Karim',
+      nameBn: 'অধ্যাপক ড. আব্দুল করিম',
+      roleEn: 'Chief Advisor',
+      roleBn: 'প্রধান উপদেষ্টা'
+    },
+    {
+      titleEn: 'Message from General Secretary',
+      titleBn: 'সাধারণ সম্পাদকের বার্তা',
+      messageEn: '"This association is not just an organization, it is an emotion and a family. Let us work shoulder to shoulder."',
+      messageBn: '"প্রাক্তন পরিষদ শুধু একটি সংগঠন নয়, এটি আমাদের আবেগ ও সংস্কৃতির অবিচ্ছেদ্য অংশ। আসুন সবাই কাঁধে কাঁধ মিলিয়ে কাজ করি।"',
+      nameEn: 'Ashraful Islam',
+      nameBn: 'জনাব আশরাফুল ইসলাম',
+      roleEn: 'General Secretary',
+      roleBn: 'সাধারণ সম্পাদক'
+    }
+  ];
+
+  useEffect(() => {
+    // Fetch timeline events
+    axios.get('http://localhost:5000/api/v1/settings/timeline_events')
+      .then(res => {
+        if (res.data.success && res.data.data && Array.isArray(res.data.data.events) && res.data.data.events.length > 0) {
+          setTimelineEvents(res.data.data.events);
+        } else {
+          setTimelineEvents(defaultTimeline);
+        }
+      })
+      .catch(() => {
+        setTimelineEvents(defaultTimeline);
+      });
+
+    // Fetch advisor messages
+    axios.get('http://localhost:5000/api/v1/settings/advisor_messages')
+      .then(res => {
+        if (res.data.success && res.data.data && Array.isArray(res.data.data.advisors) && res.data.data.advisors.length > 0) {
+          setAdvisors(res.data.data.advisors);
+        } else {
+          setAdvisors(defaultAdvisors);
+        }
+      })
+      .catch(() => {
+        setAdvisors(defaultAdvisors);
+      });
+  }, []);
+
+  const displayTimeline = timelineEvents.length > 0 ? timelineEvents : defaultTimeline;
+  const displayAdvisors = advisors.length > 0 ? advisors : defaultAdvisors;
+
   return (
     <div className="py-16 px-6 max-w-7xl mx-auto space-y-20 overflow-hidden">
       {/* Page Header */}
@@ -99,7 +156,7 @@ const About = () => {
         />
 
         <div className="space-y-12">
-          {timelineEvents.map((event, index) => {
+          {displayTimeline.map((event, index) => {
             const isEven = index % 2 === 0;
             return (
               <div key={index} className="relative flex flex-col md:flex-row items-center justify-between w-full">
@@ -164,37 +221,29 @@ const About = () => {
 
       {/* Advisor Messages */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12 pt-10">
-        <div className="bg-slate-100 p-8 rounded-2xl border border-gray-200">
-          <h3 className="text-xl font-bold text-primary font-bn">{isBn ? 'প্রধান উপদেষ্টার বাণী' : 'Message from Chief Advisor'}</h3>
-          <p className="mt-4 text-gray-600 italic font-bn">
-            {isBn
-              ? '"আমাদের প্রাক্তন শিক্ষার্থীদের সাফল্য সবসময় আমাদের অনুপ্রেরণা জোগায়। আমরা সবাই একত্রিত হয়ে এই পরিষদকে আরও উচ্চতায় নিয়ে যাবো।"'
-              : '"The success of our alumni is always our pride. Together, we will elevate this association to greater heights."'}
-          </p>
-          <div className="mt-6 flex items-center space-x-3">
-            <div className="w-12 h-12 bg-primary rounded-full" />
-            <div>
-              <span className="block font-bold text-dark font-bn">{isBn ? 'অধ্যাপক ড. আব্দুল করিম' : 'Prof. Dr. Abdul Karim'}</span>
-              <span className="text-xs text-gray-500">Chief Advisor</span>
+        {displayAdvisors.map((advisor, idx) => (
+          <div key={idx} className="bg-slate-100 p-8 rounded-2xl border border-gray-200">
+            <h3 className="text-xl font-bold text-primary font-bn">
+              {isBn ? advisor.titleBn : advisor.titleEn}
+            </h3>
+            <p className="mt-4 text-gray-600 italic font-bn">
+              {isBn ? advisor.messageBn : advisor.messageEn}
+            </p>
+            <div className="mt-6 flex items-center space-x-3">
+              <div className="w-12 h-12 bg-primary rounded-full shrink-0 overflow-hidden flex items-center justify-center text-white font-bold">
+                {advisor.nameEn ? advisor.nameEn[0] : 'A'}
+              </div>
+              <div>
+                <span className="block font-bold text-dark font-bn">
+                  {isBn ? advisor.nameBn : advisor.nameEn}
+                </span>
+                <span className="text-xs text-gray-500 font-bn">
+                  {isBn ? advisor.roleBn : advisor.roleEn}
+                </span>
+              </div>
             </div>
           </div>
-        </div>
-
-        <div className="bg-slate-100 p-8 rounded-2xl border border-gray-200">
-          <h3 className="text-xl font-bold text-primary font-bn">{isBn ? 'সাধারণ সম্পাদকের বার্তা' : 'Message from General Secretary'}</h3>
-          <p className="mt-4 text-gray-600 italic font-bn">
-            {isBn
-              ? '"প্রাক্তন পরিষদ শুধু একটি সংগঠন নয়, এটি আমাদের আবেগ ও সংস্কৃতির অবিচ্ছেদ্য অংশ। আসুন সবাই কাঁধে কাঁধ মিলিয়ে কাজ করি।"'
-              : '"This association is not just an organization, it is an emotion and a family. Let us work shoulder to shoulder."'}
-          </p>
-          <div className="mt-6 flex items-center space-x-3">
-            <div className="w-12 h-12 bg-primary rounded-full" />
-            <div>
-              <span className="block font-bold text-dark font-bn">{isBn ? 'জনাব আশরাফুল ইসলাম' : 'Ashraful Islam'}</span>
-              <span className="text-xs text-gray-500">General Secretary</span>
-            </div>
-          </div>
-        </div>
+        ))}
       </div>
     </div>
   );

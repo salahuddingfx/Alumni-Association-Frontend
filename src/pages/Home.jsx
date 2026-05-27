@@ -16,14 +16,88 @@ const Home = () => {
   const { t, i18n } = useTranslation();
   const [notices, setNotices] = useState([]);
   const [countdown, setCountdown] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+  const [stats, setStats] = useState({ totalAmount: 0, totalCount: 0 });
+  const [membersCount, setMembersCount] = useState(0);
+  const [eventsCount, setEventsCount] = useState(0);
+  const [targetEvent, setTargetEvent] = useState(null);
+  const [slides, setSlides] = useState([]);
+  const isBn = i18n.language === 'bn';
 
-  // Mock Target Date: Dec 31, 2026 for reunion countdown
+  const targetAmount = 1000000; // Target is ৳১০,০০,০০০ BDT
+
+  // Fetch notices, stats, members, events, and hero slides
   useEffect(() => {
-    const target = new Date('2026-12-31T23:59:59').getTime();
+    // 1. Notices
+    axios.get('http://localhost:5000/api/v1/notices')
+      .then(res => {
+        if (res.data.success) {
+          setNotices(res.data.data.slice(0, 3));
+        }
+      })
+      .catch(err => console.log('Error fetching notices:', err));
+
+    // 2. Donation Stats
+    axios.get('http://localhost:5000/api/v1/donations/stats')
+      .then(res => {
+        if (res.data.success) {
+          setStats(res.data.data);
+        }
+      })
+      .catch(err => console.log('Error fetching donation stats:', err));
+
+    // 3. Members Count
+    axios.get('http://localhost:5000/api/v1/members')
+      .then(res => {
+        if (res.data.success && Array.isArray(res.data.data)) {
+          setMembersCount(res.data.data.length);
+        }
+      })
+      .catch(err => console.log('Error fetching members count:', err));
+
+    // 4. Events Count & Target Countdown Event
+    axios.get('http://localhost:5000/api/v1/events')
+      .then(res => {
+        if (res.data.success && Array.isArray(res.data.data)) {
+          setEventsCount(res.data.data.length);
+          
+          // Find the nearest upcoming event
+          const now = new Date().getTime();
+          const upcoming = res.data.data
+            .filter(e => new Date(e.date).getTime() > now)
+            .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+          
+          if (upcoming.length > 0) {
+            setTargetEvent(upcoming[0]);
+          }
+        }
+      })
+      .catch(err => console.log('Error fetching events:', err));
+
+    // 5. Hero Slides
+    axios.get('http://localhost:5000/api/v1/settings/hero_slides')
+      .then(res => {
+        if (res.data.success && res.data.data && Array.isArray(res.data.data.slides)) {
+          setSlides(res.data.data.slides);
+        }
+      })
+      .catch(err => console.log('Error fetching hero slides:', err));
+  }, []);
+
+  // Countdown timer effect
+  useEffect(() => {
+    // Target date: nearest upcoming event or fallback to Dec 31, 2026
+    const targetDateStr = targetEvent ? targetEvent.date : '2026-12-31T23:59:59';
+    const target = new Date(targetDateStr).getTime();
 
     const interval = setInterval(() => {
       const now = new Date().getTime();
       const difference = target - now;
+
+      if (difference <= 0) {
+        clearInterval(interval);
+        setCountdown({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+        return;
+      }
 
       const d = Math.floor(difference / (1000 * 60 * 60 * 24));
       const h = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -34,20 +108,57 @@ const Home = () => {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [targetEvent]);
 
-  // Fetch notices
-  useEffect(() => {
-    axios.get('http://localhost:5000/api/v1/notices')
-      .then(res => {
-        if (res.data.success) {
-          setNotices(res.data.data.slice(0, 3));
-        }
-      })
-      .catch(err => console.log('Error fetching notices:', err));
-  }, []);
+  const progressPercent = Math.min((stats.totalAmount / targetAmount) * 100, 100);
 
-  const currentLang = i18n.language;
+  // Convert numbers to Bengali string helper
+  const toBnNum = (num) => {
+    if (!isBn) return num.toLocaleString();
+    const bnDigits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
+    return num.toString().replace(/\d/g, d => bnDigits[d]);
+  };
+
+  const defaultSlides = [
+    {
+      image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=1200",
+      titleBn: "স্বাগতম প্রাক্তন পরিষদে",
+      titleEn: "Welcome to Practon Alumni Association",
+      subtitleBn: "আমাদের সকল প্রাক্তন শিক্ষার্থীদের ঐক্যবদ্ধ করার লক্ষ্যে পরিষদের পথচলা।",
+      subtitleEn: "Connecting alumni, fostering friendships, and supporting our alma mater.",
+      btnTextBn: "যুক্ত হোন",
+      btnTextEn: "Join Us",
+      btnLink: "/register",
+      hasCountdown: false,
+      hasDonation: false
+    },
+    {
+      image: "https://images.unsplash.com/photo-1511578314322-379afb476865?q=80&w=1200",
+      titleBn: targetEvent ? targetEvent.title.bn : "বার্ষিক পুনর্মিলনী অনুষ্ঠান ২০২৬",
+      titleEn: targetEvent ? targetEvent.title.en : "Annual Reunion Ceremony 2026",
+      subtitleBn: targetEvent ? "অনুষ্ঠানটি শুরু হতে আর মাত্র বাকি:" : "Annual Reunion is approaching. Register today!",
+      subtitleEn: targetEvent ? "Countdown to the event:" : "Annual Reunion is approaching. Register today!",
+      btnTextBn: "নিবন্ধন করুন",
+      btnTextEn: "Register Now",
+      btnLink: "/events",
+      hasCountdown: true,
+      hasDonation: false
+    },
+    {
+      image: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=1200",
+      titleBn: "অনুদান তহবিল ও কল্যাণ ফান্ড",
+      titleEn: "Alumni Welfare & Support Fund",
+      subtitleBn: "ছাত্রবৃত্তি ফান্ড, জরুরি সংকটকালীন ত্রাণ ও ভবিষ্যৎ রিইউনিয়ন সফল করার কার্যক্রমে অনুদান দিন।",
+      subtitleEn: "Make a contribution to fuel student scholarships, emergency relief, and upcoming reunion events.",
+      btnTextBn: "অনুদান দিন",
+      btnTextEn: "Donate Now",
+      btnLink: "/donation",
+      hasCountdown: false,
+      hasDonation: true
+    }
+  ];
+
+  const displaySlides = slides.length > 0 ? slides : defaultSlides;
 
   return (
     <div className="overflow-x-hidden font-english">
@@ -60,94 +171,73 @@ const Home = () => {
           pagination={{ clickable: true }}
           className="h-full w-full"
         >
-          {/* Slide 1 - Welcome */}
-          <SwiperSlide className="relative flex items-center justify-center bg-gradient-to-r from-dark to-primary/80">
-            <div className="absolute inset-0 bg-cover bg-center opacity-30" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=1200')" }} />
-            <div className="relative z-10 max-w-7xl mx-auto px-6 h-full flex flex-col justify-center text-left text-white">
-              <motion.h1
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8 }}
-                className="text-4xl sm:text-6xl font-extrabold font-bn leading-tight"
-              >
-                {t('hero.welcome')}
-              </motion.h1>
-              <motion.p
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.2 }}
-                className="mt-4 max-w-2xl text-lg text-gray-200"
-              >
-                {t('hero.subtitle')}
-              </motion.p>
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.4 }}
-                className="mt-8 flex flex-wrap gap-4"
-              >
-                <Link to="/register" className="bg-secondary hover:bg-yellow-500 text-white font-bold px-8 py-3 rounded-full flex items-center space-x-2 transition shadow-lg">
-                  <span>{t('hero.join')}</span>
-                  <ArrowRight size={18} />
-                </Link>
-                <Link to="/events" className="border-2 border-white hover:bg-white hover:text-dark text-white font-bold px-8 py-3 rounded-full transition">
-                  {t('hero.explore')}
-                </Link>
-              </motion.div>
-            </div>
-          </SwiperSlide>
+          {displaySlides.map((slide, idx) => (
+            <SwiperSlide key={idx} className="relative flex items-center justify-center bg-gradient-to-r from-dark to-primary/85">
+              <div className="absolute inset-0 bg-cover bg-center opacity-30" style={{ backgroundImage: `url('${slide.image}')` }} />
+              <div className="relative z-10 max-w-7xl mx-auto px-6 h-full flex flex-col justify-center text-left text-white w-full">
+                <motion.h1
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8 }}
+                  className="text-4xl sm:text-6xl font-extrabold font-bn leading-tight max-w-4xl"
+                >
+                  {isBn ? slide.titleBn : slide.titleEn}
+                </motion.h1>
+                <motion.p
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.2 }}
+                  className="mt-4 max-w-2xl text-lg text-gray-200 font-bn"
+                >
+                  {isBn ? slide.subtitleBn : slide.subtitleEn}
+                </motion.p>
 
-          {/* Slide 2 - Reunion Countdown */}
-          <SwiperSlide className="relative flex items-center justify-center bg-gradient-to-r from-dark to-primary/95">
-            <div className="absolute inset-0 bg-cover bg-center opacity-25" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1511578314322-379afb476865?q=80&w=1200')" }} />
-            <div className="relative z-10 max-w-7xl mx-auto px-6 h-full flex flex-col justify-center items-center text-center text-white">
-              <h2 className="text-3xl sm:text-5xl font-bold font-bn">বার্ষিক পুনর্মিলনী অনুষ্ঠান ২০২৬</h2>
-              <p className="mt-2 text-gray-300">Annual Reunion Ceremony 2026 is approaching. Register today!</p>
-              
-              {/* Countdown Board */}
-              <div className="mt-8 grid grid-cols-4 gap-4 max-w-lg">
-                {[
-                  { label: 'Days', val: countdown.days },
-                  { label: 'Hours', val: countdown.hours },
-                  { label: 'Mins', val: countdown.minutes },
-                  { label: 'Secs', val: countdown.seconds },
-                ].map((item, i) => (
-                  <div key={i} className="bg-white/10 backdrop-blur-md rounded-lg p-3 sm:p-5 border border-white/20">
-                    <span className="block text-2xl sm:text-4xl font-bold text-secondary">{item.val}</span>
-                    <span className="text-xs uppercase text-gray-300 font-medium">{item.label}</span>
+                {/* Countdown Board */}
+                {slide.hasCountdown && (
+                  <div className="mt-8 grid grid-cols-4 gap-4 max-w-lg">
+                    {[
+                      { label: isBn ? 'দিন' : 'Days', val: countdown.days },
+                      { label: isBn ? 'ঘণ্টা' : 'Hours', val: countdown.hours },
+                      { label: isBn ? 'মিনিট' : 'Mins', val: countdown.minutes },
+                      { label: isBn ? 'সেকেন্ড' : 'Secs', val: countdown.seconds },
+                    ].map((item, i) => (
+                      <div key={i} className="bg-white/10 backdrop-blur-md rounded-lg p-3 sm:p-5 border border-white/20">
+                        <span className="block text-2xl sm:text-4xl font-bold text-secondary">{toBnNum(item.val)}</span>
+                        <span className="text-xs uppercase text-gray-300 font-medium">{item.label}</span>
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
+                )}
 
-              <div className="mt-8">
-                <Link to="/events" className="bg-secondary hover:bg-yellow-500 text-white font-bold px-8 py-3 rounded-full transition shadow-lg">
-                  Register Now
-                </Link>
-              </div>
-            </div>
-          </SwiperSlide>
+                {/* Donation Progress */}
+                {slide.hasDonation && (
+                  <div className="mt-6 max-w-md w-full">
+                    <div className="bg-white/20 rounded-full h-4 overflow-hidden border border-white/10">
+                      <div className="bg-secondary h-full rounded-full transition-all duration-1000" style={{ width: `${progressPercent}%` }} />
+                    </div>
+                    <span className="text-sm mt-2 block text-gray-300 font-bn">
+                      {toBnNum(progressPercent.toFixed(1))}% {isBn ? 'লক্ষ্যমাত্রা' : 'of Target'} ৳{toBnNum(targetAmount)} {isBn ? 'টাকা সংগৃহীত হয়েছে' : 'BDT Raised'}
+                    </span>
+                  </div>
+                )}
 
-          {/* Slide 3 - Donation */}
-          <SwiperSlide className="relative flex items-center justify-center bg-gradient-to-r from-dark to-primary/80">
-            <div className="absolute inset-0 bg-cover bg-center opacity-30" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=1200')" }} />
-            <div className="relative z-10 max-w-7xl mx-auto px-6 h-full flex flex-col justify-center text-left text-white">
-              <h2 className="text-3xl sm:text-5xl font-bold font-bn">{t('donation.title')}</h2>
-              <p className="mt-4 max-w-xl text-gray-200">{t('donation.subtitle')}</p>
-              
-              {/* Progress Simulation */}
-              <div className="mt-6 max-w-md w-full bg-white/20 rounded-full h-4 overflow-hidden border border-white/10">
-                <div className="bg-secondary h-full rounded-full" style={{ width: '72%' }} />
+                {slide.btnLink && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, delay: 0.4 }}
+                    className="mt-8"
+                  >
+                    <Link to={slide.btnLink} className="bg-secondary hover:bg-yellow-500 text-white font-bold px-8 py-3 rounded-full flex items-center space-x-2 transition shadow-lg w-fit">
+                      {slide.hasDonation && <Heart size={16} className="fill-current" />}
+                      <span>{isBn ? (slide.btnTextBn || 'ক্লিক করুন') : (slide.btnTextEn || 'Click Here')}</span>
+                      {!slide.hasDonation && <ArrowRight size={18} />}
+                    </Link>
+                  </motion.div>
+                )}
               </div>
-              <span className="text-sm mt-2 text-gray-300">72% of Target 10,00,000 BDT Raised</span>
-
-              <div className="mt-6">
-                <Link to="/donation" className="bg-secondary hover:bg-yellow-500 text-white font-bold px-8 py-3 rounded-full flex items-center space-x-2 w-fit transition shadow-lg">
-                  <Heart size={16} className="fill-current" />
-                  <span>{t('donation.donate_now')}</span>
-                </Link>
-              </div>
-            </div>
-          </SwiperSlide>
+            </SwiperSlide>
+          ))}
         </Swiper>
       </section>
 
@@ -175,8 +265,8 @@ const Home = () => {
             <img src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=800" className="object-cover w-full h-full" alt="Campus Building" />
           </div>
           <div className="absolute -bottom-6 -left-6 bg-white p-6 rounded-xl shadow-lg border border-gray-100 hidden sm:block">
-            <span className="block text-3xl font-extrabold text-primary">১০,০০০+</span>
-            <span className="text-sm text-gray-500 font-medium">Active Registered Alumni</span>
+            <span className="block text-3xl font-extrabold text-primary">{toBnNum(membersCount > 0 ? membersCount : '১০০+')}</span>
+            <span className="text-sm text-gray-500 font-medium">Active Registered Members</span>
           </div>
         </div>
       </section>
@@ -186,10 +276,10 @@ const Home = () => {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(79,195,247,0.15),transparent)]" />
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 relative z-10">
           {[
-            { icon: <Users size={32} className="text-secondary" />, count: '১০,০০০+', label: 'মোট সদস্য' },
-            { icon: <Calendar size={32} className="text-secondary" />, count: '১২+', label: 'বার্ষিক ইভেন্ট' },
-            { icon: <Trophy size={32} className="text-secondary" />, count: '৫০+', label: 'পুরস্কার ও সম্মাননা' },
-            { icon: <Heart size={32} className="text-secondary" />, count: '৫,০০,০০০+', label: 'সংগৃহীত অনুদান (টাকা)' }
+            { icon: <Users size={32} className="text-secondary" />, count: toBnNum(membersCount > 0 ? membersCount : '১০০+'), label: isBn ? 'মোট সদস্য' : 'Active Members' },
+            { icon: <Calendar size={32} className="text-secondary" />, count: toBnNum(eventsCount > 0 ? eventsCount : '০'), label: isBn ? 'নিবন্ধিত ইভেন্ট' : 'Active Events' },
+            { icon: <Trophy size={32} className="text-secondary" />, count: isBn ? '১০+' : '10+', label: isBn ? 'পুরস্কার ও সম্মাননা' : 'Awards & Recognition' },
+            { icon: <Heart size={32} className="text-secondary" />, count: '৳' + toBnNum(stats.totalAmount), label: isBn ? 'সংগৃহীত অনুদান (টাকা)' : 'Total Donations (BDT)' }
           ].map((stat, i) => (
             <div key={i} className="flex flex-col items-center">
               {stat.icon}
@@ -241,28 +331,9 @@ const Home = () => {
                 </div>
               ))
             ) : (
-              // Mock Notices in case server is not running or empty
-              [1, 2, 3].map((_, i) => (
-                <div key={i} className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex flex-col justify-between hover:shadow-md transition">
-                  <div>
-                    <div className="flex items-center space-x-2 mb-4">
-                      <span className="bg-blue-100 text-blue-700 px-2.5 py-0.5 text-xs font-bold rounded-full">NORMAL</span>
-                    </div>
-                    <h3 className="font-bold text-lg text-primary font-bn">
-                      {currentLang === 'bn' ? 'বার্ষিক পুনর্মিলনী রেজিস্ট্রেশন শুরু হয়েছে' : 'Annual Reunion Registration Started'}
-                    </h3>
-                    <p className="mt-2 text-gray-600 text-sm font-bn">
-                      {currentLang === 'bn' 
-                        ? 'সকল প্রাক্তন শিক্ষার্থীদের জন্য আনন্দের সাথে জানানো যাচ্ছে যে আগামী পুনর্মিলনীর জন্য নিবন্ধন প্রক্রিয়া শুরু হয়েছে।' 
-                        : 'We are pleased to announce that the registration for the upcoming reunion is now open to all alumni.'}
-                    </p>
-                  </div>
-                  <div className="mt-6 pt-4 border-t border-gray-100 text-xs text-gray-500 flex justify-between items-center">
-                    <span>May 27, 2026</span>
-                    <Link to="/notices" className="text-secondary hover:text-primary font-bold">Read More &rarr;</Link>
-                  </div>
-                </div>
-              ))
+              <div className="col-span-3 text-center py-12 text-sm text-gray-500 font-semibold font-bn">
+                {isBn ? 'এখনো কোনো নোটিশ পোস্ট করা হয়নি।' : 'No announcements published yet.'}
+              </div>
             )}
           </div>
         </div>

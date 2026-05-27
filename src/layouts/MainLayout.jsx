@@ -20,6 +20,7 @@ const MainLayout = ({ children }) => {
     { path: '/members', labelKey: 'members' },
     { path: '/notices', labelKey: 'notices' },
     { path: '/events', labelKey: 'events' },
+    { path: '/blog', labelKey: 'blog' },
     { path: '/contact', labelKey: 'contact' },
   ];
 

@@ -23,90 +23,27 @@ const Members = () => {
       .catch(err => console.log('Error fetching members:', err));
   }, [search, pscBatch, bloodGroup]);
 
-  // Premium Mock Members Data for fallbacks
-  const mockMembers = [
-    {
-      _id: '1',
-      name: { en: 'Sabbir Ahmed', bn: 'সাব্বির আহমেদ' },
-      batch: '2016',
-      pscBatch: '2010',
-      bloodGroup: 'A+',
-      profession: 'Software Engineer',
-      currentOrganization: 'Google',
-      email: 'sabbir@google.com'
-    },
-    {
-      _id: '2',
-      name: { en: 'Fariha Jahan', bn: 'ফারিহা জাহান' },
-      batch: '2018',
-      pscBatch: '2012',
-      bloodGroup: 'O+',
-      profession: 'UI/UX Designer',
-      currentOrganization: 'Design Studio',
-      email: 'fariha@design.com'
-    },
-    {
-      _id: '3',
-      name: { en: 'Rakibul Hasan', bn: 'রাকিবুল হাসান' },
-      batch: '2015',
-      pscBatch: '2009',
-      bloodGroup: 'B+',
-      profession: 'Medical Officer',
-      currentOrganization: 'Square Hospital',
-      email: 'rakib@square.com'
-    },
-    {
-      _id: '4',
-      name: { en: 'Tasnim Sultana', bn: 'তাসনিম সুলতানা' },
-      batch: '2017',
-      pscBatch: '2011',
-      bloodGroup: 'O-',
-      profession: 'Data Analyst',
-      currentOrganization: 'Fintech Ltd',
-      email: 'tasnim@fintech.com'
-    },
-    {
-      _id: '5',
-      name: { en: 'Salah Uddin Kader', bn: 'সালাহ উদ্দিন কাদের' },
-      batch: '2021',
-      pscBatch: '2015',
-      bloodGroup: 'A-',
-      profession: 'MERN Stack Developer',
-      currentOrganization: 'Dpian Codebase',
-      email: 'salahuddin@dpian.com'
-    },
-    {
-      _id: '6',
-      name: { en: 'Tanvir Rahman', bn: 'তানভীর রহমান' },
-      batch: '2020',
-      pscBatch: '2014',
-      bloodGroup: 'AB+',
-      profession: 'Assistant Professor',
-      currentOrganization: 'Dhaka University',
-      email: 'tanvir@du.ac.bd'
-    }
-  ];
-
-  const sourceMembers = members.length > 0 ? members : mockMembers;
+  const sourceMembers = members;
 
   // Filter members on client-side for immediate responsive feel
   const filteredMembers = sourceMembers.filter(m => {
+    if (!m.name || !m.email) return false;
     const nameMatch = isBn
-      ? m.name.bn.toLowerCase().includes(search.toLowerCase())
-      : m.name.en.toLowerCase().includes(search.toLowerCase());
+      ? (m.name.bn || '').toLowerCase().includes(search.toLowerCase())
+      : (m.name.en || '').toLowerCase().includes(search.toLowerCase());
     const emailMatch = m.email.toLowerCase().includes(search.toLowerCase());
     const orgMatch = (m.currentOrganization || '').toLowerCase().includes(search.toLowerCase());
-    const profMatch = m.profession.toLowerCase().includes(search.toLowerCase());
+    const profMatch = (m.profession || '').toLowerCase().includes(search.toLowerCase());
     
     const matchesSearch = search === '' || nameMatch || emailMatch || orgMatch || profMatch;
     const matchesPsc = pscBatch === '' || m.pscBatch === pscBatch;
     const matchesBlood = bloodGroup === '' || m.bloodGroup === bloodGroup;
-    const matchesProfFilter = professionFilter === '' || m.profession.toLowerCase().includes(professionFilter.toLowerCase());
+    const matchesProfFilter = professionFilter === '' || (m.profession || '').toLowerCase().includes(professionFilter.toLowerCase());
 
     return matchesSearch && matchesPsc && matchesBlood && matchesProfFilter;
   });
 
-  const uniquePscBatches = [...new Set(sourceMembers.map(m => m.pscBatch))].sort();
+  const uniquePscBatches = [...new Set(sourceMembers.map(m => m.pscBatch).filter(Boolean))].sort();
   const bloodGroups = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
 
   return (
@@ -193,9 +130,13 @@ const Members = () => {
                 <span>{member.bloodGroup}</span>
               </div>
 
-              {/* Avatar Initial Circle */}
-              <div className="w-16 h-16 rounded-2xl bg-secondary/10 text-secondary flex items-center justify-center font-extrabold text-xl shrink-0">
-                {isBn ? member.name.bn[0] : member.name.en[0]}
+              {/* Avatar Image / Initial Circle */}
+              <div className="w-16 h-16 rounded-2xl bg-secondary/10 text-secondary overflow-hidden flex items-center justify-center font-extrabold text-xl shrink-0 border border-slate-100">
+                {member.profilePhoto ? (
+                  <img src={member.profilePhoto.startsWith('http') ? member.profilePhoto : `http://localhost:5000${member.profilePhoto}`} className="w-full h-full object-cover" alt="" />
+                ) : (
+                  <span>{isBn ? (member.name.bn ? member.name.bn[0] : 'প') : (member.name.en ? member.name.en[0] : 'P')}</span>
+                )}
               </div>
 
               <div className="space-y-1.5 pr-12">

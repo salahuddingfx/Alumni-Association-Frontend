@@ -15,6 +15,8 @@ import Register from './pages/Register.jsx';
 import Developer from './pages/Developer.jsx';
 import Policies from './pages/Policies.jsx';
 import UserDashboard from './pages/UserDashboard.jsx';
+import Blog from './pages/Blog.jsx';
+import BlogDetail from './pages/BlogDetail.jsx';
 
 const App = () => {
   return (
@@ -28,6 +30,8 @@ const App = () => {
         <Route path="/notices" element={<Notices />} />
         <Route path="/gallery" element={<Gallery />} />
         <Route path="/donation" element={<Donation />} />
+        <Route path="/blog" element={<Blog />} />
+        <Route path="/blog/:slug" element={<BlogDetail />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
