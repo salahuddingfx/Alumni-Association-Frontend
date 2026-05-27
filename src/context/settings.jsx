@@ -23,7 +23,9 @@ export const defaultSettings = {
     { batches: '2010, 2011, 2012', fee: 1000 },
     { batches: '2013-2015', fee: 1200 },
     { batches: '2016-2020', fee: 800 }
-  ]
+  ],
+  digitalFeeType: 'percentage', // 'percentage' or 'fixed'
+  digitalFeeValue: 2, // 2%
 };
 
 export const SettingsProvider = ({ children }) => {

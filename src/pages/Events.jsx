@@ -81,7 +81,21 @@ const Events = () => {
     return defaultFee;
   };
 
+  const calculateProcessingFee = (baseFee) => {
+    if (paymentType !== 'digital') return 0;
+    
+    const feeType = settings.digitalFeeType || 'percentage';
+    const feeVal = Number(settings.digitalFeeValue) || 0;
+
+    if (feeType === 'percentage') {
+      return Math.round(baseFee * (feeVal / 100));
+    }
+    return feeVal;
+  };
+
   const currentFee = calculateEventFee(pscBatch);
+  const processingFee = calculateProcessingFee(currentFee);
+  const totalFee = currentFee + processingFee;
 
   useEffect(() => {
     api.get('/events')
@@ -359,7 +373,7 @@ const Events = () => {
                       <div className="p-6 space-y-6 text-center">
                         <div className="text-sm bg-black/10 py-2 rounded-lg">
                           <span>{isBn ? 'প্রাক্তন পরিষদ ইভেন্ট ফি' : 'Practon Alumni Event Reg Fee'}</span>
-                          <span className="block text-lg font-extrabold mt-1">৳{toBnNum(currentFee)}.০০</span>
+                          <span className="block text-lg font-extrabold mt-1">৳{toBnNum(totalFee)}.০০</span>
                         </div>
 
                         {checkoutStep === 1 && (
@@ -444,7 +458,7 @@ const Events = () => {
                       <div className="p-6 space-y-6 text-center">
                         <div className="text-sm bg-black/10 py-2 rounded-lg">
                           <span>{isBn ? 'প্রাক্তন পরিষদ ইভেন্ট ফি' : 'Practon Alumni Event Reg Fee'}</span>
-                          <span className="block text-lg font-extrabold mt-1">৳{toBnNum(currentFee)}.০০</span>
+                          <span className="block text-lg font-extrabold mt-1">৳{toBnNum(totalFee)}.০০</span>
                         </div>
 
                         {checkoutStep === 1 && (
@@ -726,9 +740,24 @@ const Events = () => {
 
                   {/* Payment Method Option */}
                   <div className="bg-slate-50 p-4 rounded-lg border border-gray-200">
-                    <div className="flex justify-between items-center mb-3 pb-2 border-b border-gray-200 font-bn">
-                      <span className="text-xs font-bold text-gray-700 uppercase">{isBn ? 'রেজিস্ট্রেশন ফি' : 'Registration Fee'}</span>
-                      <span className="text-base font-extrabold text-secondary">৳{toBnNum(currentFee)} BDT</span>
+                    <div className="space-y-1.5 mb-3 pb-2 border-b border-gray-200 font-bn text-sm">
+                      <div className="flex justify-between items-center text-gray-600">
+                        <span>{isBn ? 'রেজিস্ট্রেশন ফি' : 'Registration Fee'}</span>
+                        <span className="font-bold">৳{toBnNum(currentFee)} BDT</span>
+                      </div>
+                      {paymentType === 'digital' && processingFee > 0 && (
+                        <div className="flex justify-between items-center text-gray-500 text-xs">
+                          <span>
+                            {isBn ? 'অনলাইন প্রসেসিং ফি' : 'Online Processing Fee'}{' '}
+                            ({settings.digitalFeeType === 'percentage' ? `${settings.digitalFeeValue}%` : (isBn ? 'ফিক্সড' : 'Fixed')})
+                          </span>
+                          <span className="font-bold">৳{toBnNum(processingFee)} BDT</span>
+                        </div>
+                      )}
+                      <div className="flex justify-between items-center text-dark font-extrabold pt-1">
+                        <span>{isBn ? 'মোট পরিশোধযোগ্য টাকা' : 'Total Payable Amount'}</span>
+                        <span className="text-base text-secondary">৳{toBnNum(totalFee)} BDT</span>
+                      </div>
                     </div>
                     <label className="block text-xs font-bold text-primary uppercase mb-2">Select Registration Fee Method</label>
                     <div className="grid grid-cols-2 gap-4">
