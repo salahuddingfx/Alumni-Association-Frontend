@@ -18,10 +18,12 @@ import UserDashboard from './pages/UserDashboard.jsx';
 import Blog from './pages/Blog.jsx';
 import BlogDetail from './pages/BlogDetail.jsx';
 import ScrollToTop from './components/ScrollToTop.jsx';
+import IntroLoader from './components/ui/IntroLoader.jsx';
 
 const App = () => {
   return (
     <MainLayout>
+      <IntroLoader />
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<Home />} />
