@@ -1,0 +1,38 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About Us",
+    "committee": "Committee",
+    "members": "Members",
+    "events": "Events",
+    "notices": "Notices",
+    "gallery": "Gallery",
+    "blog": "Blog & News",
+    "donation": "Donation",
+    "contact": "Contact",
+    "login": "Login",
+    "register": "Register",
+    "developer": "Developer Profile",
+    "admin": "Admin Panel"
+  },
+  "hero": {
+    "welcome": "Welcome to Practon Alumni Association",
+    "subtitle": "Connecting generations, celebrating heritage, and building a stronger community.",
+    "join": "Join Association",
+    "explore": "Explore Events"
+  },
+  "notice": {
+    "title": "Notice Board",
+    "latest": "Latest Announcements",
+    "priority": "Priority",
+    "sticky": "Featured",
+    "read_more": "Read Full Notice"
+  },
+  "donation": {
+    "title": "Support Your Alma Mater",
+    "subtitle": "Help us fund scholarships, structural developments, and alumni programs.",
+    "donate_now": "Donate Now",
+    "recent_donors": "Recent Donors",
+    "stats": "Donation Campaign Progress"
+  }
+}

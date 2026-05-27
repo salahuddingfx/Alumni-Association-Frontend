@@ -1,0 +1,76 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --primary: #003B73;
+    --secondary: #F9A826;
+    --accent: #4FC3F7;
+    --dark: #071426;
+    --white: #FFFFFF;
+  }
+
+  body {
+    @apply bg-slate-50 text-dark overflow-x-hidden;
+  }
+
+  /* Custom Font Application base classes */
+  .font-bn {
+    font-family: 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
+  }
+
+  .font-en {
+    font-family: 'Inter', 'Poppins', sans-serif;
+  }
+}
+
+/* Glassmorphism utility */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.glass-panel-dark {
+  background: rgba(7, 20, 38, 0.8);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Smooth Wave Animated Dividers */
+.wave-divider {
+  position: relative;
+  width: 100%;
+  height: 50px;
+  background: transparent;
+}
+
+/* Float Glow Animation */
+@keyframes floatGlow {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateY(-20px) scale(1.1);
+    opacity: 0.8;
+  }
+}
+
+.animate-float-glow {
+  animation: floatGlow 8s ease-in-out infinite;
+}
+
+/* Page transitions */
+.page-enter {
+  opacity: 0;
+  transform: translateY(10px);
+}
+.page-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 300ms, transform 300ms;
+}
