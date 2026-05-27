@@ -2,9 +2,12 @@ import React, { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Menu, X, Globe } from 'lucide-react';
+import { useSettings } from '../../context/settings.jsx';
 
 const Navbar = () => {
   const { t, i18n } = useTranslation();
+  const { settings } = useSettings();
+  const isBn = i18n.language === 'bn';
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const isLoggedIn = !!localStorage.getItem('accessToken');
 
@@ -34,8 +37,12 @@ const Navbar = () => {
               প
             </div>
             <div className="flex flex-col">
-              <span className="text-lg font-bold text-primary font-bn tracking-wide">প্রাক্তন শিক্ষার্থী পরিষদ</span>
-              <span className="text-xs text-gray-500 font-medium">Dhuapalong Govt. Primary School</span>
+              <span className="text-lg font-bold text-primary font-bn tracking-wide">
+                {isBn ? settings.siteTitleBn : settings.siteTitleEn}
+              </span>
+              <span className="text-xs text-gray-500 font-medium">
+                {isBn ? settings.schoolNameBn : settings.schoolNameEn}
+              </span>
             </div>
           </Link>
 
