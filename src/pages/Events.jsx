@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
-import { Calendar, MapPin, X, User, Phone, CheckCircle, Upload } from 'lucide-react';
+import { Calendar, MapPin, X, User, Phone, CheckCircle, Upload, CreditCard } from 'lucide-react';
 import { convertBanglishToBengali } from '../utils/banglish';
 
 const Events = () => {
@@ -23,7 +23,15 @@ const Events = () => {
   const [fullAddress, setFullAddress] = useState('');
   const [userImage, setUserImage] = useState(null);
   const [paymentType, setPaymentType] = useState('cash'); // 'cash' or 'digital'
+  const [digitalProvider, setDigitalProvider] = useState('bKash'); // 'bKash' or 'Nagad'
   
+  // Checkout Modal State
+  const [showCheckoutOverlay, setShowCheckoutOverlay] = useState(false);
+  const [checkoutStep, setCheckoutStep] = useState(1); // 1: Number, 2: OTP, 3: PIN, 4: Loading
+  const [checkoutPhone, setCheckoutPhone] = useState('');
+  const [checkoutOtp, setCheckoutOtp] = useState('');
+  const [checkoutPin, setCheckoutPin] = useState('');
+
   const [message, setMessage] = useState('');
   const isBn = i18n.language === 'bn';
 
@@ -58,8 +66,17 @@ const Events = () => {
     }
   ];
 
-  const handleRegisterSubmit = async (e) => {
+  const handleFormSubmit = (e) => {
     e.preventDefault();
+    if (paymentType === 'digital') {
+      setShowCheckoutOverlay(true);
+      setCheckoutStep(1);
+    } else {
+      executeRegistration();
+    }
+  };
+
+  const executeRegistration = async () => {
     try {
       const formData = new FormData();
       formData.append('fullName', fullName);
@@ -86,8 +103,7 @@ const Events = () => {
       );
 
       if (res.data.success) {
-        setMessage(isBn ? 'রেজিস্ট্রেশন সফল! আপনার টিকেট নিচে তৈরি করা হলো।' : 'Registration successful! Your ticket has been generated below.');
-        // Do not auto-clear immediately so the user can see and download the ticket pass
+        setMessage(isBn ? 'রেজিস্ট্রেশন সফল! আপনার ডিজিটাল এন্ট্রি পাসটি নিচে তৈরি করা হলো।' : 'Registration successful! Your digital entry pass has been successfully generated.');
       }
     } catch (error) {
       alert(error.response?.data?.message || 'Registration failed');
@@ -109,6 +125,38 @@ const Events = () => {
     setFullAddress('');
     setUserImage(null);
     setPaymentType('cash');
+    setShowCheckoutOverlay(false);
+    setCheckoutStep(1);
+    setCheckoutPhone('');
+    setCheckoutOtp('');
+    setCheckoutPin('');
+  };
+
+  const handleCheckoutProceed = () => {
+    if (checkoutStep === 1) {
+      if (!checkoutPhone || checkoutPhone.length < 11) {
+        alert(isBn ? 'অনুগ্রহ করে সঠিক ১১ ডিজিটের মোবাইল নম্বর দিন।' : 'Please enter a valid 11-digit mobile number.');
+        return;
+      }
+      setCheckoutStep(2);
+    } else if (checkoutStep === 2) {
+      if (!checkoutOtp) {
+        alert(isBn ? 'অনুগ্রহ করে সঠিক ওটিপি দিন।' : 'Please enter a valid verification code.');
+        return;
+      }
+      setCheckoutStep(3);
+    } else if (checkoutStep === 3) {
+      if (!checkoutPin) {
+        alert(isBn ? 'অনুগ্রহ করে সঠিক পিন নম্বর দিন।' : 'Please enter a valid PIN.');
+        return;
+      }
+      setCheckoutStep(4);
+      // Simulate verification loader and submit
+      setTimeout(() => {
+        setShowCheckoutOverlay(false);
+        executeRegistration();
+      }, 2000);
+    }
   };
 
   return (
@@ -166,7 +214,7 @@ const Events = () => {
 
       {/* Event Registration Modal Form */}
       {registeringEvent && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+        <div className="fixed inset-0 z-45 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
           <div className="bg-white w-full max-w-2xl rounded-2xl overflow-hidden shadow-2xl border border-gray-200 animate-in fade-in zoom-in-95 duration-150 my-8">
             {/* Modal Header */}
             <div className="bg-primary text-white px-6 py-4 flex items-center justify-between">
@@ -185,7 +233,185 @@ const Events = () => {
             </div>
 
             {/* Modal Content / Form */}
-            <div className="p-8 max-h-[70vh] overflow-y-auto">
+            <div className="p-8 max-h-[70vh] overflow-y-auto relative">
+              
+              {/* simulated checkout overlay */}
+              {showCheckoutOverlay && (
+                <div className="absolute inset-0 bg-slate-900/90 z-50 flex items-center justify-center p-6 backdrop-blur-md">
+                  {digitalProvider === 'bKash' ? (
+                    /* bKash theme overlay */
+                    <div className="bg-[#E2125B] w-full max-w-md rounded-2xl shadow-2xl overflow-hidden border border-[#b80e4a] flex flex-col justify-between text-white font-bn select-none">
+                      {/* Logo header */}
+                      <div className="bg-white p-4 flex justify-between items-center border-b-4 border-[#b80e4a]">
+                        <img src="https://web.archive.org/web/20220313075143/https://www.bkash.com/sites/default/files/bKash%20Logo_0.png" alt="bKash Logo" className="h-10 object-contain mx-auto" />
+                      </div>
+                      
+                      <div className="p-6 space-y-6 text-center">
+                        <div className="text-sm bg-black/10 py-2 rounded-lg">
+                          <span>{isBn ? 'প্রাক্তন পরিষদ ইভেন্ট ফি' : 'Practon Alumni Event Reg Fee'}</span>
+                          <span className="block text-lg font-extrabold mt-1">৳১,৫০০.০০</span>
+                        </div>
+
+                        {checkoutStep === 1 && (
+                          <div className="space-y-4">
+                            <label className="block text-sm font-semibold">{isBn ? 'আপনার বিকাশ অ্যাকাউন্ট নম্বর দিন' : 'Enter your bKash Account Number'}</label>
+                            <input 
+                              type="text" 
+                              placeholder="e.g. 017XXXXXXXX"
+                              className="w-full bg-white text-slate-800 text-center font-bold tracking-widest text-lg py-3 rounded-lg border-2 border-[#b80e4a] focus:outline-none"
+                              value={checkoutPhone}
+                              onChange={e => setCheckoutPhone(e.target.value)}
+                              maxLength={11}
+                            />
+                            <p className="text-[10px] text-pink-200 leading-snug">{isBn ? 'এই পেমেন্ট গেটওয়েটি একটি প্র্যাকটিক্যাল ডেমো। আপনার ব্যক্তিগত নম্বর দিন।' : 'This gateway is a simulation demo. Enter your personal phone number.'}</p>
+                          </div>
+                        )}
+
+                        {checkoutStep === 2 && (
+                          <div className="space-y-4">
+                            <label className="block text-sm font-semibold">{isBn ? 'বিকাশ ভেরিফিকেশন কোড (OTP) দিন' : 'Enter bKash Verification Code (OTP)'}</label>
+                            <input 
+                              type="text" 
+                              placeholder="e.g. 123456"
+                              className="w-full bg-white text-slate-800 text-center font-bold tracking-widest text-lg py-3 rounded-lg border-2 border-[#b80e4a] focus:outline-none"
+                              value={checkoutOtp}
+                              onChange={e => setCheckoutOtp(e.target.value)}
+                            />
+                            <p className="text-[10px] text-pink-200">{isBn ? 'যেকোনো ৬ সংখ্যার ওটিপি দিয়ে প্রসিডিউট করুন।' : 'Enter any 6-digit OTP code to proceed.'}</p>
+                          </div>
+                        )}
+
+                        {checkoutStep === 3 && (
+                          <div className="space-y-4">
+                            <label className="block text-sm font-semibold">{isBn ? 'আপনার বিকাশ পিন (PIN) নম্বর দিন' : 'Enter your bKash PIN'}</label>
+                            <input 
+                              type="password" 
+                              placeholder="••••"
+                              className="w-full bg-white text-slate-800 text-center font-bold tracking-widest text-lg py-3 rounded-lg border-2 border-[#b80e4a] focus:outline-none"
+                              value={checkoutPin}
+                              onChange={e => setCheckoutPin(e.target.value)}
+                              maxLength={5}
+                            />
+                            <p className="text-[10px] text-pink-200">{isBn ? 'ডেমো পিন দিয়ে পেমেন্ট সম্পন্ন করুন।' : 'Enter simulated PIN code to complete registration.'}</p>
+                          </div>
+                        )}
+
+                        {checkoutStep === 4 && (
+                          <div className="py-6 space-y-4 flex flex-col items-center">
+                            <div className="w-10 h-10 border-4 border-white border-t-transparent rounded-full animate-spin" />
+                            <span className="text-sm font-bold tracking-wider uppercase">{isBn ? 'পেমেন্ট যাচাই করা হচ্ছে...' : 'Verifying simulated payment...'}</span>
+                          </div>
+                        )}
+                      </div>
+
+                      {checkoutStep < 4 && (
+                        <div className="flex bg-slate-100/10 text-sm">
+                          <button 
+                            type="button" 
+                            onClick={() => setShowCheckoutOverlay(false)}
+                            className="flex-1 py-4 text-pink-100 hover:text-white border-r border-white/10 font-bold"
+                          >
+                            {isBn ? 'বন্ধ করুন' : 'CLOSE'}
+                          </button>
+                          <button 
+                            type="button" 
+                            onClick={handleCheckoutProceed}
+                            className="flex-1 py-4 text-white hover:bg-black/10 font-extrabold"
+                          >
+                            {isBn ? 'নিশ্চিত করুন' : 'PROCEED'}
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    /* Nagad theme overlay */
+                    <div className="bg-[#F25C22] w-full max-w-md rounded-2xl shadow-2xl overflow-hidden border border-[#d84a12] flex flex-col justify-between text-white font-bn select-none">
+                      {/* Logo header */}
+                      <div className="bg-white p-4 flex justify-between items-center border-b-4 border-[#d84a12]">
+                        <img src="https://web.archive.org/web/20220331045934/https://nagad.com.bd/wp-content/uploads/2020/09/Nagad-Logo-1.png" alt="Nagad Logo" className="h-10 object-contain mx-auto" />
+                      </div>
+                      
+                      <div className="p-6 space-y-6 text-center">
+                        <div className="text-sm bg-black/10 py-2 rounded-lg">
+                          <span>{isBn ? 'প্রাক্তন পরিষদ ইভেন্ট ফি' : 'Practon Alumni Event Reg Fee'}</span>
+                          <span className="block text-lg font-extrabold mt-1">৳১,৫০০.০০</span>
+                        </div>
+
+                        {checkoutStep === 1 && (
+                          <div className="space-y-4">
+                            <label className="block text-sm font-semibold">{isBn ? 'আপনার নগদ অ্যাকাউন্ট নম্বর দিন' : 'Enter your Nagad Account Number'}</label>
+                            <input 
+                              type="text" 
+                              placeholder="e.g. 017XXXXXXXX"
+                              className="w-full bg-white text-slate-800 text-center font-bold tracking-widest text-lg py-3 rounded-lg border-2 border-[#d84a12] focus:outline-none"
+                              value={checkoutPhone}
+                              onChange={e => setCheckoutPhone(e.target.value)}
+                              maxLength={11}
+                            />
+                            <p className="text-[10px] text-orange-200 leading-snug">{isBn ? 'এই পেমেন্ট গেটওয়েটি একটি প্র্যাকটিক্যাল ডেমো। আপনার ব্যক্তিগত নম্বর দিন।' : 'This gateway is a simulation demo. Enter your personal phone number.'}</p>
+                          </div>
+                        )}
+
+                        {checkoutStep === 2 && (
+                          <div className="space-y-4">
+                            <label className="block text-sm font-semibold">{isBn ? 'নগদ ওটিপি (OTP) ভেরিফিকেশন কোড দিন' : 'Enter Nagad Verification Code (OTP)'}</label>
+                            <input 
+                              type="text" 
+                              placeholder="e.g. 123456"
+                              className="w-full bg-white text-slate-800 text-center font-bold tracking-widest text-lg py-3 rounded-lg border-2 border-[#d84a12] focus:outline-none"
+                              value={checkoutOtp}
+                              onChange={e => setCheckoutOtp(e.target.value)}
+                            />
+                            <p className="text-[10px] text-orange-200">{isBn ? 'যেকোনো ৬ সংখ্যার ওটিপি দিয়ে প্রসিডিউট করুন।' : 'Enter any 6-digit OTP code to proceed.'}</p>
+                          </div>
+                        )}
+
+                        {checkoutStep === 3 && (
+                          <div className="space-y-4">
+                            <label className="block text-sm font-semibold">{isBn ? 'আপনার নগদ পিন (PIN) নম্বর দিন' : 'Enter your Nagad PIN'}</label>
+                            <input 
+                              type="password" 
+                              placeholder="••••"
+                              className="w-full bg-white text-slate-800 text-center font-bold tracking-widest text-lg py-3 rounded-lg border-2 border-[#d84a12] focus:outline-none"
+                              value={checkoutPin}
+                              onChange={e => setCheckoutPin(e.target.value)}
+                              maxLength={4}
+                            />
+                            <p className="text-[10px] text-orange-200">{isBn ? 'ডেমো পিন দিয়ে পেমেন্ট সম্পন্ন করুন।' : 'Enter simulated PIN code to complete registration.'}</p>
+                          </div>
+                        )}
+
+                        {checkoutStep === 4 && (
+                          <div className="py-6 space-y-4 flex flex-col items-center">
+                            <div className="w-10 h-10 border-4 border-white border-t-transparent rounded-full animate-spin" />
+                            <span className="text-sm font-bold tracking-wider uppercase">{isBn ? 'পেমেন্ট যাচাই করা হচ্ছে...' : 'Verifying simulated payment...'}</span>
+                          </div>
+                        )}
+                      </div>
+
+                      {checkoutStep < 4 && (
+                        <div className="flex bg-slate-100/10 text-sm">
+                          <button 
+                            type="button" 
+                            onClick={() => setShowCheckoutOverlay(false)}
+                            className="flex-1 py-4 text-orange-100 hover:text-white border-r border-white/10 font-bold"
+                          >
+                            {isBn ? 'বন্ধ করুন' : 'CLOSE'}
+                          </button>
+                          <button 
+                            type="button" 
+                            onClick={handleCheckoutProceed}
+                            className="flex-1 py-4 text-white hover:bg-black/10 font-extrabold"
+                          >
+                            {isBn ? 'নিশ্চিত করুন' : 'PROCEED'}
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              )}
+
               {message ? (
                 <div className="text-center py-6 space-y-6">
                   <div className="flex flex-col items-center space-y-2">
@@ -249,7 +475,7 @@ const Events = () => {
                   </button>
                 </div>
               ) : (
-                <form onSubmit={handleRegisterSubmit} className="space-y-4 text-sm text-gray-700">
+                <form onSubmit={handleFormSubmit} className="space-y-4 text-sm text-gray-700">
                   <div className="bg-slate-50 p-4 rounded-lg border border-gray-150 mb-4">
                     <span className="block text-xs font-bold text-primary uppercase">Target Event</span>
                     <span className="text-base font-bold text-dark font-bn">
@@ -399,6 +625,36 @@ const Events = () => {
                         <span className="text-sm font-semibold">Digital Payment (অনলাইন পেমেন্ট)</span>
                       </label>
                     </div>
+
+                    {paymentType === 'digital' && (
+                      <div className="border-t border-gray-200 pt-4 mt-4 space-y-2">
+                        <label className="block text-xs font-bold text-primary uppercase">Select Gateway Channel</label>
+                        <div className="grid grid-cols-2 gap-4">
+                          <button
+                            type="button"
+                            onClick={() => setDigitalProvider('bKash')}
+                            className={`py-3 rounded-xl border font-extrabold text-xs transition flex flex-col items-center justify-center space-y-1 ${
+                              digitalProvider === 'bKash'
+                                ? 'border-[#E2125B] bg-[#E2125B]/5 text-[#E2125B]'
+                                : 'border-gray-300 bg-white text-gray-700 hover:bg-slate-50'
+                            }`}
+                          >
+                            <span>bKash (বিকাশ)</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setDigitalProvider('Nagad')}
+                            className={`py-3 rounded-xl border font-extrabold text-xs transition flex flex-col items-center justify-center space-y-1 ${
+                              digitalProvider === 'Nagad'
+                                ? 'border-[#F25C22] bg-[#F25C22]/5 text-[#F25C22]'
+                                : 'border-gray-300 bg-white text-gray-700 hover:bg-slate-50'
+                            }`}
+                          >
+                            <span>Nagad (নগদ)</span>
+                          </button>
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   <div>
