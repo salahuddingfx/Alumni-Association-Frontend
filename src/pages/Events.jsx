@@ -3,9 +3,11 @@ import { useTranslation } from 'react-i18next';
 import api, { API_URL } from '../api/api';
 import { Calendar, MapPin, X, User, Phone, CheckCircle, Upload, CreditCard } from 'lucide-react';
 import { convertBanglishToBengali } from '../utils/banglish';
+import { useSettings } from '../context/settings.jsx';
 
 const Events = () => {
   const { i18n } = useTranslation();
+  const { settings } = useSettings();
   const [events, setEvents] = useState([]);
   const [registeringEvent, setRegisteringEvent] = useState(null);
   
@@ -35,6 +37,51 @@ const Events = () => {
 
   const [message, setMessage] = useState('');
   const isBn = i18n.language === 'bn';
+
+  const toBnNum = (num) => {
+    if (!isBn) return num.toLocaleString();
+    const bnDigits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
+    return num.toString().replace(/\d/g, d => bnDigits[d]);
+  };
+
+  const calculateEventFee = (batchStr) => {
+    const defaultFee = settings.eventDefaultFee || 1500;
+    const batchFees = settings.eventBatchFees || [];
+
+    if (!batchStr) return defaultFee;
+
+    const match = batchStr.match(/\d{4}/);
+    if (!match) return defaultFee;
+    
+    const year = parseInt(match[0], 10);
+
+    for (const rule of batchFees) {
+      if (!rule.batches || !rule.fee) continue;
+
+      const parts = rule.batches.split(',').map(s => s.trim());
+      for (const part of parts) {
+        if (part.includes('-')) {
+          const rangeParts = part.split('-').map(s => parseInt(s.trim(), 10));
+          if (rangeParts.length === 2 && !isNaN(rangeParts[0]) && !isNaN(rangeParts[1])) {
+            const min = Math.min(rangeParts[0], rangeParts[1]);
+            const max = Math.max(rangeParts[0], rangeParts[1]);
+            if (year >= min && year <= max) {
+              return Number(rule.fee);
+            }
+          }
+        } else {
+          const exactYear = parseInt(part, 10);
+          if (!isNaN(exactYear) && exactYear === year) {
+            return Number(rule.fee);
+          }
+        }
+      }
+    }
+
+    return defaultFee;
+  };
+
+  const currentFee = calculateEventFee(pscBatch);
 
   useEffect(() => {
     api.get('/events')
@@ -312,7 +359,7 @@ const Events = () => {
                       <div className="p-6 space-y-6 text-center">
                         <div className="text-sm bg-black/10 py-2 rounded-lg">
                           <span>{isBn ? 'প্রাক্তন পরিষদ ইভেন্ট ফি' : 'Practon Alumni Event Reg Fee'}</span>
-                          <span className="block text-lg font-extrabold mt-1">৳১,৫০০.০০</span>
+                          <span className="block text-lg font-extrabold mt-1">৳{toBnNum(currentFee)}.০০</span>
                         </div>
 
                         {checkoutStep === 1 && (
@@ -397,7 +444,7 @@ const Events = () => {
                       <div className="p-6 space-y-6 text-center">
                         <div className="text-sm bg-black/10 py-2 rounded-lg">
                           <span>{isBn ? 'প্রাক্তন পরিষদ ইভেন্ট ফি' : 'Practon Alumni Event Reg Fee'}</span>
-                          <span className="block text-lg font-extrabold mt-1">৳১,৫০০.০০</span>
+                          <span className="block text-lg font-extrabold mt-1">৳{toBnNum(currentFee)}.০০</span>
                         </div>
 
                         {checkoutStep === 1 && (
@@ -679,6 +726,10 @@ const Events = () => {
 
                   {/* Payment Method Option */}
                   <div className="bg-slate-50 p-4 rounded-lg border border-gray-200">
+                    <div className="flex justify-between items-center mb-3 pb-2 border-b border-gray-200 font-bn">
+                      <span className="text-xs font-bold text-gray-700 uppercase">{isBn ? 'রেজিস্ট্রেশন ফি' : 'Registration Fee'}</span>
+                      <span className="text-base font-extrabold text-secondary">৳{toBnNum(currentFee)} BDT</span>
+                    </div>
                     <label className="block text-xs font-bold text-primary uppercase mb-2">Select Registration Fee Method</label>
                     <div className="grid grid-cols-2 gap-4">
                       <label className="flex items-center space-x-2 bg-white p-3 rounded-lg border border-gray-300 cursor-pointer">

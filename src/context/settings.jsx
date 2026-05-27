@@ -18,6 +18,12 @@ export const defaultSettings = {
   bkash: '+880 1700 000000',
   nagad: '+880 1800 000000',
   rocket: '+880 1900 000000',
+  eventDefaultFee: 1500,
+  eventBatchFees: [
+    { batches: '2010, 2011, 2012', fee: 1000 },
+    { batches: '2013-2015', fee: 1200 },
+    { batches: '2016-2020', fee: 800 }
+  ]
 };
 
 export const SettingsProvider = ({ children }) => {
