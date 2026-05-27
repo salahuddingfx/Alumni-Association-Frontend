@@ -45,6 +45,18 @@ const Events = () => {
       .catch(err => console.log('Error fetching events:', err));
   }, []);
 
+  // Lock body scroll when event modal is open
+  useEffect(() => {
+    if (registeringEvent) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [registeringEvent]);
+
   const displayEvents = events.length > 0 ? events : [
     {
       _id: '1',
