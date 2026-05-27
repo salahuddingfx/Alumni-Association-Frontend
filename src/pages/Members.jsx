@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import axios from 'axios';
+import api from '../api/api';
 import { Search, Mail, Building, Droplet, Calendar, Award } from 'lucide-react';
 
 const Members = () => {
@@ -14,7 +14,7 @@ const Members = () => {
 
   useEffect(() => {
     // Fetch members with filters from API (Fallback to client-side filtering if API is empty)
-    axios.get(`http://localhost:5000/api/v1/members?search=${search}&pscBatch=${pscBatch}&bloodGroup=${bloodGroup}`)
+    api.get(`/members?search=${search}&pscBatch=${pscBatch}&bloodGroup=${bloodGroup}`)
       .then(res => {
         if (res.data.success) {
           setMembers(res.data.data.members);
@@ -133,7 +133,7 @@ const Members = () => {
               {/* Avatar Image / Initial Circle */}
               <div className="w-16 h-16 rounded-2xl bg-secondary/10 text-secondary overflow-hidden flex items-center justify-center font-extrabold text-xl shrink-0 border border-slate-100">
                 {member.profilePhoto ? (
-                  <img src={member.profilePhoto.startsWith('http') ? member.profilePhoto : `http://localhost:5000${member.profilePhoto}`} className="w-full h-full object-cover" alt="" />
+                  <img src={member.profilePhoto.startsWith('http') ? member.profilePhoto : `${window.API_URL}${member.profilePhoto}`} className="w-full h-full object-cover" alt="" />
                 ) : (
                   <span>{isBn ? (member.name.bn ? member.name.bn[0] : 'প') : (member.name.en ? member.name.en[0] : 'P')}</span>
                 )}

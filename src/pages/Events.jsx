@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import axios from 'axios';
+import api from '../api/api';
 import { Calendar, MapPin, X, User, Phone, CheckCircle, Upload, CreditCard } from 'lucide-react';
 import { convertBanglishToBengali } from '../utils/banglish';
 
@@ -37,7 +37,7 @@ const Events = () => {
   const isBn = i18n.language === 'bn';
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/v1/events')
+    api.get('/events')
       .then(res => {
         if (res.data.success) {
           setEvents(res.data.data);
@@ -64,7 +64,7 @@ const Events = () => {
       const token = localStorage.getItem('accessToken');
       if (token) {
         // Fetch user auth details
-        axios.get('http://localhost:5000/api/v1/auth/me', {
+        api.get('/auth/me', {
           headers: { Authorization: `Bearer ${token}` }
         })
           .then(res => {
@@ -80,7 +80,7 @@ const Events = () => {
           .catch(err => console.log('Error fetching user auth for event registration:', err));
 
         // Fetch member profile details
-        axios.get('http://localhost:5000/api/v1/members/my/profile', {
+        api.get('/members/my/profile', {
           headers: { Authorization: `Bearer ${token}` }
         })
           .then(res => {
@@ -95,7 +95,7 @@ const Events = () => {
                 setWhatsappNumber(m.phone);
               }
               if (m.profilePhoto) {
-                const photoUrl = m.profilePhoto.startsWith('http') ? m.profilePhoto : `http://localhost:5000${m.profilePhoto}`;
+                const photoUrl = m.profilePhoto.startsWith('http') ? m.profilePhoto : `${window.API_URL}${m.profilePhoto}`;
                 setExistingPhoto(photoUrl);
               }
             }
@@ -158,8 +158,8 @@ const Events = () => {
         formData.append('userImage', existingPhoto);
       }
 
-      const res = await axios.post(
-        `http://localhost:5000/api/v1/events/${registeringEvent._id}/registration/register`,
+      const res = await api.post(
+        `/events/${registeringEvent._id}/registration/register`,
         formData,
         { headers: { 'Content-Type': 'multipart/form-data' } }
       );

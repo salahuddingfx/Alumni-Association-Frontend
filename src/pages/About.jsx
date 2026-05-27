@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import axios from 'axios';
+import api from '../api/api';
 
 const About = () => {
   const { i18n } = useTranslation();
@@ -101,7 +101,7 @@ const About = () => {
 
   useEffect(() => {
     // Fetch timeline events
-    axios.get('http://localhost:5000/api/v1/settings/timeline_events')
+    api.get('/settings/timeline_events')
       .then(res => {
         if (res.data.success && res.data.data && Array.isArray(res.data.data.events) && res.data.data.events.length > 0) {
           setTimelineEvents(res.data.data.events);
@@ -114,7 +114,7 @@ const About = () => {
       });
 
     // Fetch advisor messages
-    axios.get('http://localhost:5000/api/v1/settings/advisor_messages')
+    api.get('/settings/advisor_messages')
       .then(res => {
         if (res.data.success && res.data.data && Array.isArray(res.data.data.advisors) && res.data.data.advisors.length > 0) {
           setAdvisors(res.data.data.advisors);

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import axios from 'axios';
+import api from '../api/api';
 import { Calendar, User, Clock, ArrowLeft, FileText } from 'lucide-react';
 
 const BlogDetail = () => {
@@ -14,7 +14,7 @@ const BlogDetail = () => {
 
   useEffect(() => {
     setLoading(true);
-    axios.get(`http://localhost:5000/api/v1/blogs/${slug}`)
+    api.get(`/blogs/${slug}`)
       .then(res => {
         if (res.data.success) {
           setBlog(res.data.data);
@@ -95,7 +95,7 @@ const BlogDetail = () => {
         {blog.thumbnail && (
           <div className="w-full h-[350px] bg-slate-100 rounded-2xl overflow-hidden shadow-sm border border-gray-200">
             <img 
-              src={blog.thumbnail.startsWith('http') ? blog.thumbnail : `http://localhost:5000${blog.thumbnail}`} 
+              src={blog.thumbnail.startsWith('http') ? blog.thumbnail : `${window.API_URL}${blog.thumbnail}`} 
               className="w-full h-full object-cover" 
               alt={title} 
             />

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import axios from 'axios';
+import api from '../api/api';
 import { KeyRound, Mail, UserPlus, User, Phone, Eye, EyeOff } from 'lucide-react';
 
 const Register = () => {
@@ -21,7 +21,7 @@ const Register = () => {
       return setError('Passwords do not match');
     }
     try {
-      const res = await axios.post('http://localhost:5000/api/v1/auth/register', {
+      const res = await api.post('/auth/register', {
         email,
         username,
         phone,

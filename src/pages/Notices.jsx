@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import axios from 'axios';
+import api from '../api/api';
 import { Megaphone, Pin, X, Calendar, AlertTriangle } from 'lucide-react';
 
 const Notices = () => {
@@ -10,7 +10,7 @@ const Notices = () => {
   const isBn = i18n.language === 'bn';
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/v1/notices')
+    api.get('/notices')
       .then(res => {
         if (res.data.success) {
           setNotices(res.data.data);

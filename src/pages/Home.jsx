@@ -5,7 +5,7 @@ import { Autoplay, EffectFade, Pagination } from 'swiper/modules';
 import { ArrowRight, Calendar, Users, Megaphone, Trophy, Heart } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import axios from 'axios';
+import api from '../api/api';
 
 // Import Swiper styles
 import 'swiper/css';
@@ -28,7 +28,7 @@ const Home = () => {
   // Fetch notices, stats, members, events, and hero slides
   useEffect(() => {
     // 1. Notices
-    axios.get('http://localhost:5000/api/v1/notices')
+    api.get('/notices')
       .then(res => {
         if (res.data.success) {
           setNotices(res.data.data.slice(0, 3));
@@ -37,7 +37,7 @@ const Home = () => {
       .catch(err => console.log('Error fetching notices:', err));
 
     // 2. Donation Stats
-    axios.get('http://localhost:5000/api/v1/donations/stats')
+    api.get('/donations/stats')
       .then(res => {
         if (res.data.success) {
           setStats(res.data.data);
@@ -46,7 +46,7 @@ const Home = () => {
       .catch(err => console.log('Error fetching donation stats:', err));
 
     // 3. Members Count
-    axios.get('http://localhost:5000/api/v1/members')
+    api.get('/members')
       .then(res => {
         if (res.data.success && Array.isArray(res.data.data)) {
           setMembersCount(res.data.data.length);
@@ -55,7 +55,7 @@ const Home = () => {
       .catch(err => console.log('Error fetching members count:', err));
 
     // 4. Events Count & Target Countdown Event
-    axios.get('http://localhost:5000/api/v1/events')
+    api.get('/events')
       .then(res => {
         if (res.data.success && Array.isArray(res.data.data)) {
           setEventsCount(res.data.data.length);
@@ -74,7 +74,7 @@ const Home = () => {
       .catch(err => console.log('Error fetching events:', err));
 
     // 5. Hero Slides
-    axios.get('http://localhost:5000/api/v1/settings/hero_slides')
+    api.get('/settings/hero_slides')
       .then(res => {
         if (res.data.success && res.data.data && Array.isArray(res.data.data.slides)) {
           setSlides(res.data.data.slides);

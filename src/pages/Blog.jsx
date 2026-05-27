@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import api from '../api/api';
 import { Calendar, User, Clock, ArrowRight, Search, FileText } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -13,7 +13,7 @@ const Blog = () => {
   const [categoryFilter, setCategoryFilter] = useState('all');
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/v1/blogs')
+    api.get('/blogs')
       .then(res => {
         if (res.data.success) {
           setBlogs(res.data.data);
@@ -98,7 +98,7 @@ const Blog = () => {
                   <div className="h-48 w-full bg-slate-100 overflow-hidden relative">
                     {blog.thumbnail ? (
                       <img 
-                        src={blog.thumbnail.startsWith('http') ? blog.thumbnail : `http://localhost:5000${blog.thumbnail}`} 
+                        src={blog.thumbnail.startsWith('http') ? blog.thumbnail : `${window.API_URL}${blog.thumbnail}`} 
                         className="w-full h-full object-cover" 
                         alt={title} 
                       />

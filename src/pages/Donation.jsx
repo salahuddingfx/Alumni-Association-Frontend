@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import axios from 'axios';
+import api from '../api/api';
 import { Heart, Landmark, Smartphone, Trophy, UserCheck, ShieldAlert } from 'lucide-react';
 
 const Donation = () => {
@@ -19,7 +19,7 @@ const Donation = () => {
 
   useEffect(() => {
     // Fetch stats
-    axios.get('http://localhost:5000/api/v1/donations/stats')
+    api.get('/donations/stats')
       .then(res => {
         if (res.data.success) {
           setStats(res.data.data);
@@ -28,7 +28,7 @@ const Donation = () => {
       .catch(err => console.log('Error fetching stats:', err));
 
     // Fetch recent donations list
-    axios.get('http://localhost:5000/api/v1/donations')
+    api.get('/donations')
       .then(res => {
         if (res.data.success) {
           setRecentDonations(res.data.data);
@@ -48,7 +48,7 @@ const Donation = () => {
         isAnonymous,
       };
 
-      const res = await axios.post('http://localhost:5000/api/v1/donations/checkout', payload);
+      const res = await api.post('/donations/checkout', payload);
       if (res.data.success) {
         setMessage(isBn ? 'অনুদান সফলভাবে সম্পন্ন হয়েছে! ধন্যবাদ।' : 'Donation completed successfully! Thank you.');
         setAmount('');

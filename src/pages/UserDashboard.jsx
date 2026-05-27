@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import axios from 'axios';
+import api from '../api/api';
 import { User, Calendar, LogOut, Ticket, Mail, Phone, Tag, Edit, Save, X, Key, Upload, ShieldAlert, CheckCircle, AlertCircle } from 'lucide-react';
 
 const UserDashboard = () => {
@@ -42,7 +42,7 @@ const UserDashboard = () => {
   const [savingMember, setSavingMember] = useState(false);
 
   const fetchProfile = (token) => {
-    axios.get('http://localhost:5000/api/v1/auth/me', {
+    api.get('/auth/me', {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => {
@@ -54,7 +54,7 @@ const UserDashboard = () => {
           setEditPhone(user.phone || '');
           setEditFullName(user.fullName || '');
           if (user.profilePhoto) {
-            setUserPhotoPreview(user.profilePhoto.startsWith('http') ? user.profilePhoto : `http://localhost:5000${user.profilePhoto}`);
+            setUserPhotoPreview(user.profilePhoto.startsWith('http') ? user.profilePhoto : `${window.API_URL}${user.profilePhoto}`);
           } else {
             setUserPhotoPreview('');
           }
@@ -66,7 +66,7 @@ const UserDashboard = () => {
   };
 
   const fetchMemberProfile = (token) => {
-    axios.get('http://localhost:5000/api/v1/members/my/profile', {
+    api.get('/members/my/profile', {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => {
@@ -85,7 +85,7 @@ const UserDashboard = () => {
           setBioBn(m.bio?.bn || '');
           setIsPublic(m.isPublic !== false);
           if (m.profilePhoto) {
-            setProfilePhotoPreview(m.profilePhoto.startsWith('http') ? m.profilePhoto : `http://localhost:5000${m.profilePhoto}`);
+            setProfilePhotoPreview(m.profilePhoto.startsWith('http') ? m.profilePhoto : `${window.API_URL}${m.profilePhoto}`);
           }
         }
       })
@@ -103,7 +103,7 @@ const UserDashboard = () => {
     fetchMemberProfile(token);
 
     // Fetch Registrations
-    axios.get('http://localhost:5000/api/v1/events/my/registrations', {
+    api.get('/events/my/registrations', {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => {
@@ -137,7 +137,7 @@ const UserDashboard = () => {
         formData.append('profilePhoto', userPhotoFile);
       }
 
-      const res = await axios.put('http://localhost:5000/api/v1/auth/me', formData, {
+      const res = await api.put('/auth/me', formData, {
         headers: { 
           Authorization: `Bearer ${token}`,
           'Content-Type': 'multipart/form-data'
@@ -178,7 +178,7 @@ const UserDashboard = () => {
         formData.append('profilePhoto', profilePhotoFile);
       }
 
-      const res = await axios.put('http://localhost:5000/api/v1/members/my/profile', formData, {
+      const res = await api.put('/members/my/profile', formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'multipart/form-data'
@@ -190,7 +190,7 @@ const UserDashboard = () => {
         fetchProfile(token);
         setMemberMsg(isBn ? 'ডিরেক্টরি প্রোফাইল সফলভাবে আপডেট করা হয়েছে!' : 'Directory profile updated successfully!');
         if (res.data.data.profilePhoto) {
-          setProfilePhotoPreview(res.data.data.profilePhoto.startsWith('http') ? res.data.data.profilePhoto : `http://localhost:5000${res.data.data.profilePhoto}`);
+          setProfilePhotoPreview(res.data.data.profilePhoto.startsWith('http') ? res.data.data.profilePhoto : `${window.API_URL}${res.data.data.profilePhoto}`);
         }
         setTimeout(() => setMemberMsg(''), 3000);
       }
