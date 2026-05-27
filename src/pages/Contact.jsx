@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Mail, Phone, MapPin, Send } from 'lucide-react';
+import { useSettings } from '../context/settings.jsx';
 
 const Contact = () => {
   const { i18n } = useTranslation();
+  const { settings } = useSettings();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [subject, setSubject] = useState('');
@@ -111,24 +113,24 @@ const Contact = () => {
             <div className="space-y-4">
               <div className="flex items-center space-x-3 text-sm text-gray-600">
                 <MapPin className="text-secondary shrink-0" size={20} />
-                <span className="font-bn">{isBn ? 'প্রধান ক্যাম্পাস ভবন, ঢাকা, বাংলাদেশ' : 'Main Campus Road, Dhaka, Bangladesh'}</span>
+                <span className="font-bn">{isBn ? settings.addressBn : settings.addressEn}</span>
               </div>
               <div className="flex items-center space-x-3 text-sm text-gray-600">
                 <Phone className="text-secondary shrink-0" size={20} />
-                <span>+880 1234 567890</span>
+                <span>{settings.phone}</span>
               </div>
               <div className="flex items-center space-x-3 text-sm text-gray-600">
                 <Mail className="text-secondary shrink-0" size={20} />
-                <span>info@practonalumni.org</span>
+                <span>{settings.email}</span>
               </div>
             </div>
 
             {/* Official Emails */}
             <div className="mt-8 pt-6 border-t border-gray-200 space-y-2">
               <span className="block text-xs font-bold text-gray-400 uppercase tracking-wider">Official Emails</span>
-              <p className="text-sm text-gray-700">General Info: <span className="font-semibold text-primary">info@practonalumni.org</span></p>
-              <p className="text-sm text-gray-700">Administrator: <span className="font-semibold text-primary">admin@practonalumni.org</span></p>
-              <p className="text-sm text-gray-700">Support / Help: <span className="font-semibold text-primary">contact@practonalumni.org</span></p>
+              <p className="text-sm text-gray-700">General Info: <span className="font-semibold text-primary">{settings.email}</span></p>
+              <p className="text-sm text-gray-700">Administrator: <span className="font-semibold text-primary">admin@{settings.email.split('@')[1] || 'practonalumni.org'}</span></p>
+              <p className="text-sm text-gray-700">Support / Help: <span className="font-semibold text-primary">support@{settings.email.split('@')[1] || 'practonalumni.org'}</span></p>
             </div>
           </div>
 
