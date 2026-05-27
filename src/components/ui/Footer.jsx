@@ -17,7 +17,7 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="bg-dark text-white relative mt-20 pt-10">
+    <footer className="bg-dark text-white relative mt-20 pt-16">
       {/* Animated wave separator placeholder/SVG */}
       <div className="absolute top-0 left-0 right-0 w-full overflow-hidden leading-none transform -translate-y-full">
         <svg className="relative block w-full h-[30px]" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
@@ -25,15 +25,15 @@ const Footer = () => {
         </svg>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-12">
+        <div className="grid grid-cols-2 md:grid-cols-6 gap-8">
           {/* About Widget */}
-          <div className="col-span-2 md:col-span-1 space-y-4">
+          <div className="col-span-2 md:col-span-2 space-y-4">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-primary font-bold text-lg">
+              <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-primary font-bold text-lg shrink-0">
                 প
               </div>
-              <span className="text-xl font-bold font-bn tracking-wide">প্রাক্তন শিক্ষার্থী পরিষদ</span>
+              <span className="text-xl font-bold font-bn tracking-wide leading-snug">প্রাক্তন শিক্ষার্থী পরিষদ</span>
             </div>
             <p className="text-gray-400 text-sm leading-relaxed font-bn">
               ঐতিহ্যবাহী শিক্ষাপ্রতিষ্ঠানের প্রাক্তন শিক্ষার্থীদের একটি সংযোগ ও উন্নয়নের সেতু বন্ধন।
