@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import api, { API_URL } from '../api/api';
 import { Search, Mail, Building, Droplet, Calendar, Award } from 'lucide-react';
+import MemberSkeleton from '../components/ui/MemberSkeleton.jsx';
 
 const Members = () => {
   const { i18n } = useTranslation();
@@ -10,17 +11,20 @@ const Members = () => {
   const [pscBatch, setPscBatch] = useState('');
   const [bloodGroup, setBloodGroup] = useState('');
   const [professionFilter, setProfessionFilter] = useState('');
+  const [loading, setLoading] = useState(true);
   const isBn = i18n.language === 'bn';
 
   useEffect(() => {
     // Fetch members with filters from API (Fallback to client-side filtering if API is empty)
+    setLoading(true);
     api.get(`/members?search=${search}&pscBatch=${pscBatch}&bloodGroup=${bloodGroup}`)
       .then(res => {
         if (res.data.success) {
           setMembers(res.data.data.members);
         }
       })
-      .catch(err => console.log('Error fetching members:', err));
+      .catch(err => console.log('Error fetching members:', err))
+      .finally(() => setLoading(false));
   }, [search, pscBatch, bloodGroup]);
 
   const sourceMembers = members;
@@ -120,7 +124,9 @@ const Members = () => {
 
       {/* Directory Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredMembers.length > 0 ? (
+        {loading ? (
+          Array.from({ length: 6 }).map((_, i) => <MemberSkeleton key={i} />)
+        ) : filteredMembers.length > 0 ? (
           filteredMembers.map((member) => (
             <div key={member._id} className="bg-white p-6 rounded-2xl border border-gray-200 hover:border-secondary shadow-sm hover:shadow-md transition-all flex items-start space-x-4 relative group">
               
