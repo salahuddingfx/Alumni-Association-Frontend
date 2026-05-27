@@ -11,6 +11,12 @@ const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const isLoggedIn = !!localStorage.getItem('accessToken');
 
+  const handleLogout = () => {
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('user');
+    window.location.href = '/login';
+  };
+
   const toggleLanguage = () => {
     const currentLang = i18n.language;
     i18n.changeLanguage(currentLang === 'bn' ? 'en' : 'bn');
@@ -30,10 +36,10 @@ const Navbar = () => {
   return (
     <header className="sticky top-0 z-50 glass-panel shadow-sm border-b border-gray-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
+        <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-3">
-            <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white font-bold text-xl border-2 border-secondary shadow-md">
+            <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center text-white font-bold text-lg border-2 border-secondary shadow-md shrink-0">
               প
             </div>
             <div className="flex flex-col">
@@ -77,19 +83,35 @@ const Navbar = () => {
             </button>
 
             {isLoggedIn ? (
-              <Link
-                to="/dashboard"
-                className="bg-primary text-white hover:bg-primary-dark px-4 py-1.5 rounded-full font-semibold text-sm transition shadow-md"
-              >
-                Dashboard
-              </Link>
+              <div className="flex items-center space-x-2">
+                <Link
+                  to="/dashboard"
+                  className="bg-primary text-white hover:bg-primary-dark px-4 py-1.5 rounded-full font-semibold text-sm transition shadow-md"
+                >
+                  {isBn ? 'ড্যাশবোর্ড' : 'Dashboard'}
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  className="border border-red-500 text-red-500 hover:bg-red-500 hover:text-white px-4 py-1.5 rounded-full font-semibold text-sm transition"
+                >
+                  {isBn ? 'লগআউট' : 'Log Out'}
+                </button>
+              </div>
             ) : (
-              <Link
-                to="/login"
-                className="border border-primary text-primary hover:bg-primary hover:text-white px-4 py-1.5 rounded-full font-semibold text-sm transition"
-              >
-                {t('nav.login')}
-              </Link>
+              <div className="flex items-center space-x-2">
+                <Link
+                  to="/login"
+                  className="border border-primary text-primary hover:bg-primary hover:text-white px-4 py-1.5 rounded-full font-semibold text-sm transition"
+                >
+                  {t('nav.login')}
+                </Link>
+                <Link
+                  to="/register"
+                  className="bg-secondary hover:bg-yellow-500 text-white px-4 py-1.5 rounded-full font-semibold text-sm transition shadow-sm"
+                >
+                  {t('nav.register')}
+                </Link>
+              </div>
             )}
           </div>
 
@@ -131,23 +153,43 @@ const Navbar = () => {
                 {t(`nav.${item.labelKey}`)}
               </NavLink>
             ))}
-            <div className="pt-4 pb-2 border-t border-gray-200 flex flex-col px-3 space-y-2">
+            <div className="pt-3 pb-2 border-t border-gray-200 flex flex-col px-3 space-y-2">
               {isLoggedIn ? (
-                <Link
-                  to="/dashboard"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="w-full block bg-primary text-white py-2 rounded-full font-bold text-center"
-                >
-                  Dashboard
-                </Link>
+                <>
+                  <Link
+                    to="/dashboard"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="w-full block bg-primary text-white py-2 rounded-full font-bold text-center text-sm shadow-sm"
+                  >
+                    {isBn ? 'ড্যাশবোর্ড' : 'Dashboard'}
+                  </Link>
+                  <button
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      handleLogout();
+                    }}
+                    className="w-full block border border-red-500 text-red-500 py-2 rounded-full font-semibold text-center hover:bg-red-500 hover:text-white text-sm"
+                  >
+                    {isBn ? 'লগআউট' : 'Log Out'}
+                  </button>
+                </>
               ) : (
-                <Link
-                  to="/login"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="w-full block border border-primary text-primary py-2 rounded-full font-semibold text-center hover:bg-primary hover:text-white"
-                >
-                  {t('nav.login')}
-                </Link>
+                <>
+                  <Link
+                    to="/login"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="w-full block border border-primary text-primary py-2 rounded-full font-semibold text-center hover:bg-primary hover:text-white text-sm"
+                  >
+                    {t('nav.login')}
+                  </Link>
+                  <Link
+                    to="/register"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="w-full block bg-secondary text-white py-2 rounded-full font-bold text-center text-sm shadow-sm"
+                  >
+                    {t('nav.register')}
+                  </Link>
+                </>
               )}
             </div>
           </div>
