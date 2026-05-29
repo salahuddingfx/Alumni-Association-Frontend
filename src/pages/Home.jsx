@@ -366,6 +366,84 @@ const Home = () => {
         </div>
       </section>
 
+      {/* 🎥 VIDEO & AI PORTAL SECTION */}
+      <section className="py-20 bg-dark text-white relative overflow-hidden">
+        {/* Glowing background highlights */}
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl animate-float-slow" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-secondary/10 rounded-full blur-3xl animate-float-slow-reverse" />
+        
+        <div className="max-w-7xl mx-auto px-6 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {/* Association Intro Video */}
+            <div className="space-y-6">
+              <span className="text-secondary font-bold text-sm uppercase tracking-wider block">
+                {isBn ? "ভিডিও ডকুমেন্টারি" : "Video Documentary"}
+              </span>
+              <h2 className="text-3xl sm:text-4xl font-bold font-bn">
+                {isBn ? "আমাদের প্রাক্তন পরিষদের পরিচিতি" : "Introducing Our Alumni Association"}
+              </h2>
+              <p className="text-gray-300 font-bn leading-relaxed">
+                {isBn 
+                  ? "আমাদের প্রিয় প্রাক্তন পরিষদের ঐতিহ্যবাহী গৌরবোজ্জ্বল ইতিহাস ও ভবিষ্যত পথচলার এক নজরে চিত্ররূপ। এই প্রামাণ্যচিত্রের মাধ্যমে দেখুন কীভাবে আমরা আমাদের শিকড়কে ভুলে না গিয়ে একসাথে সামনে এগিয়ে চলেছি।" 
+                  : "A visual journey showcasing the rich history, values, and forward-looking vision of our Alumni Association. Watch the documentary to see how we keep our legacy alive and grow stronger together."
+                }
+              </p>
+              
+              {/* Responsive Video Container */}
+              <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-black/40 aspect-video group">
+                <iframe 
+                  className="absolute inset-0 w-full h-full"
+                  src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+                  title="Alumni Association Introduction Video"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                ></iframe>
+              </div>
+            </div>
+
+            {/* Antigravity AI Showcase */}
+            <div className="glass-panel-dark rounded-2xl p-8 border border-white/10 relative overflow-hidden">
+              {/* Decorative elements */}
+              <div className="absolute top-0 right-0 w-24 h-24 bg-accent/20 rounded-full blur-2xl animate-pulse" />
+              
+              <div className="relative z-10 space-y-6">
+                <div className="flex items-center space-x-3">
+                  <div className="bg-secondary/20 p-2 rounded-lg text-secondary animate-bounce">
+                    <Trophy size={24} />
+                  </div>
+                  <span className="bg-accent/10 text-accent border border-accent/20 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider font-english">
+                    DeepMind Antigravity
+                  </span>
+                </div>
+
+                <h2 className="text-2xl sm:text-3xl font-bold font-bn">
+                  {isBn ? "অ্যান্টিগ্রাভিটি এআই কোডিং পার্টনার" : "Engineered by Antigravity AI"}
+                </h2>
+
+                <p className="text-gray-300 font-bn leading-relaxed text-sm sm:text-base">
+                  {isBn 
+                    ? "এই ডিজিটাল অ্যালামনাই প্ল্যাটফর্মটি গুগল ডিপমাইন্ড (Google DeepMind)-এর সর্বাধুনিক এআই কোডিং সহকারী 'অ্যান্টিগ্রাভিটি' (Antigravity AI) দ্বারা সম্পূর্ণভাবে ডেভেলপ এবং অপ্টিমাইজ করা হয়েছে। বাগ ফিক্সিং, লেআউট ডিজাইন, ডেটা ক্যাশ ম্যানেজমেন্ট এবং পেমেন্ট গেটওয়ে ইন্টিগ্রেশন সফল করতে অ্যান্টিগ্রাভিটি একটি দক্ষ টিমমেট হিসেবে কাজ করেছে।" 
+                    : "This entire digital alumni portal is engineered and optimized by Google DeepMind's state-of-the-art agentic AI coding assistant, Antigravity. From layout refinements and cache engineering to system debugging and transaction integrations, Antigravity functions as a high-performance development partner."
+                  }
+                </p>
+
+                <div className="pt-4 border-t border-white/10 grid grid-cols-2 gap-4">
+                  <div className="bg-white/5 p-4 rounded-xl border border-white/5 hover:bg-white/10 transition">
+                    <span className="block text-xs text-gray-400 uppercase">{isBn ? "এআই আর্কিটেকচার" : "AI Architecture"}</span>
+                    <span className="block text-sm font-bold text-accent mt-1">Google DeepMind</span>
+                  </div>
+                  <div className="bg-white/5 p-4 rounded-xl border border-white/5 hover:bg-white/10 transition">
+                    <span className="block text-xs text-gray-400 uppercase">{isBn ? "অপ্টিমাইজেশন" : "Optimization Status"}</span>
+                    <span className="block text-sm font-bold text-secondary mt-1">100% Production Ready</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* 📢 NOTICE BOARD PREVIEW */}
       <section className="py-20 bg-slate-100 px-6">
         <div className="max-w-7xl mx-auto">
