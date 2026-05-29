@@ -65,7 +65,7 @@ const MemberDetail = () => {
         title={memberName}
         description={memberBio || `${memberName} - PSC Batch of ${member.pscBatch || member.batch}. ${member.profession || ''}`}
         image={member.profilePhoto}
-        url={`/members/${member._id}`}
+        url={`/members/${member.user?.username || member._id}`}
       />
 
       {/* Back Button */}

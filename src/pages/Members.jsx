@@ -139,7 +139,7 @@ const Members = () => {
               </div>
  
               {/* Avatar Image / Initial Circle */}
-              <Link to={`/members/${member._id}`} className="w-16 h-16 rounded-2xl bg-slate-100 overflow-hidden flex items-center justify-center font-extrabold text-xl shrink-0 border border-slate-100 hover:opacity-90 transition-opacity">
+              <Link to={`/members/${member.user?.username || member._id}`} className="w-16 h-16 rounded-2xl bg-slate-100 overflow-hidden flex items-center justify-center font-extrabold text-xl shrink-0 border border-slate-100 hover:opacity-90 transition-opacity">
                 <img 
                   src={member.profilePhoto ? getImageUrl(member.profilePhoto) : `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(isBn ? member.name.bn : member.name.en)}`} 
                   className="w-full h-full object-cover" 
@@ -152,7 +152,7 @@ const Members = () => {
               </Link>
 
               <div className="space-y-1.5 pr-12">
-                <Link to={`/members/${member._id}`} className="hover:underline">
+                <Link to={`/members/${member.user?.username || member._id}`} className="hover:underline">
                   <h3 className="font-extrabold text-lg text-primary font-bn group-hover:text-secondary transition-colors">
                     {isBn ? member.name.bn : member.name.en}
                   </h3>
