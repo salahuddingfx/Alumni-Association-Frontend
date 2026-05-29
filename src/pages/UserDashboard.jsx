@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import api, { API_URL } from '../api/api';
-import { User, Calendar, LogOut, Ticket, Mail, Phone, Tag, Edit, Save, X, Key, Upload, ShieldAlert, CheckCircle, AlertCircle } from 'lucide-react';
+import { User, Calendar, LogOut, Ticket, Mail, Phone, Tag, Edit, Save, X, Key, Upload, ShieldAlert, CheckCircle, AlertCircle, ShieldCheck, RefreshCw, Smartphone, CreditCard } from 'lucide-react';
 
 const UserDashboard = () => {
   const navigate = useNavigate();
@@ -45,6 +45,29 @@ const UserDashboard = () => {
   const [isPublic, setIsPublic] = useState(true);
   const [memberMsg, setMemberMsg] = useState('');
   const [savingMember, setSavingMember] = useState(false);
+
+  // Virtual ID Card States
+  const [idCardData, setIdCardData] = useState(null);
+  const [idCardLoading, setIdCardLoading] = useState(false);
+  const [idCardFlip, setIdCardFlip] = useState(false);
+
+  const fetchIdCard = (token) => {
+    setIdCardLoading(true);
+    api.get('/members/my/id-card', {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+      .then(res => {
+        if (res.data.success) {
+          setIdCardData(res.data.data);
+        }
+      })
+      .catch(err => {
+        console.log('ID Card fetch error:', err);
+      })
+      .finally(() => {
+        setIdCardLoading(false);
+      });
+  };
 
   const fetchProfile = (token) => {
     api.get('/auth/me', {
@@ -111,6 +134,7 @@ const UserDashboard = () => {
 
     fetchProfile(token);
     fetchMemberProfile(token);
+    fetchIdCard(token);
 
     // Fetch Registrations
     api.get('/events/my/registrations', {
@@ -123,6 +147,25 @@ const UserDashboard = () => {
       })
       .catch(() => {});
   }, [navigate]);
+
+  // Countdown timer for TOTP token refetching every 30s
+  useEffect(() => {
+    let timer;
+    if (idCardData) {
+      timer = setInterval(() => {
+        setIdCardData(prev => {
+          if (!prev) return null;
+          if (prev.expiresIn <= 1) {
+            const token = localStorage.getItem('accessToken');
+            fetchIdCard(token);
+            return prev;
+          }
+          return { ...prev, expiresIn: prev.expiresIn - 1 };
+        });
+      }, 1000);
+    }
+    return () => clearInterval(timer);
+  }, [idCardData]);
 
   const handleLogout = () => {
     localStorage.removeItem('accessToken');
