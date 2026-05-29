@@ -288,6 +288,170 @@ const UserDashboard = () => {
         
         {/* Left column - Account login settings & Tickets list - 5 cols */}
         <div className="lg:col-span-5 space-y-6">
+          {/* Virtual Alumni Identity Card */}
+          {idCardData ? (
+            <div className="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm space-y-6">
+              <h3 className="text-sm font-bold text-primary flex items-center justify-between pb-4 border-b border-gray-150">
+                <div className="flex items-center space-x-2">
+                  <CreditCard size={18} className="text-secondary" />
+                  <span>Virtual Alumni ID Card</span>
+                </div>
+                <span className="text-[10px] bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full border border-emerald-200 flex items-center space-x-1">
+                  <ShieldCheck size={10} />
+                  <span>Verified Pass</span>
+                </span>
+              </h3>
+
+              {/* Flip Card Wrapper */}
+              <div 
+                className="relative w-full aspect-[1.586/1] rounded-2xl cursor-pointer select-none overflow-hidden transition-all duration-500 shadow-lg border border-primary/10"
+                onClick={() => setIdCardFlip(!idCardFlip)}
+                style={{
+                  perspective: '1000px',
+                }}
+              >
+                {/* Card Container for 3D flip effect */}
+                <div 
+                  className="w-full h-full relative transition-transform duration-500"
+                  style={{
+                    transformStyle: 'preserve-3d',
+                    transform: idCardFlip ? 'rotateY(180deg)' : 'none',
+                  }}
+                >
+                  {/* FRONT SIDE */}
+                  <div 
+                    className="absolute inset-0 w-full h-full bg-gradient-to-br from-primary to-primary-dark p-5 rounded-2xl flex flex-col justify-between text-white"
+                    style={{
+                      backfaceVisibility: 'hidden',
+                    }}
+                  >
+                    {/* Card Header */}
+                    <div className="flex items-start justify-between">
+                      <div className="flex items-center space-x-2">
+                        <div className="w-8 h-8 bg-white/10 rounded-full border border-secondary/40 flex items-center justify-center font-bold text-white text-xs">
+                          প
+                        </div>
+                        <div className="flex flex-col">
+                          <span className="text-xs font-bold font-bn tracking-wide">প্রাক্তন শিক্ষার্থী পরিষদ</span>
+                          <span className="text-[7px] text-slate-300 font-medium uppercase tracking-wider">Alumni Card</span>
+                        </div>
+                      </div>
+                      <span className="text-[8px] border border-secondary/30 bg-secondary/10 px-2 py-0.5 rounded text-secondary font-extrabold uppercase tracking-widest">Official</span>
+                    </div>
+
+                    {/* Card Body */}
+                    <div className="flex items-center space-x-4 my-auto">
+                      <div className="w-14 h-14 rounded-full border-2 border-secondary overflow-hidden bg-white/15 flex items-center justify-center text-white font-bold text-base shrink-0 shadow-md">
+                        {idCardData.member.profilePhoto ? (
+                          <img src={idCardData.member.profilePhoto.startsWith('http') ? idCardData.member.profilePhoto : `${API_URL}${idCardData.member.profilePhoto}`} alt="" className="w-full h-full object-cover" />
+                        ) : (
+                          idCardData.member.name.en.charAt(0).toUpperCase()
+                        )}
+                      </div>
+                      <div className="space-y-0.5">
+                        <h4 className="text-sm font-bold font-bn tracking-wide leading-tight">{idCardData.member.name.en}</h4>
+                        <p className="text-[9px] font-bn text-slate-300">{idCardData.member.name.bn}</p>
+                        <div className="flex space-x-3 text-[8px] text-slate-200 mt-1">
+                          <div>
+                            <span className="text-gray-400 block text-[6px] uppercase">Batch</span>
+                            <span className="font-bold">{idCardData.member.batch}</span>
+                          </div>
+                          {idCardData.member.bloodGroup && (
+                            <div>
+                              <span className="text-gray-400 block text-[6px] uppercase">Blood</span>
+                              <span className="font-bold text-rose-300">{idCardData.member.bloodGroup}</span>
+                            </div>
+                          )}
+                          <div>
+                            <span className="text-gray-400 block text-[6px] uppercase">ID</span>
+                            <span className="font-mono">{idCardData.member._id.toString().slice(-6).toUpperCase()}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Card Footer */}
+                    <div className="flex items-center justify-between border-t border-white/10 pt-2 text-[7px] text-slate-300 uppercase tracking-widest">
+                      <span>Practon Alumni Portal</span>
+                      <span className="text-slate-400">Click to flip</span>
+                    </div>
+                  </div>
+
+                  {/* BACK SIDE */}
+                  <div 
+                    className="absolute inset-0 w-full h-full bg-gradient-to-br from-[#0c223c] to-[#040e1a] p-5 rounded-2xl flex flex-col justify-between text-white border border-primary/20"
+                    style={{
+                      backfaceVisibility: 'hidden',
+                      transform: 'rotateY(180deg)',
+                    }}
+                  >
+                    {/* Header */}
+                    <div className="flex items-center justify-between border-b border-white/10 pb-2">
+                      <span className="text-[8px] text-secondary font-bold uppercase tracking-wider">Dynamic Gate Check-In Pass</span>
+                      <div className="flex items-center space-x-1 text-[8px] text-gray-400">
+                        <RefreshCw size={8} className="animate-spin text-secondary" />
+                        <span>Expires in {idCardData.expiresIn}s</span>
+                      </div>
+                    </div>
+
+                    {/* Card Body - QR & Barcode */}
+                    <div className="flex items-center justify-around my-auto">
+                      <div className="bg-white p-1 rounded-lg shadow-md border border-gray-255 shrink-0">
+                        <img 
+                          src={`https://api.qrserver.com/v1/create-qr-code/?size=90x90&data=${encodeURIComponent(idCardData.verificationUrl)}`} 
+                          alt="Dynamic QR Code" 
+                          className="w-16 h-16 object-contain"
+                        />
+                      </div>
+                      <div className="text-center space-y-1">
+                        <div className="font-mono text-base tracking-widest font-bold text-secondary">
+                          {idCardData.totpToken}
+                        </div>
+                        <p className="text-[7px] text-slate-300 max-w-[120px] mx-auto leading-normal">
+                          Scan at gate for authenticated entrance. Valid for 30s.
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Footer */}
+                    <div className="text-center text-[6px] text-gray-500 uppercase tracking-widest border-t border-white/10 pt-2">
+                      Secured by SHA-256 OTP Algorithm
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Download Buttons */}
+              <div className="pt-2">
+                <button
+                  onClick={() => {
+                    const token = localStorage.getItem('accessToken');
+                    window.open(`http://localhost:5000/api/members/my/id-card/pkpass?token=${token}`, '_blank');
+                  }}
+                  className="w-full bg-primary hover:bg-primary-dark text-white font-bold py-2 rounded-lg flex items-center justify-center space-x-2 shadow transition text-xs uppercase"
+                >
+                  <Smartphone size={14} className="text-secondary" />
+                  <span>Apple Wallet Pass</span>
+                </button>
+              </div>
+            </div>
+          ) : !idCardLoading && !memberProfile ? (
+            <div className="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm space-y-4 text-center">
+              <CreditCard size={32} className="mx-auto text-gray-400" />
+              <h4 className="text-sm font-bold text-primary">Virtual ID Card Locked</h4>
+              <p className="text-xs text-gray-500 font-bn leading-relaxed px-4">
+                {isBn 
+                  ? 'আপনার ভার্চুয়াল আইডি কার্ড জেনারেট করতে অনুগ্রহ করে ডিরেক্টরি প্রোফাইলটি সম্পূর্ণ করুন।' 
+                  : 'Please complete your Directory Profile on the right to activate your Virtual Alumnus Identity Card.'}
+              </p>
+            </div>
+          ) : (
+            <div className="bg-white p-8 rounded-2xl border border-gray-200 shadow-sm text-center">
+              <RefreshCw size={24} className="mx-auto text-secondary animate-spin mb-2" />
+              <span className="text-xs text-gray-500">Generating secure ID card...</span>
+            </div>
+          )}
+
           {/* Account Login Settings */}
           <div className="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm space-y-6 h-fit">
             <div className="flex justify-between items-center pb-4 border-b border-gray-150">
