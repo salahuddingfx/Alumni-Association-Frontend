@@ -114,26 +114,9 @@ const Footer = () => {
   const isBn = i18n.language === 'bn';
   const [partners, setPartners] = useState([]);
 
-  const row1 = [
-    { name: 'Visa', logo: <VisaLogo /> },
-    { name: 'Mastercard', logo: <MastercardLogo /> },
-    { name: 'Amex', logo: <AmexLogo /> },
-    { name: 'Brac Bank', logo: <BracBankLogo /> },
-    { name: 'DBBL Nexus', logo: <DbblNexusLogo /> },
-    { name: 'City Bank', logo: <CityBankLogo /> },
-    { name: 'Bank Asia', logo: <BankAsiaLogo /> },
-    { name: 'Islami Bank', logo: <IslamiBankLogo /> }
-  ];
-
-  const row2 = [
-    { name: 'AB Bank', logo: <AbBankLogo /> },
-    { name: 'MTB', logo: <MtbLogo /> },
-    { name: 'bKash', logo: <BkashLogo /> },
-    { name: 'Rocket', logo: <RocketLogo /> },
-    { name: 'Nagad', logo: <NagadLogo /> },
-    { name: 'Upay', logo: <UpayLogo /> },
-    { name: 'OK Wallet', logo: <OkWalletLogo /> }
-  ];
+  const half = Math.ceil(partners.length / 2);
+  const row1 = partners.slice(0, half);
+  const row2 = partners.slice(half);
 
   useEffect(() => {
     api.get('/partners')
@@ -181,29 +164,7 @@ const Footer = () => {
         </svg>
       </div>
 
-      {/* Dynamic Partner Logo Ribbon */}
-      {partners.length > 0 && (
-        <div className="border-b border-slate-800/80 bg-slate-950/20 py-4 overflow-hidden mask-gradient relative z-10 mb-8">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-2.5 flex items-center justify-between text-[10px] text-gray-500 font-extrabold uppercase tracking-wider font-english">
-            <span>{isBn ? "সহযোগী সংস্থাসমূহ" : "Partner Organizations"}</span>
-            <Link to="/partners" className="hover:text-secondary transition-colors text-[9px] lowercase font-semibold">{isBn ? "বিস্তারিত" : "view all"}</Link>
-          </div>
-          <div className="w-full overflow-hidden">
-            <div className="animate-marquee-fast flex items-center space-x-12">
-              {partners.map(p => (
-                <a key={p._id} href={p.website || '#'} target={p.website ? '_blank' : '_self'} rel="noreferrer" className="shrink-0 flex items-center justify-center opacity-40 hover:opacity-100 transition-opacity duration-300">
-                  <img src={getImageUrl(p.logo)} alt={isBn ? p.name.bn : p.name.en} className="h-6 w-auto object-contain max-w-[110px] filter brightness-0 invert" />
-                </a>
-              ))}
-              {partners.map(p => (
-                <a key={`${p._id}-dup`} href={p.website || '#'} target={p.website ? '_blank' : '_self'} rel="noreferrer" className="shrink-0 flex items-center justify-center opacity-40 hover:opacity-100 transition-opacity duration-300">
-                  <img src={getImageUrl(p.logo)} alt={isBn ? p.name.bn : p.name.en} className="h-6 w-auto object-contain max-w-[110px] filter brightness-0 invert" />
-                </a>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
+
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-8">
         <div className="grid grid-cols-2 md:grid-cols-6 gap-8">
@@ -340,45 +301,76 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* SSLCommerz-style Secured Payment Gateways Banner */}
-        <div className="mt-12 pt-8 border-t border-slate-800/80">
-          <div className="text-center mb-5">
-            <span className="text-[10px] text-gray-500 font-extrabold uppercase tracking-wider font-english">
-              {isBn ? "নিরাপদ পেমেন্ট পার্টনারসমূহ (SSLCommerz)" : "Secured Payment Channels (SSLCommerz accepted)"}
-            </span>
-          </div>
-          <div className="flex flex-col items-center justify-center relative py-1 border-l border-r border-slate-800/65 px-4">
-            <div className="w-full overflow-hidden mask-gradient">
-              {/* Row 1 */}
-              <div className="animate-marquee flex items-center space-x-3 py-1">
-                {row1.map((pm, idx) => (
-                  <div key={idx} className="bg-white px-3 py-2 rounded-lg border border-slate-200/10 shadow-sm flex items-center justify-center min-w-[90px] h-10 shrink-0 select-none">
-                    {pm.logo}
-                  </div>
-                ))}
-                {row1.map((pm, idx) => (
-                  <div key={`dup-1-${idx}`} className="bg-white px-3 py-2 rounded-lg border border-slate-200/10 shadow-sm flex items-center justify-center min-w-[90px] h-10 shrink-0 select-none">
-                    {pm.logo}
-                  </div>
-                ))}
-              </div>
+        {/* SSLCommerz-style Dynamic Partners Counter-Scrolling Banner */}
+        {partners.length > 0 && (
+          <div className="mt-12 pt-8 border-t border-slate-800/80">
+            <div className="text-center mb-5 flex justify-between items-center px-4 max-w-7xl mx-auto">
+              <span className="text-[10px] text-gray-500 font-extrabold uppercase tracking-wider font-english">
+                {isBn ? "আমাদের গর্বিত অংশীদার ও পৃষ্ঠপোষক" : "Proud Partners & Sponsors"}
+              </span>
+              <Link to="/partners" className="text-[9px] font-semibold text-secondary hover:underline uppercase tracking-wide">
+                {isBn ? "বিস্তারিত বিবরণ" : "View All"}
+              </Link>
+            </div>
+            <div className="flex flex-col items-center justify-center relative py-1 border-l border-r border-slate-800/65 px-4">
+              <div className="w-full overflow-hidden mask-gradient">
+                {/* Row 1 */}
+                <div className="animate-marquee flex items-center space-x-3 py-1">
+                  {row1.map((p) => (
+                    <a
+                      key={p._id}
+                      href={p.website || '#'}
+                      target={p.website ? '_blank' : '_self'}
+                      rel="noreferrer"
+                      className="bg-white px-4 py-2 rounded-lg border border-slate-200/10 shadow-sm flex items-center justify-center min-w-[140px] max-w-[200px] h-11 shrink-0 select-none transition-transform duration-300 hover:scale-105 group"
+                    >
+                      <img src={getImageUrl(p.logo)} alt={isBn ? p.name?.bn : p.name?.en} className="max-h-full max-w-full object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300" />
+                    </a>
+                  ))}
+                  {row1.map((p) => (
+                    <a
+                      key={`dup-1-${p._id}`}
+                      href={p.website || '#'}
+                      target={p.website ? '_blank' : '_self'}
+                      rel="noreferrer"
+                      className="bg-white px-4 py-2 rounded-lg border border-slate-200/10 shadow-sm flex items-center justify-center min-w-[140px] max-w-[200px] h-11 shrink-0 select-none transition-transform duration-300 hover:scale-105 group"
+                    >
+                      <img src={getImageUrl(p.logo)} alt={isBn ? p.name?.bn : p.name?.en} className="max-h-full max-w-full object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300" />
+                    </a>
+                  ))}
+                </div>
 
-              {/* Row 2 */}
-              <div className="animate-marquee-reverse flex items-center space-x-3 py-1 mt-1">
-                {row2.map((pm, idx) => (
-                  <div key={idx} className="bg-white px-3 py-2 rounded-lg border border-slate-200/10 shadow-sm flex items-center justify-center min-w-[90px] h-10 shrink-0 select-none">
-                    {pm.logo}
+                {/* Row 2 */}
+                {row2.length > 0 && (
+                  <div className="animate-marquee-reverse flex items-center space-x-3 py-1 mt-1">
+                    {row2.map((p) => (
+                      <a
+                        key={p._id}
+                        href={p.website || '#'}
+                        target={p.website ? '_blank' : '_self'}
+                        rel="noreferrer"
+                        className="bg-white px-4 py-2 rounded-lg border border-slate-200/10 shadow-sm flex items-center justify-center min-w-[140px] max-w-[200px] h-11 shrink-0 select-none transition-transform duration-300 hover:scale-105 group"
+                      >
+                        <img src={getImageUrl(p.logo)} alt={isBn ? p.name?.bn : p.name?.en} className="max-h-full max-w-full object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300" />
+                      </a>
+                    ))}
+                    {row2.map((p) => (
+                      <a
+                        key={`dup-2-${p._id}`}
+                        href={p.website || '#'}
+                        target={p.website ? '_blank' : '_self'}
+                        rel="noreferrer"
+                        className="bg-white px-4 py-2 rounded-lg border border-slate-200/10 shadow-sm flex items-center justify-center min-w-[140px] max-w-[200px] h-11 shrink-0 select-none transition-transform duration-300 hover:scale-105 group"
+                      >
+                        <img src={getImageUrl(p.logo)} alt={isBn ? p.name?.bn : p.name?.en} className="max-h-full max-w-full object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300" />
+                      </a>
+                    ))}
                   </div>
-                ))}
-                {row2.map((pm, idx) => (
-                  <div key={`dup-2-${idx}`} className="bg-white px-3 py-2 rounded-lg border border-slate-200/10 shadow-sm flex items-center justify-center min-w-[90px] h-10 shrink-0 select-none">
-                    {pm.logo}
-                  </div>
-                ))}
+                )}
               </div>
             </div>
           </div>
-        </div>
+        )}
 
         <div className="mt-8 pt-4 border-t border-slate-800 text-center text-sm text-gray-500">
           &copy; {new Date().getFullYear()} {isBn ? settings.schoolNameBn : settings.schoolNameEn}. All rights reserved.
