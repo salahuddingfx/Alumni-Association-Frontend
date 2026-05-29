@@ -482,14 +482,7 @@ const Home = () => {
               </span>
               
               <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-black/40 aspect-video group">
-                <iframe 
-                  className="absolute inset-0 w-full h-full"
-                  src="https://www.youtube.com/embed/9ycVq2kU7L0"
-                  title="Alumni Association Introduction Video"
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  allowFullScreen
-                ></iframe>
+                <VideoPlayer url={settings?.introVideoUrl || 'https://www.youtube.com/embed/9ycVq2kU7L0'} />
               </div>
             </div>
           </div>
