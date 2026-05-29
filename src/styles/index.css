@@ -162,24 +162,6 @@ html {
   }
 }
 
-.animate-marquee {
-  display: flex;
-  width: max-content;
-  animation: marquee 30s linear infinite;
-}
-
-.animate-marquee-fast {
-  display: flex;
-  width: max-content;
-  animation: marquee 18s linear infinite;
-}
-
-.animate-marquee:hover,
-.animate-marquee-fast:hover,
-.animate-marquee-reverse:hover {
-  animation-play-state: paused;
-}
-
 @keyframes marquee-reverse {
   0% {
     transform: translateX(-50%);
@@ -189,16 +171,53 @@ html {
   }
 }
 
+/* Marquee track wrapper — must be overflow:hidden */
+.marquee-track {
+  overflow: hidden;
+  width: 100%;
+  position: relative;
+}
+
+/* Marquee inner row — holds items + duplicated items side by side */
+.animate-marquee {
+  display: flex;
+  flex-wrap: nowrap;
+  width: max-content;
+  will-change: transform;
+  animation: marquee 35s linear infinite;
+}
+
+.animate-marquee-fast {
+  display: flex;
+  flex-wrap: nowrap;
+  width: max-content;
+  will-change: transform;
+  animation: marquee 20s linear infinite;
+}
+
 .animate-marquee-reverse {
   display: flex;
+  flex-wrap: nowrap;
   width: max-content;
-  animation: marquee-reverse 30s linear infinite;
+  will-change: transform;
+  animation: marquee-reverse 35s linear infinite;
+}
+
+/* Pause on hover */
+.marquee-track:hover .animate-marquee,
+.marquee-track:hover .animate-marquee-fast,
+.marquee-track:hover .animate-marquee-reverse {
+  animation-play-state: paused;
 }
 
 /* Mask gradient for smooth fade effect at edges of scrolling marquee ticker */
 .mask-gradient {
-  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
-  -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
 }
 
+/* Dark mode toggle transition */
+.theme-transition {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
 
