@@ -71,7 +71,7 @@ const CommitteeDetail = () => {
         title={memberName}
         description={`${memberRole} - Committee member of Practon Alumni Association.`}
         image={member.image}
-        url={`/committee/${member._id}`}
+        url={`/committee/${member.slug || member._id}`}
       />
 
       {/* Back Button */}

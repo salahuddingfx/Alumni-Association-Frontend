@@ -64,7 +64,7 @@ const Committee = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         {displayMembers.map((member) => (
           <div key={member._id} className="bg-white rounded-2xl overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition duration-300">
-            <Link to={`/committee/${member._id}`} className="h-64 bg-slate-200 relative flex items-center justify-center block hover:opacity-95 transition-opacity">
+            <Link to={`/committee/${member.slug || member._id}`} className="h-64 bg-slate-200 relative flex items-center justify-center block hover:opacity-95 transition-opacity">
               {member.image ? (
                 <img src={getImageUrl(member.image)} className="w-full h-full object-cover" alt={member.name.en} />
               ) : (
@@ -77,7 +77,7 @@ const Committee = () => {
               </span>
             </Link>
             <div className="p-6">
-              <Link to={`/committee/${member._id}`} className="hover:underline">
+              <Link to={`/committee/${member.slug || member._id}`} className="hover:underline">
                 <h3 className="font-bold text-xl text-primary font-bn">
                   {isBn ? member.name.bn : member.name.en}
                 </h3>
