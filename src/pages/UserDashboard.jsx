@@ -46,6 +46,8 @@ const UserDashboard = () => {
   const [website, setWebsite] = useState('');
   const [profilePhotoFile, setProfilePhotoFile] = useState(null);
   const [profilePhotoPreview, setProfilePhotoPreview] = useState('');
+  const [bannerPhotoFile, setBannerPhotoFile] = useState(null);
+  const [bannerPhotoPreview, setBannerPhotoPreview] = useState('');
   const [isPublic, setIsPublic] = useState(true);
   const [memberMsg, setMemberMsg] = useState('');
   const [savingMember, setSavingMember] = useState(false);
@@ -126,6 +128,9 @@ const UserDashboard = () => {
           initClientSocket(m);
           if (m.profilePhoto) {
             setProfilePhotoPreview(getImageUrl(m.profilePhoto));
+          }
+          if (m.bannerPhoto) {
+            setBannerPhotoPreview(getImageUrl(m.bannerPhoto));
           }
         }
       })
@@ -240,6 +245,9 @@ const UserDashboard = () => {
       formData.append('isPublic', isPublic);
       if (profilePhotoFile) {
         formData.append('profilePhoto', profilePhotoFile);
+      }
+      if (bannerPhotoFile) {
+        formData.append('bannerPhoto', bannerPhotoFile);
       }
 
       const res = await api.put('/members/my/profile', formData, {
