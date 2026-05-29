@@ -76,8 +76,21 @@ const MemberDetail = () => {
 
       {/* Profile Card */}
       <div className="bg-white rounded-3xl border border-gray-200 overflow-hidden shadow-xl">
-        {/* Banner/Header background gradient */}
-        <div className="h-40 bg-gradient-to-r from-primary to-primary-dark relative"></div>
+        {/* Banner/Header background */}
+        <div className="h-48 relative overflow-hidden">
+          {member.bannerPhoto ? (
+            <>
+              <img
+                src={getImageUrl(member.bannerPhoto)}
+                alt="Profile Banner"
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+            </>
+          ) : (
+            <div className="h-full bg-gradient-to-r from-primary to-primary-dark" />
+          )}
+        </div>
 
         {/* Profile Info Section */}
         <div className="px-6 md:px-12 pb-12 relative">
