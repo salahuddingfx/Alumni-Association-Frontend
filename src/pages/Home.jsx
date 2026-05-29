@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useSettings } from '../context/settings.jsx';
 import api, { API_URL } from '../api/api';
+import { getImageUrl } from '../utils/image';
 
 // 60fps high-performance count-up counter component
 const AnimatedCounter = ({ value, suffix = '', isCurrency = false, isBn = false }) => {
@@ -636,7 +637,7 @@ const Home = () => {
                     <div className="h-44 w-full bg-slate-200 overflow-hidden relative">
                       {blog.thumbnail ? (
                         <img 
-                          src={blog.thumbnail.startsWith('http') ? blog.thumbnail : `${API_URL}${blog.thumbnail}`} 
+                          src={getImageUrl(blog.thumbnail)} 
                           className="w-full h-full object-cover" 
                           alt={isBn ? blog.title.bn : blog.title.en} 
                         />
