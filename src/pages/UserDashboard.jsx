@@ -746,6 +746,35 @@ const UserDashboard = () => {
               </div>
             </div>
 
+            {/* Banner / Cover photo upload */}
+            <div>
+              <label className="block text-xxs font-bold text-gray-500 uppercase mb-1.5">{isBn ? 'কভার ফটো (ব্যানার)' : 'Cover Photo (Banner)'}</label>
+              <div className="relative rounded-xl overflow-hidden border border-gray-200 group" style={{ height: '110px' }}>
+                {bannerPhotoPreview ? (
+                  <img src={bannerPhotoPreview} className="w-full h-full object-cover" alt="Banner" />
+                ) : (
+                  <div className="w-full h-full bg-gradient-to-r from-primary to-primary-dark flex items-center justify-center">
+                    <span className="text-white/50 text-xs font-bold uppercase tracking-wider">{isBn ? 'কভার ফটো সেট করুন' : 'Set Cover Photo'}</span>
+                  </div>
+                )}
+                <label className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center cursor-pointer transition-opacity">
+                  <Upload size={20} className="text-white mb-1" />
+                  <span className="text-white text-xs font-bold">{isBn ? 'কভার ফটো আপলোড করুন' : 'Upload Cover Photo'}</span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={e => {
+                      if (e.target.files[0]) {
+                        setBannerPhotoFile(e.target.files[0]);
+                        setBannerPhotoPreview(URL.createObjectURL(e.target.files[0]));
+                      }
+                    }}
+                  />
+                </label>
+              </div>
+            </div>
+
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-xxs font-bold text-gray-500 uppercase mb-1">Full Name (English)</label>
