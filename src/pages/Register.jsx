@@ -46,9 +46,7 @@ const Register = () => {
     <div className="py-20 px-6 flex justify-center items-center">
       <div className="max-w-md w-full bg-white p-8 rounded-2xl border border-gray-200 shadow-lg">
         <div className="text-center mb-8">
-          <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center text-primary font-bold text-lg mx-auto mb-3">
-            প
-          </div>
+          <img src="/alumni_logo.png" className="w-12 h-12 rounded-full border-2 border-secondary shadow-md mx-auto mb-3 object-cover animate-pulse" alt="Logo" />
           <h2 className="text-2xl font-extrabold text-primary font-bn">নতুন অ্যাকাউন্ট তৈরি করুন</h2>
           <p className="text-xs text-gray-500 mt-1 uppercase tracking-wider">Register Alumni Member Account</p>
         </div>
