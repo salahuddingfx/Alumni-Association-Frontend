@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useLocation } from 'react-router-dom';
 import api from '../api/api';
 import { Megaphone, Pin, X, Calendar, AlertTriangle } from 'lucide-react';
 import NoticeSkeleton from '../components/ui/NoticeSkeleton.jsx';
 
 const Notices = () => {
   const { i18n } = useTranslation();
+  const { search } = useLocation();
   const [notices, setNotices] = useState([]);
   const [selectedNotice, setSelectedNotice] = useState(null);
   const [loading, setLoading] = useState(true);
