@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import api, { API_URL } from '../api/api';
 import { Search, Mail, Building, Droplet, Calendar, Award, Phone, Facebook, Linkedin, Twitter, Globe } from 'lucide-react';
 import MemberSkeleton from '../components/ui/MemberSkeleton.jsx';
+import { getImageUrl } from '../utils/image';
 
 const Members = () => {
   const { i18n } = useTranslation();
@@ -135,11 +136,11 @@ const Members = () => {
                 <Droplet size={12} className="fill-current text-red-500" />
                 <span>{member.bloodGroup}</span>
               </div>
-
+ 
               {/* Avatar Image / Initial Circle */}
               <div className="w-16 h-16 rounded-2xl bg-slate-100 overflow-hidden flex items-center justify-center font-extrabold text-xl shrink-0 border border-slate-100">
                 <img 
-                  src={member.profilePhoto ? (member.profilePhoto.startsWith('http') ? member.profilePhoto : `${API_URL}${member.profilePhoto}`) : `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(isBn ? member.name.bn : member.name.en)}`} 
+                  src={member.profilePhoto ? getImageUrl(member.profilePhoto) : `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(isBn ? member.name.bn : member.name.en)}`} 
                   className="w-full h-full object-cover" 
                   alt="" 
                   onError={(e) => {
