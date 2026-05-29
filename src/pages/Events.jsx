@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import api, { API_URL } from '../api/api';
+import { getImageUrl } from '../utils/image';
 import { Calendar, MapPin, X, User, Phone, CheckCircle, Upload, CreditCard } from 'lucide-react';
 import EventSkeleton from '../components/ui/EventSkeleton.jsx';
 import { convertBanglishToBengali } from '../utils/banglish';
@@ -163,7 +164,7 @@ const Events = () => {
                 setWhatsappNumber(m.phone);
               }
               if (m.profilePhoto) {
-                const photoUrl = m.profilePhoto.startsWith('http') ? m.profilePhoto : `${API_URL}${m.profilePhoto}`;
+                const photoUrl = getImageUrl(m.profilePhoto);
                 setExistingPhoto(photoUrl);
               }
             }
