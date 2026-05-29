@@ -38,28 +38,28 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-3">
+          <Link to="/" className="flex items-center space-x-3 shrink-0">
             <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center text-white font-bold text-lg border-2 border-secondary shadow-md shrink-0">
               প
             </div>
             <div className="flex flex-col">
-              <span className="text-lg font-bold text-primary font-bn tracking-wide">
+              <span className="text-base lg:text-[15px] xl:text-lg font-bold text-primary font-bn tracking-wide whitespace-nowrap">
                 {isBn ? settings.siteTitleBn : settings.siteTitleEn}
               </span>
-              <span className="text-xs text-gray-500 font-medium">
+              <span className="text-[10px] xl:text-xs text-gray-500 font-medium whitespace-nowrap">
                 {isBn ? settings.schoolNameBn : settings.schoolNameEn}
               </span>
             </div>
           </Link>
 
           {/* Desktop Navbar */}
-          <nav className="hidden lg:flex items-center space-x-1">
+          <nav className="hidden lg:flex items-center space-x-0.5 xl:space-x-1">
             {navItems.map((item) => (
               <NavLink
                 key={item.path}
                 to={item.path}
                 className={({ isActive }) =>
-                  `px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                  `px-2 xl:px-3 py-2 rounded-md text-[13px] xl:text-sm font-medium transition-colors ${
                     isActive
                       ? 'text-primary border-b-2 border-secondary font-bold'
                       : 'text-gray-600 hover:text-primary hover:bg-slate-100'
@@ -72,42 +72,42 @@ const Navbar = () => {
           </nav>
 
           {/* Actions */}
-          <div className="hidden lg:flex items-center space-x-4">
+          <div className="hidden lg:flex items-center space-x-2 xl:space-x-4 shrink-0">
             {/* Language Switcher */}
             <button
               onClick={toggleLanguage}
-              className="flex items-center space-x-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-gray-700 text-xs font-semibold rounded-full border border-gray-300 transition"
+              className="flex items-center space-x-1 px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-gray-700 text-xs font-semibold rounded-full border border-gray-300 transition shrink-0"
             >
               <Globe size={14} className="text-primary" />
               <span>{i18n.language === 'bn' ? 'English' : 'বাংলা'}</span>
             </button>
 
             {isLoggedIn ? (
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-1.5 xl:space-x-2">
                 <Link
                   to="/dashboard"
-                  className="bg-primary text-white hover:bg-primary-dark px-4 py-1.5 rounded-full font-semibold text-sm transition shadow-md"
+                  className="bg-primary text-white hover:bg-primary-dark px-3 xl:px-4 py-1.5 rounded-full font-semibold text-xs xl:text-sm transition shadow-md whitespace-nowrap"
                 >
                   {isBn ? 'ড্যাশবোর্ড' : 'Dashboard'}
                 </Link>
                 <button
                   onClick={handleLogout}
-                  className="border border-red-500 text-red-500 hover:bg-red-500 hover:text-white px-4 py-1.5 rounded-full font-semibold text-sm transition"
+                  className="border border-red-500 text-red-500 hover:bg-red-500 hover:text-white px-3 xl:px-4 py-1.5 rounded-full font-semibold text-xs xl:text-sm transition whitespace-nowrap"
                 >
                   {isBn ? 'লগআউট' : 'Log Out'}
                 </button>
               </div>
             ) : (
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-1.5 xl:space-x-2">
                 <Link
                   to="/login"
-                  className="border border-primary text-primary hover:bg-primary hover:text-white px-4 py-1.5 rounded-full font-semibold text-sm transition"
+                  className="border border-primary text-primary hover:bg-primary hover:text-white px-3 xl:px-4 py-1.5 rounded-full font-semibold text-xs xl:text-sm transition whitespace-nowrap"
                 >
                   {t('nav.login')}
                 </Link>
                 <Link
                   to="/register"
-                  className="bg-secondary hover:bg-yellow-500 text-white px-4 py-1.5 rounded-full font-semibold text-sm transition shadow-sm"
+                  className="bg-secondary hover:bg-yellow-500 text-white px-3 xl:px-4 py-1.5 rounded-full font-semibold text-xs xl:text-sm transition shadow-sm whitespace-nowrap"
                 >
                   {t('nav.register')}
                 </Link>

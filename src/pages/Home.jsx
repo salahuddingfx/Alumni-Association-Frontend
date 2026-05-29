@@ -7,6 +7,60 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import api from '../api/api';
 
+// 60fps high-performance count-up counter component
+const AnimatedCounter = ({ value, suffix = '', isCurrency = false, isBn = false }) => {
+  const [displayCount, setDisplayCount] = useState(0);
+
+  useEffect(() => {
+    const numericValue = typeof value === 'number' 
+      ? value 
+      : parseInt(String(value).replace(/[^\d]/g, ''), 10);
+
+    if (isNaN(numericValue) || numericValue === 0) {
+      setDisplayCount(0);
+      return;
+    }
+
+    const end = numericValue;
+    const duration = 1500; 
+    const startTime = performance.now();
+
+    const animate = (currentTime) => {
+      const elapsedTime = currentTime - startTime;
+      const progress = Math.min(elapsedTime / duration, 1);
+      const easedProgress = progress * (2 - progress); // Ease out quad
+      const current = Math.floor(easedProgress * end);
+      
+      setDisplayCount(current);
+
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      } else {
+        setDisplayCount(end);
+      }
+    };
+
+    requestAnimationFrame(animate);
+  }, [value]);
+
+  const toBnNum = (num) => {
+    if (!isBn) return num.toLocaleString();
+    const bnDigits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
+    return num.toString().replace(/\d/g, d => bnDigits[d]);
+  };
+
+  const formattedCount = isCurrency 
+    ? (isBn ? '৳' + toBnNum(displayCount) : '৳' + displayCount.toLocaleString())
+    : toBnNum(displayCount);
+
+  return (
+    <span>
+      {formattedCount}
+      {suffix}
+    </span>
+  );
+};
+
 // Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/effect-fade';
@@ -48,8 +102,11 @@ const Home = () => {
     // 3. Members Count
     api.get('/members')
       .then(res => {
-        if (res.data.success && Array.isArray(res.data.data)) {
-          setMembersCount(res.data.data.length);
+        if (res.data.success && res.data.data) {
+          const count = typeof res.data.data.total === 'number'
+            ? res.data.data.total
+            : (Array.isArray(res.data.data.members) ? res.data.data.members.length : 0);
+          setMembersCount(count);
         }
       })
       .catch(err => console.log('Error fetching members count:', err));
@@ -265,7 +322,9 @@ const Home = () => {
             <img src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=800" className="object-cover w-full h-full" alt="Campus Building" />
           </div>
           <div className="absolute -bottom-6 -left-6 bg-white p-6 rounded-xl shadow-lg border border-gray-100 hidden sm:block">
-            <span className="block text-3xl font-extrabold text-primary">{toBnNum(membersCount > 0 ? membersCount : '১০০+')}</span>
+            <span className="block text-3xl font-extrabold text-primary">
+              <AnimatedCounter value={membersCount > 0 ? membersCount : 100} suffix="+" isBn={isBn} />
+            </span>
             <span className="text-sm text-gray-500 font-medium">Active Registered Members</span>
           </div>
         </div>
@@ -276,14 +335,30 @@ const Home = () => {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(79,195,247,0.15),transparent)]" />
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 relative z-10">
           {[
-            { icon: <Users size={32} className="text-secondary" />, count: toBnNum(membersCount > 0 ? membersCount : '১০০+'), label: isBn ? 'মোট সদস্য' : 'Active Members' },
-            { icon: <Calendar size={32} className="text-secondary" />, count: toBnNum(eventsCount > 0 ? eventsCount : '০'), label: isBn ? 'নিবন্ধিত ইভেন্ট' : 'Active Events' },
-            { icon: <Trophy size={32} className="text-secondary" />, count: isBn ? '১০+' : '10+', label: isBn ? 'পুরস্কার ও সম্মাননা' : 'Awards & Recognition' },
-            { icon: <Heart size={32} className="text-secondary" />, count: '৳' + toBnNum(stats.totalAmount), label: isBn ? 'সংগৃহীত অনুদান (টাকা)' : 'Total Donations (BDT)' }
+            { 
+              icon: <Users size={32} className="text-secondary" />, 
+              counter: <AnimatedCounter value={membersCount > 0 ? membersCount : 100} suffix="+" isBn={isBn} />, 
+              label: isBn ? 'মোট সদস্য' : 'Active Members' 
+            },
+            { 
+              icon: <Calendar size={32} className="text-secondary" />, 
+              counter: <AnimatedCounter value={eventsCount} isBn={isBn} />, 
+              label: isBn ? 'নিবন্ধিত ইভেন্ট' : 'Active Events' 
+            },
+            { 
+              icon: <Trophy size={32} className="text-secondary" />, 
+              counter: <AnimatedCounter value={10} suffix="+" isBn={isBn} />, 
+              label: isBn ? 'পুরস্কার ও সম্মাননা' : 'Awards & Recognition' 
+            },
+            { 
+              icon: <Heart size={32} className="text-secondary" />, 
+              counter: <AnimatedCounter value={stats.totalAmount} isCurrency={true} isBn={isBn} />, 
+              label: isBn ? 'সংগৃহীত অনুদান (টাকা)' : 'Total Donations (BDT)' 
+            }
           ].map((stat, i) => (
             <div key={i} className="flex flex-col items-center">
               {stat.icon}
-              <span className="text-3xl sm:text-4xl font-extrabold font-bn mt-3">{stat.count}</span>
+              <span className="text-3xl sm:text-4xl font-extrabold font-bn mt-3">{stat.counter}</span>
               <span className="text-sm text-gray-300 font-bn mt-1">{stat.label}</span>
             </div>
           ))}
