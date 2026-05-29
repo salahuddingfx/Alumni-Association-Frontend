@@ -299,7 +299,7 @@ const Home = () => {
   return (
     <div className="overflow-x-hidden font-english">
       {/* 🖼️ HERO SECTION WITH ANIMATED SLIDER */}
-      <section className="relative h-[85vh] w-full bg-dark">
+      <section className="relative h-screen min-h-[600px] w-full bg-dark">
         <Swiper
           modules={[Autoplay, EffectFade, Pagination, Navigation, Keyboard]}
           effect={'fade'}
@@ -705,8 +705,8 @@ const Home = () => {
           </Link>
 
           {partners.length > 0 ? (
-            <div className="w-full overflow-hidden mask-gradient py-4">
-              <div className="animate-marquee flex items-center space-x-8">
+            <div className="w-full marquee-track mask-gradient py-4">
+              <div className="animate-marquee items-center space-x-8" style={{ gap: '2rem' }}>
                 {/* Original items */}
                 {partners.map((partner) => (
                   <a
@@ -720,7 +720,7 @@ const Home = () => {
                       <img
                         src={getImageUrl(partner.logo)}
                         alt={isBn ? partner.name?.bn : partner.name?.en}
-                        className="max-h-full max-w-full object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300"
+                        className="max-h-full max-w-full object-contain"
                       />
                     </div>
                     <div className="text-left min-w-0">
@@ -746,7 +746,7 @@ const Home = () => {
                       <img
                         src={getImageUrl(partner.logo)}
                         alt={isBn ? partner.name?.bn : partner.name?.en}
-                        className="max-h-full max-w-full object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300"
+                        className="max-h-full max-w-full object-contain"
                       />
                     </div>
                     <div className="text-left min-w-0">
