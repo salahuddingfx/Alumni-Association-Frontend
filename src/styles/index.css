@@ -152,3 +152,37 @@ html {
   background: #F9A826 !important;
 }
 
+/* Linear Infinite Scrolling Marquee Ticker */
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 30s linear infinite;
+}
+
+.animate-marquee-fast {
+  display: flex;
+  width: max-content;
+  animation: marquee 18s linear infinite;
+}
+
+.animate-marquee:hover,
+.animate-marquee-fast:hover {
+  animation-play-state: paused;
+}
+
+/* Mask gradient for smooth fade effect at edges of scrolling marquee ticker */
+.mask-gradient {
+  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}
+
+
