@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import api, { API_URL } from '../api/api';
+import api from '../api/api';
 import { Calendar, User, Clock, ArrowRight, Search, FileText } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { getImageUrl } from '../utils/image';
 
 const Blog = () => {
   const { i18n } = useTranslation();
@@ -34,47 +35,45 @@ const Blog = () => {
       {/* Header */}
       <div className="text-center max-w-3xl mx-auto mb-12">
         <h1 className="text-4xl font-extrabold text-primary font-bn">
-          {isBn ? 'ব্লগ ও সংবাদ' : 'Blog & Alumni News'}
+          {isBn ? 'প্রাক্তনীদের ব্লগ ও সংবাদ' : 'Alumni Blog & News'}
         </h1>
         <p className="mt-4 text-gray-600 font-bn">
-          {isBn 
-            ? 'আমাদের পরিষদের বিভিন্ন কার্যক্রম, সাফল্য ও প্রাক্তন শিক্ষার্থীদের মতামত এবং গল্প সমূহ।' 
-            : 'Read the latest updates, achievements, thoughts, and stories from our alumni network.'}
+          {isBn ? 'পড়ুন আমাদের সফল প্রাক্তন শিক্ষার্থীদের অনুপ্রেরণামূলক গল্প ও নানা সংবাদ।' : 'Read inspirational stories, updates, and articles from our alumni community.'}
         </p>
       </div>
 
       {/* Controls: Search and Filters */}
-      <div className="flex flex-col md:flex-row gap-4 items-center justify-between mb-10">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10 bg-slate-50 p-6 rounded-2xl border border-gray-200">
         {/* Search */}
-        <div className="relative w-full md:max-w-md">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+        <div className="relative flex-1 max-w-md">
+          <Search className="absolute left-3 top-3.5 text-gray-400" size={18} />
           <input
             type="text"
             placeholder={isBn ? 'অনুসন্ধান করুন...' : 'Search articles...'}
-            className="w-full bg-white border border-gray-300 pl-10 pr-4 py-2.5 rounded-full text-sm focus:outline-none focus:border-secondary font-bn"
+            className="w-full bg-white border border-gray-300 pl-10 pr-4 py-2.5 rounded-xl text-sm focus:outline-none focus:border-secondary"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
 
         {/* Categories */}
-        <div className="flex gap-2 overflow-x-auto w-full md:w-auto pb-2 md:pb-0">
+        <div className="flex gap-2 overflow-x-auto pb-1">
           {[
-            { key: 'all', label: isBn ? 'সব' : 'All' },
+            { key: 'all', label: isBn ? 'সব নিবন্ধ' : 'All Articles' },
             { key: 'news', label: isBn ? 'সংবাদ' : 'News' },
             { key: 'story', label: isBn ? 'গল্প' : 'Story' },
             { key: 'achievement', label: isBn ? 'সাফল্য' : 'Achievement' },
-          ].map(cat => (
+          ].map(tab => (
             <button
-              key={cat.key}
-              onClick={() => setCategoryFilter(cat.key)}
-              className={`px-4 py-1.5 rounded-full text-xs font-bold transition whitespace-nowrap ${
-                categoryFilter === cat.key
-                  ? 'bg-secondary text-white shadow'
+              key={tab.key}
+              onClick={() => setCategoryFilter(tab.key)}
+              className={`px-4 py-2 rounded-full font-bold text-xs uppercase transition tracking-wider ${
+                categoryFilter === tab.key
+                  ? 'bg-secondary text-white shadow-sm'
                   : 'bg-white border border-gray-300 text-gray-700 hover:bg-slate-50'
               }`}
             >
-              {cat.label}
+              {tab.label}
             </button>
           ))}
         </div>
@@ -98,7 +97,7 @@ const Blog = () => {
                   <div className="h-48 w-full bg-slate-100 overflow-hidden relative">
                     {blog.thumbnail ? (
                       <img 
-                        src={blog.thumbnail.startsWith('http') ? blog.thumbnail : `${API_URL}${blog.thumbnail}`} 
+                        src={getImageUrl(blog.thumbnail)} 
                         className="w-full h-full object-cover" 
                         alt={title} 
                       />
