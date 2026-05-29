@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import api, { API_URL } from '../api/api';
+import api from '../api/api';
 import { Calendar, User, Clock, ArrowLeft, FileText } from 'lucide-react';
+import { getImageUrl } from '../utils/image';
 
 const BlogDetail = () => {
   const { slug } = useParams();
@@ -95,7 +96,7 @@ const BlogDetail = () => {
         {blog.thumbnail && (
           <div className="w-full h-[350px] bg-slate-100 rounded-2xl overflow-hidden shadow-sm border border-gray-200">
             <img 
-              src={blog.thumbnail.startsWith('http') ? blog.thumbnail : `${API_URL}${blog.thumbnail}`} 
+              src={getImageUrl(blog.thumbnail)} 
               className="w-full h-full object-cover" 
               alt={title} 
             />
