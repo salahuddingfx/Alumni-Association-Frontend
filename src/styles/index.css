@@ -9,10 +9,20 @@
     --accent: #4FC3F7;
     --dark: #071426;
     --white: #FFFFFF;
+    --bg-light: #f8fafc;
+    --bg-dark: #050e1a;
+  }
+
+  html.dark {
+    color-scheme: dark;
   }
 
   body {
-    @apply bg-slate-50 text-dark overflow-x-hidden;
+    @apply bg-slate-50 text-dark overflow-x-hidden transition-colors duration-300;
+  }
+
+  html.dark body {
+    @apply bg-[#050e1a] text-slate-100;
   }
 
   /* Custom Font Application base classes */
@@ -27,10 +37,17 @@
 
 /* Glassmorphism utility */
 .glass-panel {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+}
+
+html.dark .glass-panel {
+  background: rgba(7, 20, 38, 0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .glass-panel-dark {
