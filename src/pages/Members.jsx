@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import api, { API_URL } from '../api/api';
 import { Search, Mail, Building, Droplet, Calendar, Award, Phone, Facebook, Linkedin, Twitter, Globe } from 'lucide-react';
