@@ -30,11 +30,16 @@ const UserDashboard = () => {
   const [batch, setBatch] = useState('');
   const [pscBatch, setPscBatch] = useState('');
   const [bloodGroup, setBloodGroup] = useState('O+');
+  const [gender, setGender] = useState('Male');
   const [profession, setProfession] = useState('');
   const [currentOrganization, setCurrentOrganization] = useState('');
   const [memberPhone, setMemberPhone] = useState('');
   const [bioEn, setBioEn] = useState('');
   const [bioBn, setBioBn] = useState('');
+  const [facebook, setFacebook] = useState('');
+  const [linkedin, setLinkedin] = useState('');
+  const [twitter, setTwitter] = useState('');
+  const [website, setWebsite] = useState('');
   const [profilePhotoFile, setProfilePhotoFile] = useState(null);
   const [profilePhotoPreview, setProfilePhotoPreview] = useState('');
   const [isPublic, setIsPublic] = useState(true);
@@ -78,11 +83,16 @@ const UserDashboard = () => {
           setBatch(m.batch || '');
           setPscBatch(m.pscBatch || '');
           setBloodGroup(m.bloodGroup || 'O+');
+          setGender(m.gender || 'Male');
           setProfession(m.profession || '');
           setCurrentOrganization(m.currentOrganization || '');
           setMemberPhone(m.phone || '');
           setBioEn(m.bio?.en || '');
           setBioBn(m.bio?.bn || '');
+          setFacebook(m.socialLinks?.facebook || '');
+          setLinkedin(m.socialLinks?.linkedin || '');
+          setTwitter(m.socialLinks?.twitter || '');
+          setWebsite(m.socialLinks?.website || '');
           setIsPublic(m.isPublic !== false);
           if (m.profilePhoto) {
             setProfilePhotoPreview(m.profilePhoto.startsWith('http') ? m.profilePhoto : `${API_URL}${m.profilePhoto}`);
@@ -169,10 +179,12 @@ const UserDashboard = () => {
       formData.append('batch', batch);
       formData.append('pscBatch', pscBatch);
       formData.append('bloodGroup', bloodGroup);
+      formData.append('gender', gender);
       formData.append('profession', profession);
       formData.append('currentOrganization', currentOrganization);
       formData.append('phone', memberPhone);
       formData.append('bio', JSON.stringify({ en: bioEn, bn: bioBn }));
+      formData.append('socialLinks', JSON.stringify({ facebook, linkedin, twitter, website }));
       formData.append('isPublic', isPublic);
       if (profilePhotoFile) {
         formData.append('profilePhoto', profilePhotoFile);
