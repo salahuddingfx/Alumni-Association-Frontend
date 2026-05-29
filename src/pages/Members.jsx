@@ -17,7 +17,7 @@ const Members = () => {
   useEffect(() => {
     // Fetch members with filters from API (Fallback to client-side filtering if API is empty)
     setLoading(true);
-    api.get(`/members?search=${search}&pscBatch=${pscBatch}&bloodGroup=${bloodGroup}`)
+    api.get(`/members?search=${encodeURIComponent(search)}&pscBatch=${encodeURIComponent(pscBatch)}&bloodGroup=${encodeURIComponent(bloodGroup)}`)
       .then(res => {
         if (res.data.success) {
           setMembers(res.data.data.members);
