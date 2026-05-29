@@ -130,6 +130,8 @@ const Home = () => {
   const [eventsCount, setEventsCount] = useState(0);
   const [targetEvent, setTargetEvent] = useState(null);
   const [slides, setSlides] = useState([]);
+  const [events, setEvents] = useState([]);
+  const [blogs, setBlogs] = useState([]);
   const isBn = i18n.language === 'bn';
   const currentLang = i18n.language;
 
