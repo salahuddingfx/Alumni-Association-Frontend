@@ -243,6 +243,7 @@ const UserDashboard = () => {
       if (res.data.success) {
         setMemberProfile(res.data.data);
         fetchProfile(token);
+        fetchIdCard(token);
         setMemberMsg(isBn ? 'ডিরেক্টরি প্রোফাইল সফলভাবে আপডেট করা হয়েছে!' : 'Directory profile updated successfully!');
         if (res.data.data.profilePhoto) {
           setProfilePhotoPreview(res.data.data.profilePhoto.startsWith('http') ? res.data.data.profilePhoto : `${API_URL}${res.data.data.profilePhoto}`);
