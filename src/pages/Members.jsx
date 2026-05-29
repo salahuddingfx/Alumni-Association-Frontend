@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import api, { API_URL } from '../api/api';
-import { Search, Mail, Building, Droplet, Calendar, Award } from 'lucide-react';
+import { Search, Mail, Building, Droplet, Calendar, Award, Phone, Facebook, Linkedin, Twitter, Globe } from 'lucide-react';
 import MemberSkeleton from '../components/ui/MemberSkeleton.jsx';
 
 const Members = () => {
