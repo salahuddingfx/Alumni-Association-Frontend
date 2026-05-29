@@ -18,6 +18,8 @@ import UserDashboard from './pages/UserDashboard.jsx';
 import Partners from './pages/Partners.jsx';
 import Blog from './pages/Blog.jsx';
 import BlogDetail from './pages/BlogDetail.jsx';
+import MemberDetail from './pages/MemberDetail.jsx';
+import CommitteeDetail from './pages/CommitteeDetail.jsx';
 import ScrollToTop from './components/ScrollToTop.jsx';
 import IntroLoader from './components/ui/IntroLoader.jsx';
 
@@ -31,7 +33,9 @@ const App = () => {
           <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/committee" element={<Committee />} />
+        <Route path="/committee/:committeeId" element={<CommitteeDetail />} />
         <Route path="/members" element={<Members />} />
+        <Route path="/members/:memberId" element={<MemberDetail />} />
         <Route path="/events" element={<Events />} />
         <Route path="/notices" element={<Notices />} />
         <Route path="/partners" element={<Partners />} />
