@@ -50,10 +50,10 @@ const Navbar = () => {
               প
             </div>
             <div className="flex flex-col">
-              <span className="text-base lg:text-[15px] xl:text-lg font-bold text-primary font-bn tracking-wide whitespace-nowrap">
+              <span className="text-sm sm:text-base lg:text-[15px] xl:text-lg font-bold text-primary font-bn tracking-wide whitespace-nowrap">
                 {isBn ? settings.siteTitleBn : settings.siteTitleEn}
               </span>
-              <span className="text-[10px] xl:text-xs text-gray-500 font-medium whitespace-nowrap">
+              <span className="text-[10px] xl:text-xs text-gray-500 font-medium whitespace-nowrap hidden sm:block">
                 {isBn ? settings.schoolNameBn : settings.schoolNameEn}
               </span>
             </div>
@@ -162,18 +162,18 @@ const Navbar = () => {
           </div>
 
           {/* Mobile menu trigger */}
-          <div className="lg:hidden flex items-center space-x-3">
+          <div className="lg:hidden flex items-center space-x-2">
             <button
               onClick={toggleLanguage}
-              className="flex items-center space-x-1 px-2.5 py-1 bg-slate-100 text-gray-700 text-xs font-bold rounded-full border border-gray-300 transition"
+              className="flex items-center justify-center w-8 h-8 bg-slate-100 text-gray-700 rounded-full border border-gray-300 transition shrink-0"
+              title={i18n.language === 'bn' ? 'English' : 'বাংলা'}
             >
-              <Globe size={12} />
-              <span>{i18n.language === 'bn' ? 'EN' : 'বাংলা'}</span>
+              <Globe size={14} className="text-primary" />
             </button>
 
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="text-gray-700 hover:text-primary focus:outline-none"
+              className="text-gray-700 hover:text-primary focus:outline-none p-1 shrink-0"
             >
               {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
