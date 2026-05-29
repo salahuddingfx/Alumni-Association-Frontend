@@ -739,32 +739,82 @@ const Home = () => {
       </section>
 
       {/* 🤝 PARTNERS & SPONSORS SECTION */}
-      <section className="py-16 bg-slate-50 border-t border-b border-gray-150 px-6">
-        <div className="max-w-7xl mx-auto text-center">
+      <section className="py-16 bg-slate-50 border-t border-b border-gray-150 overflow-hidden px-6 relative">
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-slate-100/30 to-transparent pointer-events-none" />
+        <div className="max-w-7xl mx-auto text-center relative z-10">
           <span className="text-secondary font-bold text-sm uppercase tracking-wider block font-english">
             {isBn ? "সহযোগিতায়" : "Our Collaborators"}
           </span>
-          <h2 className="text-2xl sm:text-3xl font-bold text-primary font-bn mt-2 mb-10">
+          <h2 className="text-2xl sm:text-3xl font-bold text-primary font-bn mt-2 mb-2">
             {isBn ? "আমাদের গর্বিত অংশীদার ও পৃষ্ঠপোষক" : "Proud Partners & Sponsors"}
           </h2>
+          <Link to="/partners" className="inline-flex items-center space-x-1.5 text-xs font-bold text-secondary hover:text-primary transition-colors duration-200 mt-2 mb-10 group">
+            <span>{isBn ? "সকল পৃষ্ঠপোষক ও বিশদ বিবরণ দেখুন" : "View All Sponsors & Details"}</span>
+            <ArrowRight size={14} className="transform group-hover:translate-x-1 transition-transform" />
+          </Link>
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 items-center justify-items-center opacity-70">
-            {[
-              { name: isBn ? "ধোয়াপালং ইউনিয়ন পরিষদ" : "Dhuapalong Union Parishad", label: "Local Gov" },
-              { name: isBn ? "উখিয়া ডেভেলপমেন্ট ফোরাম" : "Ukhia Development Forum", label: "NGO Partner" },
-              { name: isBn ? "কক্সবাজার এডুকেশন ট্রাস্ট" : "Cox's Bazar Education Trust", label: "Scholarship Sponsor" },
-              { name: isBn ? "দ্বীপান আইসিটি সলিউশনস" : "Dpian ICT Solutions", label: "Tech Partner" }
-            ].map((partner, i) => (
-              <div key={i} className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm w-full max-w-[200px] text-center hover:shadow-md hover:scale-105 transition duration-350 cursor-default group">
-                <span className="block text-sm font-extrabold text-primary font-bn group-hover:text-secondary transition-colors truncate">
-                  {partner.name}
-                </span>
-                <span className="block text-[10px] text-slate-400 font-bold uppercase mt-1 font-english">
-                  {partner.label}
-                </span>
+          {partners.length > 0 ? (
+            <div className="w-full overflow-hidden mask-gradient py-4">
+              <div className="animate-marquee flex items-center space-x-8">
+                {/* Original items */}
+                {partners.map((partner) => (
+                  <a
+                    key={partner._id}
+                    href={partner.website || '#'}
+                    target={partner.website ? '_blank' : '_self'}
+                    rel="noreferrer"
+                    className="flex items-center space-x-4 bg-white px-6 py-4 rounded-xl border border-gray-200/85 shadow-sm hover:shadow-md hover:border-slate-350 transition-all duration-300 shrink-0 group min-w-[260px] select-none cursor-pointer"
+                  >
+                    <div className="w-12 h-12 flex items-center justify-center bg-slate-50 p-1.5 rounded-lg border border-slate-150 shrink-0">
+                      <img
+                        src={getImageUrl(partner.logo)}
+                        alt={isBn ? partner.name?.bn : partner.name?.en}
+                        className="max-h-full max-w-full object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300"
+                      />
+                    </div>
+                    <div className="text-left min-w-0">
+                      <span className="block text-sm font-bold text-primary font-bn group-hover:text-secondary transition-colors duration-200 truncate">
+                        {isBn ? partner.name?.bn : partner.name?.en}
+                      </span>
+                      <span className="block text-[9px] text-slate-400 font-extrabold uppercase mt-0.5 font-english">
+                        {partner.type === 'local_gov' ? 'Local Gov' : partner.type === 'ngo_partner' ? 'NGO Partner' : partner.type === 'scholarship_sponsor' ? 'Scholarship' : partner.type === 'tech_partner' ? 'Tech Partner' : 'Partner'}
+                      </span>
+                    </div>
+                  </a>
+                ))}
+                {/* Duplicated items for seamless marquee looping */}
+                {partners.map((partner) => (
+                  <a
+                    key={`${partner._id}-dup`}
+                    href={partner.website || '#'}
+                    target={partner.website ? '_blank' : '_self'}
+                    rel="noreferrer"
+                    className="flex items-center space-x-4 bg-white px-6 py-4 rounded-xl border border-gray-200/85 shadow-sm hover:shadow-md hover:border-slate-350 transition-all duration-300 shrink-0 group min-w-[260px] select-none cursor-pointer"
+                  >
+                    <div className="w-12 h-12 flex items-center justify-center bg-slate-50 p-1.5 rounded-lg border border-slate-150 shrink-0">
+                      <img
+                        src={getImageUrl(partner.logo)}
+                        alt={isBn ? partner.name?.bn : partner.name?.en}
+                        className="max-h-full max-w-full object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300"
+                      />
+                    </div>
+                    <div className="text-left min-w-0">
+                      <span className="block text-sm font-bold text-primary font-bn group-hover:text-secondary transition-colors duration-200 truncate">
+                        {isBn ? partner.name?.bn : partner.name?.en}
+                      </span>
+                      <span className="block text-[9px] text-slate-400 font-extrabold uppercase mt-0.5 font-english">
+                        {partner.type === 'local_gov' ? 'Local Gov' : partner.type === 'ngo_partner' ? 'NGO Partner' : partner.type === 'scholarship_sponsor' ? 'Scholarship' : partner.type === 'tech_partner' ? 'Tech Partner' : 'Partner'}
+                      </span>
+                    </div>
+                  </a>
+                ))}
               </div>
-            ))}
-          </div>
+            </div>
+          ) : (
+            <div className="text-center py-6 text-sm text-gray-500 font-semibold font-bn">
+              {isBn ? 'কোনো অংশীদার পাওয়া যায়নি।' : 'No collaborators found.'}
+            </div>
+          )}
         </div>
       </section>
 
