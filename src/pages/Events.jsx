@@ -224,6 +224,13 @@ const Events = () => {
       formData.append('fullAddress', fullAddress);
       formData.append('paymentType', paymentType);
       
+      if (paymentType === 'digital') {
+        const mockTxnId = 'TXN' + Math.floor(100000000 + Math.random() * 900000000);
+        formData.append('paymentNumber', checkoutPhone);
+        formData.append('paymentProvider', digitalProvider);
+        formData.append('transactionId', mockTxnId);
+      }
+      
       if (userImage) {
         formData.append('userImage', userImage);
       } else if (existingPhoto) {
