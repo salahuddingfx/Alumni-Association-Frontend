@@ -1,15 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Send } from 'lucide-react';
 import { useSettings } from '../../context/settings.jsx';
+import api from '../../api/api';
+import { getImageUrl } from '../../utils/image';
 
 const Footer = () => {
   const { t, i18n } = useTranslation();
   const { settings } = useSettings();
   const isBn = i18n.language === 'bn';
-  const [email, setEmail] = useState('');
-  const [newsletterStatus, setNewsletterStatus] = useState('');
+  const [partners, setPartners] = useState([]);
+
+  useEffect(() => {
+    api.get('/partners')
+      .then(res => {
+        if (res.data.success) {
+          setPartners(res.data.data);
+        }
+      })
+      .catch(err => console.log('Error fetching partners in footer:', err));
+  }, []);
 
   const handleNewsletterSubmit = (e) => {
     e.preventDefault();
@@ -23,6 +34,9 @@ const Footer = () => {
       setTimeout(() => setNewsletterStatus(''), 4000);
     }
   };
+
+  const [email, setEmail] = useState('');
+  const [newsletterStatus, setNewsletterStatus] = useState('');
 
   const navItems = [
     { path: '/', labelKey: 'home' },
@@ -43,6 +57,30 @@ const Footer = () => {
           <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V0C26.9,8.75,57.05,18.3,90.35,26.85,160.85,45,228.87,63.7,321.39,56.44Z" className="fill-dark"></path>
         </svg>
       </div>
+
+      {/* Dynamic Partner Logo Ribbon */}
+      {partners.length > 0 && (
+        <div className="border-b border-slate-800/80 bg-slate-950/20 py-4 overflow-hidden mask-gradient relative z-10 mb-8">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-2.5 flex items-center justify-between text-[10px] text-gray-500 font-extrabold uppercase tracking-wider font-english">
+            <span>{isBn ? "সহযোগী সংস্থাসমূহ" : "Partner Organizations"}</span>
+            <Link to="/partners" className="hover:text-secondary transition-colors text-[9px] lowercase font-semibold">{isBn ? "বিস্তারিত" : "view all"}</Link>
+          </div>
+          <div className="w-full overflow-hidden">
+            <div className="animate-marquee-fast flex items-center space-x-12">
+              {partners.map(p => (
+                <a key={p._id} href={p.website || '#'} target={p.website ? '_blank' : '_self'} rel="noreferrer" className="shrink-0 flex items-center justify-center opacity-40 hover:opacity-100 transition-opacity duration-300">
+                  <img src={getImageUrl(p.logo)} alt={isBn ? p.name.bn : p.name.en} className="h-6 w-auto object-contain max-w-[110px] filter brightness-0 invert" />
+                </a>
+              ))}
+              {partners.map(p => (
+                <a key={`${p._id}-dup`} href={p.website || '#'} target={p.website ? '_blank' : '_self'} rel="noreferrer" className="shrink-0 flex items-center justify-center opacity-40 hover:opacity-100 transition-opacity duration-300">
+                  <img src={getImageUrl(p.logo)} alt={isBn ? p.name.bn : p.name.en} className="h-6 w-auto object-contain max-w-[110px] filter brightness-0 invert" />
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-8">
         <div className="grid grid-cols-2 md:grid-cols-6 gap-8">
