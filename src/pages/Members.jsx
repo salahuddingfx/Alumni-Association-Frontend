@@ -161,10 +161,8 @@ const Members = () => {
                 <div className="flex items-center space-x-3 text-xs text-gray-500 font-bold">
                   <div className="flex items-center space-x-1">
                     <Calendar size={12} />
-                    <span>SSC: {member.batch}</span>
+                    <span>{isBn ? 'পিএসসি ব্যাচ' : 'PSC Batch'}: {member.pscBatch || member.batch}</span>
                   </div>
-                  <span>•</span>
-                  <span>PSC: {member.pscBatch}</span>
                 </div>
 
                 <div className="space-y-1 text-sm text-gray-600 pt-2 border-t border-slate-100">

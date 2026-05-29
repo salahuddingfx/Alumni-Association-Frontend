@@ -652,7 +652,7 @@ const UserDashboard = () => {
                       <h4 className="text-sm font-bold text-primary font-bn mt-2 line-clamp-1">
                         {reg.eventId?.title?.bn || 'Reunion Event'}
                       </h4>
-                      <span className="text-[10px] text-gray-500 font-bn mt-1 block">SSC Batch: {reg.pscBatch} • {reg.fullName}</span>
+                      <span className="text-[10px] text-gray-500 font-bn mt-1 block">PSC Batch: {reg.pscBatch} • {reg.fullName}</span>
                     </div>
                     <div className="bg-white p-1 rounded-lg border border-gray-250 shrink-0 shadow-sm">
                       <img 

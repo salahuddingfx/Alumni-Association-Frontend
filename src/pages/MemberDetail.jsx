@@ -202,19 +202,10 @@ const MemberDetail = () => {
                   <div className="flex items-center space-x-3">
                     <Calendar size={18} className="text-primary shrink-0" />
                     <div>
-                      <span className="block text-[9px] text-gray-400 font-bold uppercase">{isBn ? 'এসএসসি / এইচএসসি' : 'SSC / HSC Batch'}</span>
-                      <span className="text-sm font-bold text-gray-800">Batch {member.batch}</span>
+                      <span className="block text-[9px] text-gray-400 font-bold uppercase">{isBn ? 'পিএসসি ব্যাচ' : 'PSC Batch'}</span>
+                      <span className="text-sm font-bold text-gray-800">Batch {member.pscBatch || member.batch}</span>
                     </div>
                   </div>
-                  {member.pscBatch && (
-                    <div className="flex items-center space-x-3">
-                      <Calendar size={18} className="text-primary shrink-0" />
-                      <div>
-                        <span className="block text-[9px] text-gray-400 font-bold uppercase">{isBn ? 'পিএসসি সমাপনী' : 'PSC Batch'}</span>
-                        <span className="text-sm font-bold text-gray-800">Batch {member.pscBatch}</span>
-                      </div>
-                    </div>
-                  )}
                   <div className="flex items-center space-x-3">
                     <User size={18} className="text-primary shrink-0" />
                     <div>
