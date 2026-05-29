@@ -5,6 +5,7 @@ import { Calendar, MapPin, X, User, Phone, CheckCircle, Upload, CreditCard } fro
 import EventSkeleton from '../components/ui/EventSkeleton.jsx';
 import { convertBanglishToBengali } from '../utils/banglish';
 import { useSettings } from '../context/settings.jsx';
+import SeatingPlanner from '../components/ui/SeatingPlanner.jsx';
 
 const Events = () => {
   const { i18n } = useTranslation();
@@ -12,6 +13,7 @@ const Events = () => {
   const [events, setEvents] = useState([]);
   const [registeringEvent, setRegisteringEvent] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [memberId, setMemberId] = useState('');
   
   // Registration Form State
   const [fullName, setFullName] = useState('');
@@ -151,6 +153,7 @@ const Events = () => {
           .then(res => {
             if (res.data.success && res.data.data) {
               const m = res.data.data;
+              if (m._id) setMemberId(m._id);
               if (m.name?.en) setFullName(m.name.en);
               else if (m.name?.bn) setFullName(m.name.bn);
               
@@ -607,9 +610,16 @@ const Events = () => {
                     </div>
                   </div>
 
+                  {/* Seating Planner Selector */}
+                  {memberId && (
+                    <div className="max-w-xl mx-auto my-6 text-left">
+                      <SeatingPlanner eventId={registeringEvent._id} currentMemberId={memberId} />
+                    </div>
+                  )}
+
                   <button
                     onClick={handleCloseModal}
-                    className="bg-primary hover:bg-primary/95 text-white font-extrabold px-6 py-2.5 rounded-xl shadow transition text-sm font-bn"
+                    className="bg-primary hover:bg-primary/95 text-white font-extrabold px-6 py-2.5 rounded-xl shadow transition text-sm font-bn w-full max-w-xs mx-auto block"
                   >
                     {isBn ? 'বন্ধ করুন' : 'Close Ticket'}
                   </button>

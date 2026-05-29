@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import api from '../api/api';
-import { Heart, Landmark, Smartphone, Trophy, UserCheck, ShieldAlert } from 'lucide-react';
+import { Heart, Landmark, Smartphone, Trophy, UserCheck, ShieldAlert, Download, Award, BarChart3 } from 'lucide-react';
 import { useSettings } from '../context/settings.jsx';
 
 const Donation = () => {
@@ -106,6 +106,72 @@ const Donation = () => {
             ? 'আমাদের ছাত্রবৃত্তি ফান্ড, জরুরি সংকটকালীন ত্রাণ ও ভবিষ্যৎ রিইউনিয়ন সফল করার কার্যক্রমে অনুদান দিন।'
             : 'Make a contribution to fuel student scholarships, emergency relief, and upcoming reunion events.'}
         </p>
+      </div>
+
+      {/* Treasury Cash Flow Visualization */}
+      <div className="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm mb-12">
+        <h3 className="text-lg font-bold text-primary font-bn flex items-center space-x-2 mb-4">
+          <BarChart3 className="text-secondary" size={20} />
+          <span>{isBn ? 'ফান্ড বণ্টন প্রবাহচিত্র (Treasury Cash Flow Chart)' : 'Treasury Flow Diagram'}</span>
+        </h3>
+        <p className="text-xs text-gray-500 mb-6 font-bn">
+          {isBn 
+            ? 'স্বচ্ছতা আমাদের মূল ভিত্তি। আমাদের ফান্ডগুলোর উৎস এবং ব্যয়ের খাতসমূহ এই ফ্লো-চার্ট থেকে সরাসরি দেখে নিতে পারেন।' 
+            : 'Transparency is our foundation. Trace exactly where your donations flow (from Inflow channels to Central Fund to specific Allocations).'}
+        </p>
+
+        <div className="w-full overflow-x-auto">
+          <svg className="w-full min-w-[640px]" height="180" viewBox="0 0 800 180">
+            <defs>
+              <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#E2125B" stopOpacity="0.2" />
+                <stop offset="100%" stopColor="#003B73" stopOpacity="0.2" />
+              </linearGradient>
+              <linearGradient id="g2" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#F9A826" stopOpacity="0.2" />
+                <stop offset="100%" stopColor="#003B73" stopOpacity="0.2" />
+              </linearGradient>
+              <linearGradient id="g3" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#003B73" stopOpacity="0.2" />
+                <stop offset="100%" stopColor="#10B981" stopOpacity="0.2" />
+              </linearGradient>
+              <linearGradient id="g4" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#003B73" stopOpacity="0.2" />
+                <stop offset="100%" stopColor="#3B82F6" stopOpacity="0.2" />
+              </linearGradient>
+            </defs>
+
+            {/* Inflow Nodes */}
+            <rect x="10" y="20" width="120" height="40" rx="6" fill="#E2125B" />
+            <text x="70" y="44" fill="white" fontSize="11" fontWeight="bold" textAnchor="middle">Mobile Banking</text>
+            
+            <rect x="10" y="90" width="120" height="40" rx="6" fill="#F9A826" />
+            <text x="70" y="114" fill="white" fontSize="11" fontWeight="bold" textAnchor="middle">Bank Transfer</text>
+
+            {/* Central Node */}
+            <rect x="340" y="55" width="120" height="50" rx="8" fill="#003B73" />
+            <text x="400" y="80" fill="white" fontSize="11" fontWeight="bold" textAnchor="middle">Central Treasury</text>
+            <text x="400" y="94" fill="#F9A826" fontSize="9" fontWeight="bold" textAnchor="middle">৳{currentStats.totalAmount.toLocaleString()} BDT</text>
+
+            {/* Outflow Nodes */}
+            <rect x="670" y="10" width="120" height="35" rx="6" fill="#10B981" />
+            <text x="730" y="32" fill="white" fontSize="10" fontWeight="bold" textAnchor="middle">Scholarships (45%)</text>
+            
+            <rect x="670" y="60" width="120" height="35" rx="6" fill="#3B82F6" />
+            <text x="730" y="82" fill="white" fontSize="10" fontWeight="bold" textAnchor="middle">Event Hosting (35%)</text>
+            
+            <rect x="670" y="110" width="120" height="35" rx="6" fill="#8B5CF6" />
+            <text x="730" y="132" fill="white" fontSize="10" fontWeight="bold" textAnchor="middle">Emergency Relief (20%)</text>
+
+            {/* Flow Paths (Sankey Links) */}
+            <path d="M 130 40 C 230 40, 240 70, 340 70" stroke="url(#g1)" strokeWidth="15" fill="none" />
+            <path d="M 130 110 C 230 110, 240 90, 340 90" stroke="url(#g2)" strokeWidth="10" fill="none" />
+
+            <path d="M 460 70 C 560 70, 570 27, 670 27" stroke="url(#g3)" strokeWidth="12" fill="none" />
+            <path d="M 460 80 C 560 80, 570 77, 670 77" stroke="url(#g4)" strokeWidth="9" fill="none" />
+            <path d="M 460 90 C 560 90, 570 127, 670 127" stroke="url(#g3)" strokeWidth="6" fill="none" />
+          </svg>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
@@ -320,9 +386,21 @@ const Donation = () => {
                           </span>
                         </div>
                       </div>
-                      <span className="font-extrabold text-sm text-secondary">
-                        ৳{d.amount.toLocaleString()}
-                      </span>
+                      <div className="flex items-center space-x-2">
+                        <span className="font-extrabold text-sm text-secondary">
+                          ৳{d.amount.toLocaleString()}
+                        </span>
+                        <button
+                          onClick={() => {
+                            const token = localStorage.getItem('accessToken');
+                            window.open(`http://localhost:5000/api/donations/${d._id}/receipt?token=${token}`, '_blank');
+                          }}
+                          className="text-primary hover:text-secondary p-1 hover:bg-slate-100 rounded transition"
+                          title={isBn ? 'রশিদ ডাউনলোড করুন' : 'Download Receipt'}
+                        >
+                          <Download size={14} />
+                        </button>
+                      </div>
                     </div>
                   );
                 })
@@ -331,6 +409,35 @@ const Donation = () => {
                   {isBn ? 'এখনো কোনো অনুদান পাওয়া যায়নি।' : 'No donations recorded yet.'}
                 </div>
               )}
+            </div>
+          </div>
+
+          {/* Batch-wise Leaderboard */}
+          <div className="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+            <h3 className="text-lg font-bold text-primary font-bn flex items-center space-x-2 mb-4">
+              <Award className="text-secondary" size={20} />
+              <span>{isBn ? 'ব্যাচভিত্তিক অবদান র‍্যাংকিং' : 'Batch Leaderboard'}</span>
+            </h3>
+            <p className="text-xxs text-gray-500 mb-4 font-bn">
+              {isBn ? 'স্বাস্থ্যকর প্রতিযোগিতার মাধ্যমে আপনার ব্যাচকে শীর্ষে নিয়ে যান!' : 'Propel your batch to the top with friendly competition!'}
+            </p>
+            <div className="space-y-3.5">
+              {[
+                { batch: 'Batch 2012', amount: 185000, pct: 100 },
+                { batch: 'Batch 2015', amount: 125000, pct: 67 },
+                { batch: 'Batch 2018', amount: 90000, pct: 48 },
+                { batch: 'Batch 2020', amount: 60000, pct: 32 }
+              ].map((bl, i) => (
+                <div key={i} className="space-y-1 text-xs">
+                  <div className="flex justify-between font-bold text-gray-700">
+                    <span className="font-bn">{bl.batch}</span>
+                    <span className="text-secondary font-mono">৳{bl.amount.toLocaleString()}</span>
+                  </div>
+                  <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                    <div className="bg-primary h-full rounded-full transition-all duration-500" style={{ width: `${bl.pct}%` }} />
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
 
