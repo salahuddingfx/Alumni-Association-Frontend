@@ -31,6 +31,8 @@ const UserDashboard = () => {
   const [nameBn, setNameBn] = useState('');
   const [batch, setBatch] = useState('');
   const [pscBatch, setPscBatch] = useState('');
+  const [hscBatch, setHscBatch] = useState('');
+  const [higherEducation, setHigherEducation] = useState('');
   const [bloodGroup, setBloodGroup] = useState('O+');
   const [gender, setGender] = useState('Male');
   const [profession, setProfession] = useState('');
@@ -105,8 +107,10 @@ const UserDashboard = () => {
           setMemberProfile(m);
           setNameEn(m.name?.en || '');
           setNameBn(m.name?.bn || '');
-          setBatch(m.pscBatch || m.batch || '');
-          setPscBatch(m.pscBatch || m.batch || '');
+          setBatch(m.batch || '');
+          setPscBatch(m.pscBatch || '');
+          setHscBatch(m.hscBatch || '');
+          setHigherEducation(m.higherEducation || '');
           setBloodGroup(m.bloodGroup || 'O+');
           setGender(m.gender || 'Male');
           setProfession(m.profession || '');
@@ -222,8 +226,10 @@ const UserDashboard = () => {
       const token = localStorage.getItem('accessToken');
       const formData = new FormData();
       formData.append('name', JSON.stringify({ en: nameEn, bn: nameBn }));
-      formData.append('batch', pscBatch);
+      formData.append('batch', batch);
       formData.append('pscBatch', pscBatch);
+      formData.append('hscBatch', hscBatch);
+      formData.append('higherEducation', higherEducation);
       formData.append('bloodGroup', bloodGroup);
       formData.append('gender', gender);
       formData.append('profession', profession);
