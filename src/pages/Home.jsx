@@ -76,6 +76,7 @@ const Home = () => {
   const [targetEvent, setTargetEvent] = useState(null);
   const [slides, setSlides] = useState([]);
   const isBn = i18n.language === 'bn';
+  const currentLang = i18n.language;
 
   const targetAmount = 1000000; // Target is ৳১০,০০,০০০ BDT
 
