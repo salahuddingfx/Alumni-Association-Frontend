@@ -50,11 +50,11 @@ const Navbar = () => {
               প
             </div>
             <div className="flex flex-col">
-              <span className="text-sm sm:text-base lg:text-[15px] xl:text-lg font-bold text-primary font-bn tracking-wide whitespace-nowrap">
-                {isBn ? settings.siteTitleBn : settings.siteTitleEn}
+              <span className="text-[13px] sm:text-base lg:text-[15px] xl:text-lg font-bold text-primary font-bn tracking-wide whitespace-nowrap">
+                {settings?.siteTitleBn || 'প্রাক্তন শিক্ষার্থী পরিষদ'}
               </span>
-              <span className="text-[10px] xl:text-xs text-gray-500 font-medium whitespace-nowrap hidden sm:block">
-                {isBn ? settings.schoolNameBn : settings.schoolNameEn}
+              <span className="text-[9px] sm:text-[10px] xl:text-xs text-gray-500 font-medium whitespace-nowrap">
+                {isBn ? settings?.schoolNameBn : settings?.schoolNameEn}
               </span>
             </div>
           </Link>

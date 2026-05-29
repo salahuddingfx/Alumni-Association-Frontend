@@ -53,7 +53,7 @@ const Footer = () => {
                 প
               </div>
               <span className="text-xl font-bold font-bn tracking-wide leading-snug">
-                {isBn ? settings.siteTitleBn : settings.siteTitleEn}
+                {settings?.siteTitleBn || 'প্রাক্তন শিক্ষার্থী পরিষদ'}
               </span>
             </div>
             <p className="text-gray-400 text-sm leading-relaxed font-bn">

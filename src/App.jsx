@@ -22,11 +22,12 @@ import IntroLoader from './components/ui/IntroLoader.jsx';
 
 const App = () => {
   return (
-    <MainLayout>
+    <>
       <IntroLoader />
-      <ScrollToTop />
-      <Routes>
-        <Route path="/" element={<Home />} />
+      <MainLayout>
+        <ScrollToTop />
+        <Routes>
+          <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/committee" element={<Committee />} />
         <Route path="/members" element={<Members />} />
@@ -53,6 +54,7 @@ const App = () => {
         } />
       </Routes>
     </MainLayout>
+    </>
   );
 };
 

@@ -6,6 +6,7 @@ const IntroLoader = () => {
   const [visible, setVisible] = useState(true);
   const [fade, setFade] = useState(false);
   const [minTimeElapsed, setMinTimeElapsed] = useState(false);
+  const [forceOut, setForceOut] = useState(false);
 
   useEffect(() => {
     // Lock background scrolling
@@ -16,15 +17,21 @@ const IntroLoader = () => {
       setMinTimeElapsed(true);
     }, 1500);
 
+    // Failsafe: force loader to fade out after 3.5 seconds even if settings are slow to load
+    const failsafeTimer = setTimeout(() => {
+      setForceOut(true);
+    }, 3500);
+
     return () => {
       document.body.style.overflow = 'unset';
       clearTimeout(timer);
+      clearTimeout(failsafeTimer);
     };
   }, []);
 
   useEffect(() => {
-    // Only fade out and unmount once the minimum time has elapsed AND settings are loaded
-    if (minTimeElapsed && !loading) {
+    // Only fade out and unmount once the minimum time has elapsed AND settings are loaded, OR if failsafe triggered
+    if ((minTimeElapsed && !loading) || forceOut) {
       setFade(true);
       
       const timerVisible = setTimeout(() => {
@@ -34,7 +41,7 @@ const IntroLoader = () => {
 
       return () => clearTimeout(timerVisible);
     }
-  }, [minTimeElapsed, loading]);
+  }, [minTimeElapsed, loading, forceOut]);
 
   if (!visible) return null;
 
