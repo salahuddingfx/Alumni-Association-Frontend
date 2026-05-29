@@ -143,3 +143,12 @@ html {
   animation: floatReverse 10s ease-in-out infinite;
 }
 
+/* Swiper Custom Navigation styling */
+.swiper-button-prev,
+.swiper-button-next {
+  color: #F9A826 !important; /* Secondary yellow */
+}
+.swiper-pagination-bullet-active {
+  background: #F9A826 !important;
+}
+

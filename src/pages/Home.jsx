@@ -278,10 +278,12 @@ const Home = () => {
       {/* 🖼️ HERO SECTION WITH ANIMATED SLIDER */}
       <section className="relative h-[85vh] w-full bg-dark">
         <Swiper
-          modules={[Autoplay, EffectFade, Pagination]}
+          modules={[Autoplay, EffectFade, Pagination, Navigation, Keyboard]}
           effect={'fade'}
           autoplay={{ delay: 6000, disableOnInteraction: false }}
           pagination={{ clickable: true }}
+          navigation={true}
+          keyboard={{ enabled: true }}
           className="h-full w-full"
         >
           {displaySlides.map((slide, idx) => (
