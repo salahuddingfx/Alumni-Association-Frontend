@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import api, { API_URL } from '../api/api';
 import { User, Calendar, LogOut, Ticket, Mail, Phone, Tag, Edit, Save, X, Key, Upload, ShieldAlert, CheckCircle, AlertCircle, ShieldCheck, RefreshCw, Smartphone, CreditCard } from 'lucide-react';
 import { initClientSocket } from '../utils/socket';
+import { getImageUrl } from '../utils/image';
 
 const UserDashboard = () => {
   const navigate = useNavigate();
@@ -83,7 +84,7 @@ const UserDashboard = () => {
           setEditPhone(user.phone || '');
           setEditFullName(user.fullName || '');
           if (user.profilePhoto) {
-            setUserPhotoPreview(user.profilePhoto.startsWith('http') ? user.profilePhoto : `${API_URL}${user.profilePhoto}`);
+            setUserPhotoPreview(getImageUrl(user.profilePhoto));
           } else {
             setUserPhotoPreview('');
           }
@@ -120,7 +121,7 @@ const UserDashboard = () => {
           setIsPublic(m.isPublic !== false);
           initClientSocket(m);
           if (m.profilePhoto) {
-            setProfilePhotoPreview(m.profilePhoto.startsWith('http') ? m.profilePhoto : `${API_URL}${m.profilePhoto}`);
+            setProfilePhotoPreview(getImageUrl(m.profilePhoto));
           }
         }
       })
@@ -248,7 +249,7 @@ const UserDashboard = () => {
         fetchIdCard(token);
         setMemberMsg(isBn ? 'ডিরেক্টরি প্রোফাইল সফলভাবে আপডেট করা হয়েছে!' : 'Directory profile updated successfully!');
         if (res.data.data.profilePhoto) {
-          setProfilePhotoPreview(res.data.data.profilePhoto.startsWith('http') ? res.data.data.profilePhoto : `${API_URL}${res.data.data.profilePhoto}`);
+          setProfilePhotoPreview(getImageUrl(res.data.data.profilePhoto));
         }
         setTimeout(() => setMemberMsg(''), 3000);
       }
@@ -346,7 +347,7 @@ const UserDashboard = () => {
                     <div className="flex items-center space-x-4 my-auto">
                       <div className="w-14 h-14 rounded-full border-2 border-secondary overflow-hidden bg-white/15 flex items-center justify-center text-white font-bold text-base shrink-0 shadow-md">
                         {idCardData.member.profilePhoto ? (
-                          <img src={idCardData.member.profilePhoto.startsWith('http') ? idCardData.member.profilePhoto : `${API_URL}${idCardData.member.profilePhoto}`} alt="" className="w-full h-full object-cover" />
+                          <img src={getImageUrl(idCardData.member.profilePhoto)} alt="" className="w-full h-full object-cover" />
                         ) : (
                           idCardData.member.name.en.charAt(0).toUpperCase()
                         )}
