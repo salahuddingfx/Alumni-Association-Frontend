@@ -5,6 +5,7 @@ import { Autoplay, EffectFade, Pagination } from 'swiper/modules';
 import { ArrowRight, Calendar, Users, Megaphone, Trophy, Heart } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useSettings } from '../context/settings.jsx';
 import api from '../api/api';
 
 // 60fps high-performance count-up counter component
