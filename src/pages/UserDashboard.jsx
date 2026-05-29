@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import api, { API_URL } from '../api/api';
 import { User, Calendar, LogOut, Ticket, Mail, Phone, Tag, Edit, Save, X, Key, Upload, ShieldAlert, CheckCircle, AlertCircle, ShieldCheck, RefreshCw, Smartphone, CreditCard } from 'lucide-react';
+import { initClientSocket } from '../utils/socket';
 
 const UserDashboard = () => {
   const navigate = useNavigate();
@@ -117,6 +118,7 @@ const UserDashboard = () => {
           setTwitter(m.socialLinks?.twitter || '');
           setWebsite(m.socialLinks?.website || '');
           setIsPublic(m.isPublic !== false);
+          initClientSocket(m);
           if (m.profilePhoto) {
             setProfilePhotoPreview(m.profilePhoto.startsWith('http') ? m.profilePhoto : `${API_URL}${m.profilePhoto}`);
           }
