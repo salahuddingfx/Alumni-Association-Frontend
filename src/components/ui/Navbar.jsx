@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Menu, X, Globe } from 'lucide-react';
+import { Menu, X, Globe, ChevronDown } from 'lucide-react';
 import { useSettings } from '../../context/settings.jsx';
 
 const Navbar = () => {
@@ -9,7 +9,9 @@ const Navbar = () => {
   const { settings } = useSettings();
   const isBn = i18n.language === 'bn';
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [moreOpen, setMoreOpen] = useState(false);
   const isLoggedIn = !!localStorage.getItem('accessToken');
+  const location = useLocation();
 
   const handleLogout = () => {
     localStorage.removeItem('accessToken');
