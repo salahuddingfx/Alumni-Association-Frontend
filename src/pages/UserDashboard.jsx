@@ -532,7 +532,7 @@ const UserDashboard = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               <div>
                 <label className="block text-xxs font-bold text-gray-500 uppercase mb-1">SSC/HSC Batch</label>
                 <input type="text" placeholder="e.g. 2016" className="w-full bg-slate-50 border border-gray-300 px-3 py-2 rounded-lg focus:outline-none focus:border-secondary text-sm font-bold" value={batch} onChange={e => setBatch(e.target.value)} required />
@@ -547,6 +547,14 @@ const UserDashboard = () => {
                   {['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'].map(bg => (
                     <option key={bg} value={bg}>{bg}</option>
                   ))}
+                </select>
+              </div>
+              <div>
+                <label className="block text-xxs font-bold text-gray-500 uppercase mb-1">Gender</label>
+                <select className="w-full bg-slate-50 border border-gray-300 px-3 py-2 rounded-lg focus:outline-none focus:border-secondary text-sm font-bold text-primary" value={gender} onChange={e => setGender(e.target.value)} required>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Other">Other</option>
                 </select>
               </div>
             </div>
@@ -565,6 +573,28 @@ const UserDashboard = () => {
             <div>
               <label className="block text-xxs font-bold text-gray-500 uppercase mb-1">Public Contact Number</label>
               <input type="text" placeholder="+8801700000000" className="w-full bg-slate-50 border border-gray-300 px-3 py-2 rounded-lg focus:outline-none focus:border-secondary text-sm" value={memberPhone} onChange={e => setMemberPhone(e.target.value)} />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xxs font-bold text-gray-500 uppercase mb-1">Facebook Profile Link</label>
+                <input type="url" placeholder="https://facebook.com/username" className="w-full bg-slate-50 border border-gray-300 px-3 py-2 rounded-lg focus:outline-none focus:border-secondary text-sm" value={facebook} onChange={e => setFacebook(e.target.value)} />
+              </div>
+              <div>
+                <label className="block text-xxs font-bold text-gray-500 uppercase mb-1">LinkedIn Profile Link</label>
+                <input type="url" placeholder="https://linkedin.com/in/username" className="w-full bg-slate-50 border border-gray-300 px-3 py-2 rounded-lg focus:outline-none focus:border-secondary text-sm" value={linkedin} onChange={e => setLinkedin(e.target.value)} />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xxs font-bold text-gray-500 uppercase mb-1">Twitter/X Profile Link</label>
+                <input type="url" placeholder="https://twitter.com/username" className="w-full bg-slate-50 border border-gray-300 px-3 py-2 rounded-lg focus:outline-none focus:border-secondary text-sm" value={twitter} onChange={e => setTwitter(e.target.value)} />
+              </div>
+              <div>
+                <label className="block text-xxs font-bold text-gray-500 uppercase mb-1">Personal Website / Portfolio</label>
+                <input type="url" placeholder="https://example.com" className="w-full bg-slate-50 border border-gray-300 px-3 py-2 rounded-lg focus:outline-none focus:border-secondary text-sm" value={website} onChange={e => setWebsite(e.target.value)} />
+              </div>
             </div>
 
             <div>
