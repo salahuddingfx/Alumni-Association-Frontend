@@ -504,12 +504,68 @@ const Home = () => {
         </div>
       </section>
 
+      {/* 📅 UPCOMING EVENTS SECTION */}
+      <section className="py-20 bg-white px-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex justify-between items-end mb-12">
+            <div>
+              <span className="text-secondary font-bold text-sm uppercase tracking-wider block">
+                {isBn ? "কর্মসূচী ও মিলনমেলা" : "Events & Reunions"}
+              </span>
+              <h2 className="text-3xl sm:text-4xl font-bold text-primary font-bn mt-2">
+                {isBn ? "আমাদের আসন্ন ইভেন্টসমূহ" : "Upcoming Alumni Events"}
+              </h2>
+            </div>
+            <Link to="/events" className="text-primary hover:text-secondary font-bold flex items-center space-x-1 group">
+              <span>{isBn ? "সকল ইভেন্ট দেখুন" : "View All Events"}</span>
+              <ArrowRight size={16} className="transform group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {events.length > 0 ? (
+              events.map((event) => (
+                <div key={event._id} className="bg-slate-50 rounded-2xl border border-gray-200 overflow-hidden shadow-sm flex flex-col justify-between hover:shadow-md transition">
+                  <div className="p-6 space-y-4">
+                    <span className="bg-secondary/15 text-secondary text-[10px] font-extrabold uppercase px-2.5 py-1 rounded-full w-fit block">
+                      {event.category}
+                    </span>
+                    <h3 className="font-bold text-lg text-primary font-bn line-clamp-2">
+                      {isBn ? event.title.bn : event.title.en}
+                    </h3>
+                    <p className="text-gray-600 text-sm font-bn line-clamp-3 leading-relaxed">
+                      {isBn ? event.description.bn : event.description.en}
+                    </p>
+                  </div>
+                  
+                  <div className="p-6 pt-0 border-t border-gray-150/50 mt-4 flex justify-between items-center text-xs text-gray-500 font-bn">
+                    <div className="flex flex-col space-y-1">
+                      <div className="flex items-center space-x-1 text-slate-500">
+                        <Calendar size={12} />
+                        <span>{new Date(event.date).toLocaleDateString()}</span>
+                      </div>
+                    </div>
+                    <Link to="/events" className="bg-primary hover:bg-primary-dark text-white font-bold px-4 py-1.5 rounded-full transition text-[11px] uppercase tracking-wide">
+                      {isBn ? "নিবন্ধন" : "Register"}
+                    </Link>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="col-span-3 text-center py-12 text-sm text-gray-500 font-semibold font-bn">
+                {isBn ? 'এখনো কোনো ইভেন্ট ঘোষণা করা হয়নি।' : 'No upcoming events announced yet.'}
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+
       {/* 📢 NOTICE BOARD PREVIEW */}
       <section className="py-20 bg-slate-100 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="flex justify-between items-end mb-12">
             <div>
-              <span className="text-secondary font-bold text-sm uppercase tracking-wider">Announcements</span>
+              <span className="text-secondary font-bold text-sm uppercase tracking-wider font-english">Announcements</span>
               <h2 className="text-3xl sm:text-4xl font-bold text-primary font-bn mt-2">{t('notice.title')}</h2>
             </div>
             <Link to="/notices" className="text-primary hover:text-secondary font-bold flex items-center space-x-1 group">
@@ -540,7 +596,7 @@ const Home = () => {
                   </div>
                   <div className="mt-6 pt-4 border-t border-gray-100 text-xs text-gray-500 flex justify-between items-center">
                     <span>{new Date(notice.publishDate).toLocaleDateString()}</span>
-                    <Link to={`/notices/${notice._id}`} className="text-secondary hover:text-primary font-bold">Read More &rarr;</Link>
+                    <Link to={`/notices?id=${notice._id}`} className="text-secondary hover:text-primary font-bold">Read More &rarr;</Link>
                   </div>
                 </div>
               ))
@@ -549,6 +605,129 @@ const Home = () => {
                 {isBn ? 'এখনো কোনো নোটিশ পোস্ট করা হয়নি।' : 'No announcements published yet.'}
               </div>
             )}
+          </div>
+        </div>
+      </section>
+
+      {/* 📝 BLOG & NEWS PREVIEW SECTION */}
+      <section className="py-20 bg-white px-6 border-t border-gray-100">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex justify-between items-end mb-12">
+            <div>
+              <span className="text-secondary font-bold text-sm uppercase tracking-wider block font-english">
+                {isBn ? "নিউজ ও ব্লগ" : "News & Articles"}
+              </span>
+              <h2 className="text-3xl sm:text-4xl font-bold text-primary font-bn mt-2">
+                {isBn ? "প্রাক্তনীদের গল্প ও সংবাদ" : "Latest Stories & Alumni News"}
+              </h2>
+            </div>
+            <Link to="/blog" className="text-primary hover:text-secondary font-bold flex items-center space-x-1 group font-english">
+              <span>{isBn ? "সকল ব্লগ পড়ুন" : "View All Blogs"}</span>
+              <ArrowRight size={16} className="transform group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {blogs.length > 0 ? (
+              blogs.map((blog) => (
+                <div key={blog._id} className="bg-slate-50 rounded-2xl border border-gray-200 overflow-hidden shadow-sm flex flex-col justify-between hover:shadow-md transition">
+                  <div>
+                    {/* Thumbnail placeholder */}
+                    <div className="h-44 w-full bg-slate-200 overflow-hidden relative">
+                      {blog.thumbnail ? (
+                        <img 
+                          src={blog.thumbnail.startsWith('http') ? blog.thumbnail : `${API_URL}${blog.thumbnail}`} 
+                          className="w-full h-full object-cover" 
+                          alt={isBn ? blog.title.bn : blog.title.en} 
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-gray-400 bg-slate-250">
+                          <Users size={32} />
+                        </div>
+                      )}
+                      <span className="absolute top-3 left-3 bg-primary/95 text-white text-[9px] font-extrabold uppercase px-2.5 py-0.5 rounded-full backdrop-blur-sm font-english">
+                        {blog.category}
+                      </span>
+                    </div>
+
+                    <div className="p-6">
+                      <span className="text-[10px] text-gray-500 font-bold block mb-2 font-english">{new Date(blog.createdAt).toLocaleDateString()}</span>
+                      <h3 className="font-bold text-base text-primary font-bn line-clamp-2 hover:text-secondary transition-colors">
+                        <Link to={`/blog/${blog.slug}`}>{isBn ? blog.title.bn : blog.title.en}</Link>
+                      </h3>
+                      <p className="mt-2 text-gray-600 text-sm font-bn line-clamp-3 leading-relaxed">
+                        {isBn ? blog.content.bn : blog.content.en}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="p-6 pt-0 mt-2">
+                    <Link to={`/blog/${blog.slug}`} className="text-secondary hover:text-primary font-bold text-xs uppercase tracking-wider flex items-center space-x-1 w-fit group font-english">
+                      <span>{isBn ? "আরও পড়ুন" : "Read More"}</span>
+                      <ArrowRight size={12} className="transform group-hover:translate-x-1 transition-transform" />
+                    </Link>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="col-span-3 text-center py-12 text-sm text-gray-500 font-semibold font-bn animate-pulse">
+                {isBn ? 'কোনো ব্লগ পোস্ট পাওয়া যায়নি।' : 'No blog posts published yet.'}
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* 🤝 PARTNERS & SPONSORS SECTION */}
+      <section className="py-16 bg-slate-50 border-t border-b border-gray-150 px-6">
+        <div className="max-w-7xl mx-auto text-center">
+          <span className="text-secondary font-bold text-sm uppercase tracking-wider block font-english">
+            {isBn ? "সহযোগিতায়" : "Our Collaborators"}
+          </span>
+          <h2 className="text-2xl sm:text-3xl font-bold text-primary font-bn mt-2 mb-10">
+            {isBn ? "আমাদের গর্বিত অংশীদার ও পৃষ্ঠপোষক" : "Proud Partners & Sponsors"}
+          </h2>
+
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 items-center justify-items-center opacity-70">
+            {[
+              { name: isBn ? "ধোয়াপালং ইউনিয়ন পরিষদ" : "Dhuapalong Union Parishad", label: "Local Gov" },
+              { name: isBn ? "উখিয়া ডেভেলপমেন্ট ফোরাম" : "Ukhia Development Forum", label: "NGO Partner" },
+              { name: isBn ? "কক্সবাজার এডুকেশন ট্রাস্ট" : "Cox's Bazar Education Trust", label: "Scholarship Sponsor" },
+              { name: isBn ? "দ্বীপান আইসিটি সলিউশনস" : "Dpian ICT Solutions", label: "Tech Partner" }
+            ].map((partner, i) => (
+              <div key={i} className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm w-full max-w-[200px] text-center hover:shadow-md hover:scale-105 transition duration-350 cursor-default group">
+                <span className="block text-sm font-extrabold text-primary font-bn group-hover:text-secondary transition-colors truncate">
+                  {partner.name}
+                </span>
+                <span className="block text-[10px] text-slate-400 font-bold uppercase mt-1 font-english">
+                  {partner.label}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 📞 CONTACT / CTA BANNER SECTION */}
+      <section className="py-20 bg-gradient-to-r from-primary to-primary/95 text-white text-center relative overflow-hidden px-6">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(79,195,247,0.15),transparent)] pointer-events-none" />
+        <div className="max-w-4xl mx-auto relative z-10 space-y-6">
+          <h2 className="text-3xl sm:text-4xl font-extrabold font-bn">
+            {isBn ? "আপনি কি এখনও নিবন্ধন করেননি?" : "Have You Joined Our Network Yet?"}
+          </h2>
+          <p className="text-gray-200 font-bn text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
+            {isBn 
+              ? "আমাদের অফিসিয়াল সদস্য হিসেবে আজই যুক্ত হোন এবং আপনার প্রাক্তন সহপাঠীদের খুঁজে বের করুন। যেকোনো সাহায্য বা তথ্যের জন্য আমাদের সাথে যোগাযোগ করতে পারেন।" 
+              : "Register as an official alumnus today to access your digital ID card, connect with batchmates, and support community initiatives. Get in touch for any inquiries."
+            }
+          </p>
+          <div className="pt-4 flex flex-col sm:flex-row justify-center items-center gap-4">
+            <Link to="/register" className="bg-secondary hover:bg-yellow-500 text-white font-bold px-8 py-3 rounded-full transition shadow-lg w-full sm:w-auto uppercase tracking-wide text-sm font-english">
+              {isBn ? "নিবন্ধন করুন" : "Register Now"}
+            </Link>
+            <Link to="/contact" className="bg-transparent hover:bg-white/10 text-white border border-white/30 font-bold px-8 py-3 rounded-full transition w-full sm:w-auto uppercase tracking-wide text-sm font-english">
+              {isBn ? "যোগাযোগ করুন" : "Get In Touch"}
+            </Link>
           </div>
         </div>
       </section>
