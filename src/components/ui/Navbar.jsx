@@ -22,16 +22,21 @@ const Navbar = () => {
     i18n.changeLanguage(currentLang === 'bn' ? 'en' : 'bn');
   };
 
-  const navItems = [
+  const primaryNavItems = [
     { path: '/', labelKey: 'home' },
     { path: '/about', labelKey: 'about' },
-    { path: '/committee', labelKey: 'committee' },
     { path: '/members', labelKey: 'members' },
-    { path: '/notices', labelKey: 'notices' },
     { path: '/events', labelKey: 'events' },
-    { path: '/blog', labelKey: 'blog' },
     { path: '/contact', labelKey: 'contact' },
   ];
+
+  const secondaryNavItems = [
+    { path: '/committee', labelKey: 'committee' },
+    { path: '/notices', labelKey: 'notices' },
+    { path: '/blog', labelKey: 'blog' },
+  ];
+
+  const allNavItems = [...primaryNavItems, ...secondaryNavItems];
 
   return (
     <header className="sticky top-0 z-50 glass-panel shadow-sm border-b border-gray-200">
@@ -54,7 +59,7 @@ const Navbar = () => {
 
           {/* Desktop Navbar */}
           <nav className="hidden lg:flex items-center space-x-0.5 xl:space-x-1">
-            {navItems.map((item) => (
+            {primaryNavItems.map((item) => (
               <NavLink
                 key={item.path}
                 to={item.path}
@@ -69,6 +74,45 @@ const Navbar = () => {
                 {t(`nav.${item.labelKey}`)}
               </NavLink>
             ))}
+
+            {/* More Dropdown */}
+            <div 
+              className="relative animate-in fade-in zoom-in-95 duration-100"
+              onMouseEnter={() => setMoreOpen(true)}
+              onMouseLeave={() => setMoreOpen(false)}
+            >
+              <button 
+                className={`flex items-center space-x-1 px-2.5 xl:px-3 py-2 rounded-md text-[13px] xl:text-sm font-medium transition-colors focus:outline-none ${
+                  secondaryNavItems.some(item => location.pathname === item.path)
+                    ? 'text-primary border-b-2 border-secondary font-bold'
+                    : 'text-gray-600 hover:text-primary hover:bg-slate-100'
+                }`}
+              >
+                <span>{isBn ? 'আরও' : 'More'}</span>
+                <ChevronDown size={14} className={`transform transition-transform duration-200 ${moreOpen ? 'rotate-180' : 'rotate-0'}`} />
+              </button>
+
+              {moreOpen && (
+                <div className="absolute left-0 mt-1 w-48 bg-white border border-gray-250 rounded-xl shadow-xl py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
+                  {secondaryNavItems.map((item) => (
+                    <NavLink
+                      key={item.path}
+                      to={item.path}
+                      onClick={() => setMoreOpen(false)}
+                      className={({ isActive }) =>
+                        `block px-4 py-2 text-sm transition-colors ${
+                          isActive
+                            ? 'bg-primary/5 text-primary font-bold border-l-4 border-secondary'
+                            : 'text-gray-700 hover:bg-slate-50 hover:text-primary'
+                        }`
+                      }
+                    >
+                      {t(`nav.${item.labelKey}`)}
+                    </NavLink>
+                  ))}
+                </div>
+              )}
+            </div>
           </nav>
 
           {/* Actions */}
@@ -139,7 +183,7 @@ const Navbar = () => {
       {mobileMenuOpen && (
         <div className="lg:hidden bg-white border-t border-gray-200 shadow-lg absolute w-full left-0 transition-all duration-300 ease-in-out">
           <div className="px-2 pt-2 pb-4 space-y-1 sm:px-3">
-            {navItems.map((item) => (
+            {allNavItems.map((item) => (
               <NavLink
                 key={item.path}
                 to={item.path}
