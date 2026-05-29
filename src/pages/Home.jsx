@@ -366,7 +366,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* 🎥 VIDEO & AI PORTAL SECTION */}
+      {/* 🎥 VIDEO & INTRODUCTION SECTION */}
       <section className="py-20 bg-dark text-white relative overflow-hidden">
         {/* Glowing background highlights */}
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl animate-float-slow" />
@@ -374,70 +374,68 @@ const Home = () => {
         
         <div className="max-w-7xl mx-auto px-6 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            {/* Association Intro Video */}
+            {/* Left Side: Professional Welcome & Core Values */}
             <div className="space-y-6">
               <span className="text-secondary font-bold text-sm uppercase tracking-wider block">
-                {isBn ? "ভিডিও ডকুমেন্টারি" : "Video Documentary"}
+                {isBn ? "আমাদের লক্ষ্য ও উদ্দেশ্য" : "Our Mission & Vision"}
               </span>
               <h2 className="text-3xl sm:text-4xl font-bold font-bn">
-                {isBn ? "আমাদের প্রাক্তন পরিষদের পরিচিতি" : "Introducing Our Alumni Association"}
+                {isBn ? "ঐতিহ্যের বন্ধনে প্রাক্তন পরিষদ" : "Cherishing Legacies, Inspiring Futures"}
               </h2>
               <p className="text-gray-300 font-bn leading-relaxed">
                 {isBn 
-                  ? "আমাদের প্রিয় প্রাক্তন পরিষদের ঐতিহ্যবাহী গৌরবোজ্জ্বল ইতিহাস ও ভবিষ্যত পথচলার এক নজরে চিত্ররূপ। এই প্রামাণ্যচিত্রের মাধ্যমে দেখুন কীভাবে আমরা আমাদের শিকড়কে ভুলে না গিয়ে একসাথে সামনে এগিয়ে চলেছি।" 
-                  : "A visual journey showcasing the rich history, values, and forward-looking vision of our Alumni Association. Watch the documentary to see how we keep our legacy alive and grow stronger together."
+                  ? "ধোয়াপালং সরকারি প্রাথমিক বিদ্যালয়ের ঐতিহ্য ও গৌরবকে সমুন্নত রাখতে আমাদের সকল প্রাক্তন শিক্ষার্থীদের এটি একটি সম্মিলিত প্ল্যাটফর্ম। আমরা পারস্পরিক ভ্রাতৃত্ববন্ধন জোরদার করতে এবং প্রিয় বিদ্যালয়ের উন্নয়নে অঙ্গীকারবদ্ধ।" 
+                  : "A unified platform dedicated to keeping the legacy of Dhuapalong Govt. Primary School alive. We aim to bridge the gap between different generations of graduates, foster a supportive network, and contribute directly to school development."
                 }
               </p>
+
+              {/* Core Features / Highlights */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4">
+                <div className="flex items-start space-x-3">
+                  <div className="bg-secondary/15 text-secondary p-1.5 rounded-lg shrink-0 mt-0.5">
+                    <Users size={18} />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-bold text-slate-100 font-bn">
+                      {isBn ? "ভ্রাতৃত্ব ও সংযোগ" : "Strong Networking"}
+                    </h4>
+                    <p className="text-xs text-gray-400 font-bn mt-1 leading-relaxed">
+                      {isBn ? "সকল ব্যাচের প্রাক্তনী ও পরিবারদের মধ্যে মজবুত সংযোগ স্থাপন।" : "Connecting graduates of all years across the country and globe."}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start space-x-3">
+                  <div className="bg-secondary/15 text-secondary p-1.5 rounded-lg shrink-0 mt-0.5">
+                    <Trophy size={18} />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-bold text-slate-100 font-bn">
+                      {isBn ? "বিদ্যালয়ের সামগ্রিক উন্নয়ন" : "Alma Mater Support"}
+                    </h4>
+                    <p className="text-xs text-gray-400 font-bn mt-1 leading-relaxed">
+                      {isBn ? "বিদ্যালয়ের মেধা অন্বেষণ ও অবকাঠামো উন্নয়নে সহযোগিতা।" : "Contributing to classroom facilities, scholarships, and activities."}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Side: Responsive Video Showcase */}
+            <div className="space-y-4">
+              <span className="text-slate-400 text-xs font-semibold block uppercase tracking-wider">
+                {isBn ? "আমাদের প্রামাণ্যচিত্র দেখুন" : "Watch Our Documentary Video"}
+              </span>
               
-              {/* Responsive Video Container */}
               <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-black/40 aspect-video group">
                 <iframe 
                   className="absolute inset-0 w-full h-full"
-                  src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+                  src="https://www.youtube.com/embed/9ycVq2kU7L0"
                   title="Alumni Association Introduction Video"
                   frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                   allowFullScreen
                 ></iframe>
-              </div>
-            </div>
-
-            {/* Antigravity AI Showcase */}
-            <div className="glass-panel-dark rounded-2xl p-8 border border-white/10 relative overflow-hidden">
-              {/* Decorative elements */}
-              <div className="absolute top-0 right-0 w-24 h-24 bg-accent/20 rounded-full blur-2xl animate-pulse" />
-              
-              <div className="relative z-10 space-y-6">
-                <div className="flex items-center space-x-3">
-                  <div className="bg-secondary/20 p-2 rounded-lg text-secondary animate-bounce">
-                    <Trophy size={24} />
-                  </div>
-                  <span className="bg-accent/10 text-accent border border-accent/20 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider font-english">
-                    DeepMind Antigravity
-                  </span>
-                </div>
-
-                <h2 className="text-2xl sm:text-3xl font-bold font-bn">
-                  {isBn ? "অ্যান্টিগ্রাভিটি এআই কোডিং পার্টনার" : "Engineered by Antigravity AI"}
-                </h2>
-
-                <p className="text-gray-300 font-bn leading-relaxed text-sm sm:text-base">
-                  {isBn 
-                    ? "এই ডিজিটাল অ্যালামনাই প্ল্যাটফর্মটি গুগল ডিপমাইন্ড (Google DeepMind)-এর সর্বাধুনিক এআই কোডিং সহকারী 'অ্যান্টিগ্রাভিটি' (Antigravity AI) দ্বারা সম্পূর্ণভাবে ডেভেলপ এবং অপ্টিমাইজ করা হয়েছে। বাগ ফিক্সিং, লেআউট ডিজাইন, ডেটা ক্যাশ ম্যানেজমেন্ট এবং পেমেন্ট গেটওয়ে ইন্টিগ্রেশন সফল করতে অ্যান্টিগ্রাভিটি একটি দক্ষ টিমমেট হিসেবে কাজ করেছে।" 
-                    : "This entire digital alumni portal is engineered and optimized by Google DeepMind's state-of-the-art agentic AI coding assistant, Antigravity. From layout refinements and cache engineering to system debugging and transaction integrations, Antigravity functions as a high-performance development partner."
-                  }
-                </p>
-
-                <div className="pt-4 border-t border-white/10 grid grid-cols-2 gap-4">
-                  <div className="bg-white/5 p-4 rounded-xl border border-white/5 hover:bg-white/10 transition">
-                    <span className="block text-xs text-gray-400 uppercase">{isBn ? "এআই আর্কিটেকচার" : "AI Architecture"}</span>
-                    <span className="block text-sm font-bold text-accent mt-1">Google DeepMind</span>
-                  </div>
-                  <div className="bg-white/5 p-4 rounded-xl border border-white/5 hover:bg-white/10 transition">
-                    <span className="block text-xs text-gray-400 uppercase">{isBn ? "অপ্টিমাইজেশন" : "Optimization Status"}</span>
-                    <span className="block text-sm font-bold text-secondary mt-1">100% Production Ready</span>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
