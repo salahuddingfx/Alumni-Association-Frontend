@@ -755,6 +755,28 @@ const UserDashboard = () => {
                 <input type="text" placeholder="e.g. 2010" className="w-full bg-slate-50 border border-gray-300 px-3 py-2 rounded-lg focus:outline-none focus:border-secondary text-sm font-bold" value={pscBatch} onChange={e => setPscBatch(e.target.value)} required />
               </div>
               <div>
+                <label className="block text-xxs font-bold text-gray-500 uppercase mb-1">SSC Batch</label>
+                <input type="text" placeholder="e.g. 2015" className="w-full bg-slate-50 border border-gray-300 px-3 py-2 rounded-lg focus:outline-none focus:border-secondary text-sm font-bold" value={batch} onChange={e => setBatch(e.target.value)} />
+              </div>
+              <div>
+                <label className="block text-xxs font-bold text-gray-500 uppercase mb-1">HSC Batch</label>
+                <input type="text" placeholder="e.g. 2017" className="w-full bg-slate-50 border border-gray-300 px-3 py-2 rounded-lg focus:outline-none focus:border-secondary text-sm font-bold" value={hscBatch} onChange={e => setHscBatch(e.target.value)} />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-xxs font-bold text-gray-500 uppercase mb-1">Higher Education (Diploma, BSc, University, etc.)</label>
+              <input 
+                type="text" 
+                placeholder="e.g. Diploma in Computer Tech, Feni Polytechnic or BSc in CSE, BUET" 
+                className="w-full bg-slate-50 border border-gray-300 px-3 py-2 rounded-lg focus:outline-none focus:border-secondary text-sm font-semibold" 
+                value={higherEducation} 
+                onChange={e => setHigherEducation(e.target.value)} 
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
                 <label className="block text-xxs font-bold text-gray-500 uppercase mb-1">Blood Group</label>
                 <select className="w-full bg-slate-50 border border-gray-300 px-3 py-2 rounded-lg focus:outline-none focus:border-secondary text-sm font-bold text-red-600" value={bloodGroup} onChange={e => setBloodGroup(e.target.value)} required>
                   {['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'].map(bg => (
