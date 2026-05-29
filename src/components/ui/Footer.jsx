@@ -6,11 +6,134 @@ import { useSettings } from '../../context/settings.jsx';
 import api from '../../api/api';
 import { getImageUrl } from '../../utils/image';
 
+// Inline Brand SVG / CSS Logos for SSLCommerz payment channels
+const VisaLogo = () => (
+  <svg viewBox="0 0 48 15" className="h-3 w-auto" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M18.7 0L14.6 15h3.2l4.1-15h-3.2z" fill="#0F3590" />
+    <path d="M37.3 0.3c-0.8-0.3-2.1-0.6-3.7-0.6-4.1 0-7 2.2-7 5.3 0 2.3 2 3.6 3.6 4.4 1.6 0.8 2.2 1.3 2.2 2 0 1.1-1.3 1.6-2.5 1.6-1.7 0-2.6-0.3-3.9-0.9l-0.5-0.2-0.6 3.8c1 0.5 2.9 0.9 4.8 0.9 4.3 0 7.1-2.1 7.1-5.4 0-1.8-1.1-3.2-3.6-4.4-1.5-0.8-2.4-1.3-2.4-2.1 0-0.7 0.8-1.5 2.5-1.5 1.4 0 2.4 0.3 3.2 0.6l0.4 0.2 0.7-3.8z" fill="#0F3590" />
+    <path d="M47.7 0.3h-2.5c-0.8 0-1.4 0.2-1.7 0.9L38.7 15h3.4l0.7-1.9h4.1l0.4 1.9H50.5l-2.8-14.7zm-4.1 9.8l1.7-4.6 1 4.6H43.6z" fill="#0F3590" />
+    <path d="M10.2 0.3L6.3 10.3 5.9 8.2 4.1 2.2C3.5 0.8 2.3 0.3 1.2 0.3H0.1l0.1 0.5c1.4 0.4 2.6 1.4 3.4 2.8L7.6 15h3.4L16.2 0.3h-6z" fill="#FAA61A" />
+  </svg>
+);
+
+const MastercardLogo = () => (
+  <svg viewBox="0 0 32 20" className="h-5 w-auto" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="10" cy="10" r="10" fill="#FF5F00" fillOpacity="0.9" />
+    <circle cx="22" cy="10" r="10" fill="#F79E1B" fillOpacity="0.9" />
+    <path d="M16 16.2c1.9-1.5 3.1-3.9 3.1-6.2 0-2.3-1.2-4.7-3.1-6.2-1.9 1.5-3.1 3.9-3.1 6.2 0 2.3 1.2 4.7 3.1 6.2z" fill="#EB001B" />
+  </svg>
+);
+
+const AmexLogo = () => (
+  <div className="bg-[#0076A3] text-white font-extrabold px-1.5 py-0.5 rounded text-[8px] tracking-tighter leading-none select-none flex items-center justify-center h-4 w-7">
+    AMEX
+  </div>
+);
+
+const BkashLogo = () => (
+  <div className="flex items-center space-x-0.5 select-none leading-none">
+    <span className="text-[#E2136E] font-black text-xs tracking-tighter font-english">bKash</span>
+  </div>
+);
+
+const NagadLogo = () => (
+  <div className="flex items-center space-x-0.5 select-none leading-none">
+    <span className="text-[#F15A22] font-black text-xs tracking-tighter font-english italic">nagad</span>
+  </div>
+);
+
+const RocketLogo = () => (
+  <div className="flex items-center space-x-0.5 select-none leading-none">
+    <span className="text-[#8C3494] font-black text-xs tracking-tighter font-english">Rocket</span>
+  </div>
+);
+
+const UpayLogo = () => (
+  <div className="flex items-center select-none leading-none">
+    <span className="text-[#002F6C] font-extrabold text-xs tracking-tighter font-english">u</span>
+    <span className="text-[#FFC72C] font-extrabold text-xs tracking-tighter font-english">pay</span>
+  </div>
+);
+
+const DbblNexusLogo = () => (
+  <div className="bg-[#006A4E] text-white font-black px-1 py-0.5 rounded text-[7px] tracking-tight leading-none select-none flex flex-col items-center justify-center">
+    <span className="text-[#F7B600]">DBBL</span>
+    <span className="text-[5px]">NEXUS</span>
+  </div>
+);
+
+const BracBankLogo = () => (
+  <div className="flex flex-col items-center select-none leading-none scale-90">
+    <span className="text-[#0D4F8B] font-extrabold text-[8px] tracking-tighter">BRAC BANK</span>
+    <span className="text-[4px] text-[#F4A920] font-bold">where you stand</span>
+  </div>
+);
+
+const CityBankLogo = () => (
+  <div className="flex items-center space-x-0.5 select-none leading-none scale-90">
+    <div className="w-2 h-2 bg-[#ED1C24] transform rotate-45 shrink-0" />
+    <span className="text-[#231F20] font-black text-[8px] tracking-tight">the city bank</span>
+  </div>
+);
+
+const IslamiBankLogo = () => (
+  <div className="flex items-center space-x-0.5 select-none leading-none scale-90">
+    <div className="w-2 h-2 rounded-full bg-[#008A4B] flex items-center justify-center text-[5px] text-white font-bold shrink-0">IB</div>
+    <span className="text-[#008A4B] font-black text-[8px] tracking-tighter">ISLAMI BANK</span>
+  </div>
+);
+
+const BankAsiaLogo = () => (
+  <div className="flex flex-col items-center select-none leading-none scale-90">
+    <span className="text-[#005CA9] font-black text-[8px] tracking-tighter">Bank Asia</span>
+    <span className="text-[4px] text-[#EE3A43] font-bold">For a better tomorrow</span>
+  </div>
+);
+
+const AbBankLogo = () => (
+  <div className="bg-[#ED1C24] text-white font-black px-1.5 py-0.5 rounded text-[8px] tracking-tight leading-none select-none flex items-center justify-center">
+    AB Bank
+  </div>
+);
+
+const MtbLogo = () => (
+  <div className="flex items-center space-x-0.5 select-none leading-none">
+    <span className="text-[#EE3124] font-black text-[8px] tracking-tight">MTB</span>
+  </div>
+);
+
+const OkWalletLogo = () => (
+  <div className="bg-[#FFCC00] text-black font-extrabold px-1 py-0.5 rounded text-[7px] tracking-tight leading-none select-none flex items-center justify-center">
+    OK Wallet
+  </div>
+);
+
 const Footer = () => {
   const { t, i18n } = useTranslation();
   const { settings } = useSettings();
   const isBn = i18n.language === 'bn';
   const [partners, setPartners] = useState([]);
+
+  const row1 = [
+    { name: 'Visa', logo: <VisaLogo /> },
+    { name: 'Mastercard', logo: <MastercardLogo /> },
+    { name: 'Amex', logo: <AmexLogo /> },
+    { name: 'Brac Bank', logo: <BracBankLogo /> },
+    { name: 'DBBL Nexus', logo: <DbblNexusLogo /> },
+    { name: 'City Bank', logo: <CityBankLogo /> },
+    { name: 'Bank Asia', logo: <BankAsiaLogo /> },
+    { name: 'Islami Bank', logo: <IslamiBankLogo /> }
+  ];
+
+  const row2 = [
+    { name: 'AB Bank', logo: <AbBankLogo /> },
+    { name: 'MTB', logo: <MtbLogo /> },
+    { name: 'bKash', logo: <BkashLogo /> },
+    { name: 'Rocket', logo: <RocketLogo /> },
+    { name: 'Nagad', logo: <NagadLogo /> },
+    { name: 'Upay', logo: <UpayLogo /> },
+    { name: 'OK Wallet', logo: <OkWalletLogo /> }
+  ];
 
   useEffect(() => {
     api.get('/partners')
@@ -217,7 +340,47 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="mt-6 pt-4 border-t border-slate-800 text-center text-sm text-gray-500">
+        {/* SSLCommerz-style Secured Payment Gateways Banner */}
+        <div className="mt-12 pt-8 border-t border-slate-800/80">
+          <div className="text-center mb-5">
+            <span className="text-[10px] text-gray-500 font-extrabold uppercase tracking-wider font-english">
+              {isBn ? "নিরাপদ পেমেন্ট পার্টনারসমূহ (SSLCommerz)" : "Secured Payment Channels (SSLCommerz accepted)"}
+            </span>
+          </div>
+          <div className="flex flex-col items-center justify-center relative py-1 border-l border-r border-slate-800/65 px-4">
+            <div className="w-full overflow-hidden mask-gradient">
+              {/* Row 1 */}
+              <div className="animate-marquee flex items-center space-x-3 py-1">
+                {row1.map((pm, idx) => (
+                  <div key={idx} className="bg-white px-3 py-2 rounded-lg border border-slate-200/10 shadow-sm flex items-center justify-center min-w-[90px] h-10 shrink-0 select-none">
+                    {pm.logo}
+                  </div>
+                ))}
+                {row1.map((pm, idx) => (
+                  <div key={`dup-1-${idx}`} className="bg-white px-3 py-2 rounded-lg border border-slate-200/10 shadow-sm flex items-center justify-center min-w-[90px] h-10 shrink-0 select-none">
+                    {pm.logo}
+                  </div>
+                ))}
+              </div>
+
+              {/* Row 2 */}
+              <div className="animate-marquee-reverse flex items-center space-x-3 py-1 mt-1">
+                {row2.map((pm, idx) => (
+                  <div key={idx} className="bg-white px-3 py-2 rounded-lg border border-slate-200/10 shadow-sm flex items-center justify-center min-w-[90px] h-10 shrink-0 select-none">
+                    {pm.logo}
+                  </div>
+                ))}
+                {row2.map((pm, idx) => (
+                  <div key={`dup-2-${idx}`} className="bg-white px-3 py-2 rounded-lg border border-slate-200/10 shadow-sm flex items-center justify-center min-w-[90px] h-10 shrink-0 select-none">
+                    {pm.logo}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-8 pt-4 border-t border-slate-800 text-center text-sm text-gray-500">
           &copy; {new Date().getFullYear()} {isBn ? settings.schoolNameBn : settings.schoolNameEn}. All rights reserved.
         </div>
       </div>
