@@ -1,27 +1,45 @@
 import React, { useEffect, useState } from 'react';
+import { useSettings } from '../../context/settings.jsx';
 
 const IntroLoader = () => {
+  const { settings, loading } = useSettings();
   const [visible, setVisible] = useState(true);
   const [fade, setFade] = useState(false);
+  const [minTimeElapsed, setMinTimeElapsed] = useState(false);
 
   useEffect(() => {
-    // Fade out starts at 1.5s
-    const timerFade = setTimeout(() => {
-      setFade(true);
+    // Lock background scrolling
+    document.body.style.overflow = 'hidden';
+    
+    // Minimum display time of 1.5 seconds
+    const timer = setTimeout(() => {
+      setMinTimeElapsed(true);
     }, 1500);
 
-    // Completely unmounts at 2.1s
-    const timerVisible = setTimeout(() => {
-      setVisible(false);
-    }, 2100);
-
     return () => {
-      clearTimeout(timerFade);
-      clearTimeout(timerVisible);
+      document.body.style.overflow = 'unset';
+      clearTimeout(timer);
     };
   }, []);
 
+  useEffect(() => {
+    // Only fade out and unmount once the minimum time has elapsed AND settings are loaded
+    if (minTimeElapsed && !loading) {
+      setFade(true);
+      
+      const timerVisible = setTimeout(() => {
+        setVisible(false);
+        document.body.style.overflow = 'unset';
+      }, 700); // Wait for transition animation to complete (duration-700)
+
+      return () => clearTimeout(timerVisible);
+    }
+  }, [minTimeElapsed, loading]);
+
   if (!visible) return null;
+
+  const siteTitle = settings.siteTitleBn || 'প্রাক্তন শিক্ষার্থী পরিষদ';
+  const schoolName = settings.schoolNameEn || 'Dhuapalong Govt. Primary School';
 
   return (
     <div className={`fixed inset-0 z-[9999] bg-[#071426] flex flex-col items-center justify-center transition-all duration-700 ease-in-out ${
@@ -39,10 +57,10 @@ const IntroLoader = () => {
         {/* Pulsing Text info */}
         <div className="text-center space-y-1">
           <h1 className="text-2xl font-extrabold text-white font-bn tracking-wider animate-fadeIn">
-            প্রাক্তন শিক্ষার্থী পরিষদ
+            {siteTitle}
           </h1>
           <p className="text-[10px] text-gray-400 font-medium tracking-widest uppercase">
-            Dhuapalong Govt. Primary School
+            {schoolName}
           </p>
         </div>
 
