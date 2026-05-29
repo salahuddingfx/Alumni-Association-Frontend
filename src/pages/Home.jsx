@@ -6,7 +6,7 @@ import { ArrowRight, Calendar, Users, Megaphone, Trophy, Heart } from 'lucide-re
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useSettings } from '../context/settings.jsx';
-import api from '../api/api';
+import api, { API_URL } from '../api/api';
 
 // 60fps high-performance count-up counter component
 const AnimatedCounter = ({ value, suffix = '', isCurrency = false, isBn = false }) => {
@@ -174,6 +174,7 @@ const Home = () => {
       .then(res => {
         if (res.data.success && Array.isArray(res.data.data)) {
           setEventsCount(res.data.data.length);
+          setEvents(res.data.data.slice(0, 3));
           
           // Find the nearest upcoming event
           const now = new Date().getTime();
@@ -196,6 +197,15 @@ const Home = () => {
         }
       })
       .catch(err => console.log('Error fetching hero slides:', err));
+
+    // 6. Recent Blogs
+    api.get('/blogs')
+      .then(res => {
+        if (res.data.success) {
+          setBlogs(res.data.data.slice(0, 3));
+        }
+      })
+      .catch(err => console.log('Error fetching blogs:', err));
   }, []);
 
   // Countdown timer effect
