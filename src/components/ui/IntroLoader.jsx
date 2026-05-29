@@ -131,7 +131,7 @@ const IntroLoader = () => {
           </div>
           <div className="h-1.5 w-full bg-white/10 rounded-full overflow-hidden relative">
             <div 
-              className="h-full bg-gradient-to-r from-primary via-secondary to-primary rounded-full transition-all duration-150 ease-out"
+              className="h-full bg-secondary rounded-full transition-all duration-150 ease-out"
               style={{ width: `${Math.min(progress, 100)}%` }}
             ></div>
           </div>
