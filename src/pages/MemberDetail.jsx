@@ -63,7 +63,7 @@ const MemberDetail = () => {
       {/* Dynamic SEO Tags */}
       <SEO 
         title={memberName}
-        description={memberBio || `${memberName} - Batch of ${member.batch}. ${member.profession || ''}`}
+        description={memberBio || `${memberName} - PSC Batch of ${member.pscBatch || member.batch}. ${member.profession || ''}`}
         image={member.profilePhoto}
         url={`/members/${member._id}`}
       />
