@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import api, { API_URL } from '../api/api';
+import api from '../api/api';
+import { getImageUrl } from '../utils/image';
 import { X, ChevronLeft, ChevronRight, Maximize2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -121,7 +122,7 @@ const Gallery = () => {
             onClick={() => openLightbox(index)}
             className="break-inside-avoid bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md border border-gray-200 group relative cursor-pointer"
           >
-            <img src={item.url.startsWith('http') ? item.url : `${API_URL}${item.url}`} className="w-full h-auto object-cover group-hover:scale-102 transition duration-300" alt={item.title.en} />
+            <img src={getImageUrl(item.url)} className="w-full h-auto object-cover group-hover:scale-102 transition duration-300" alt={item.title.en} />
             
             {/* Hover overlay with action icons */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-between p-5">
@@ -185,7 +186,7 @@ const Gallery = () => {
               onClick={(e) => e.stopPropagation()}
             >
               <img 
-                src={displayItems[lightboxIndex].url.startsWith('http') ? displayItems[lightboxIndex].url : `${API_URL}${displayItems[lightboxIndex].url}`} 
+                src={getImageUrl(displayItems[lightboxIndex].url)} 
                 className="max-w-full max-h-[70vh] object-contain rounded-lg shadow-2xl" 
                 alt={displayItems[lightboxIndex].title.en} 
               />
