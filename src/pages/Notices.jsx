@@ -25,6 +25,15 @@ const Notices = () => {
       .finally(() => setLoading(false));
   }, []);
 
+  useEffect(() => {
+    const queryParams = new URLSearchParams(search);
+    const noticeId = queryParams.get('id');
+    if (noticeId && notices.length > 0) {
+      const found = notices.find(n => n._id === noticeId);
+      if (found) setSelectedNotice(found);
+    }
+  }, [search, notices]);
+
   const displayNotices = notices.length > 0 ? notices : [
     {
       _id: '1',
