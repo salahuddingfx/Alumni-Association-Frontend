@@ -196,17 +196,44 @@ const MemberDetail = () => {
               
               {/* Academic Details Card */}
               <div className="bg-slate-50 p-6 rounded-3xl border border-gray-150 space-y-5">
-                <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider">{isBn ? 'শিক্ষাগত ব্যাচ' : 'Academic Batches'}</h4>
+                <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider">{isBn ? 'শিক্ষাগত যোগ্যতা' : 'Educational Milestones'}</h4>
                 
-                <div className="space-y-3.5">
+                <div className="space-y-4">
                   <div className="flex items-center space-x-3">
                     <Calendar size={18} className="text-primary shrink-0" />
                     <div>
-                      <span className="block text-[9px] text-gray-400 font-bold uppercase">{isBn ? 'পিএসসি ব্যাচ' : 'PSC Batch'}</span>
-                      <span className="text-sm font-bold text-gray-800">Batch {member.pscBatch || member.batch}</span>
+                      <span className="block text-[9px] text-gray-400 font-bold uppercase">PSC Batch</span>
+                      <span className="text-sm font-bold text-gray-800">Batch {member.pscBatch || 'N/A'}</span>
                     </div>
                   </div>
-                  <div className="flex items-center space-x-3">
+                  {member.batch && (
+                    <div className="flex items-center space-x-3">
+                      <Calendar size={18} className="text-primary shrink-0" />
+                      <div>
+                        <span className="block text-[9px] text-gray-400 font-bold uppercase">SSC Batch</span>
+                        <span className="text-sm font-bold text-gray-800">Batch {member.batch}</span>
+                      </div>
+                    </div>
+                  )}
+                  {member.hscBatch && (
+                    <div className="flex items-center space-x-3">
+                      <Calendar size={18} className="text-primary shrink-0" />
+                      <div>
+                        <span className="block text-[9px] text-gray-400 font-bold uppercase">HSC Batch</span>
+                        <span className="text-sm font-bold text-gray-800">Batch {member.hscBatch}</span>
+                      </div>
+                    </div>
+                  )}
+                  {member.higherEducation && (
+                    <div className="flex items-start space-x-3 border-t border-gray-200/60 pt-3">
+                      <Award size={18} className="text-secondary shrink-0 mt-0.5" />
+                      <div>
+                        <span className="block text-[9px] text-gray-400 font-bold uppercase">{isBn ? 'উচ্চশিক্ষা ও ডিগ্রি' : 'Higher Education / Diploma / Degrees'}</span>
+                        <span className="text-xs font-semibold text-slate-700 leading-normal block">{member.higherEducation}</span>
+                      </div>
+                    </div>
+                  )}
+                  <div className="flex items-center space-x-3 border-t border-gray-200/60 pt-3">
                     <User size={18} className="text-primary shrink-0" />
                     <div>
                       <span className="block text-[9px] text-gray-400 font-bold uppercase">{isBn ? 'লিঙ্গ' : 'Gender'}</span>

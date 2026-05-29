@@ -158,11 +158,29 @@ const Members = () => {
                   </h3>
                 </Link>
                 
-                <div className="flex items-center space-x-3 text-xs text-gray-500 font-bold">
-                  <div className="flex items-center space-x-1">
-                    <Calendar size={12} />
-                    <span>{isBn ? 'পিএসসি ব্যাচ' : 'PSC Batch'}: {member.pscBatch || member.batch}</span>
+                <div className="flex flex-col space-y-1.5 text-xs text-gray-500 font-bold">
+                  <div className="flex items-center flex-wrap gap-y-1">
+                    <Calendar size={12} className="shrink-0 mr-1" />
+                    <span>PSC: {member.pscBatch || 'N/A'}</span>
+                    {member.batch && (
+                      <>
+                        <span className="mx-1 text-gray-300">•</span>
+                        <span>SSC: {member.batch}</span>
+                      </>
+                    )}
+                    {member.hscBatch && (
+                      <>
+                        <span className="mx-1 text-gray-300">•</span>
+                        <span>HSC: {member.hscBatch}</span>
+                      </>
+                    )}
                   </div>
+                  {member.higherEducation && (
+                    <div className="flex items-center space-x-1.5 text-primary max-w-[200px]" title={member.higherEducation}>
+                      <span className="text-[9px] font-extrabold uppercase bg-primary/10 text-primary px-1.5 py-0.5 rounded border border-primary/20 shrink-0">EDU</span>
+                      <span className="truncate text-xs font-semibold leading-none">{member.higherEducation}</span>
+                    </div>
+                  )}
                 </div>
 
                 <div className="space-y-1 text-sm text-gray-600 pt-2 border-t border-slate-100">
