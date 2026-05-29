@@ -69,6 +69,7 @@ import 'swiper/css/pagination';
 
 const Home = () => {
   const { t, i18n } = useTranslation();
+  const { settings } = useSettings();
   const [notices, setNotices] = useState([]);
   const [countdown, setCountdown] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [stats, setStats] = useState({ totalAmount: 0, totalCount: 0 });
