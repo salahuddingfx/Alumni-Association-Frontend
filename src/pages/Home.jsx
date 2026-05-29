@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, EffectFade, Pagination } from 'swiper/modules';
+import { Autoplay, EffectFade, Pagination, Navigation, Keyboard } from 'swiper/modules';
 import { ArrowRight, Calendar, Users, Megaphone, Trophy, Heart } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -66,6 +66,7 @@ const AnimatedCounter = ({ value, suffix = '', isCurrency = false, isBn = false 
 import 'swiper/css';
 import 'swiper/css/effect-fade';
 import 'swiper/css/pagination';
+import 'swiper/css/navigation';
 
 // Dynamic Video Player component supporting YouTube, Facebook, and Cloudinary/Local uploaded videos
 const VideoPlayer = ({ url }) => {
