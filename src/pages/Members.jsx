@@ -168,10 +168,50 @@ const Members = () => {
                     <Building size={14} className="text-gray-400 mt-0.5 shrink-0" />
                     <span className="leading-snug">{member.profession} {member.currentOrganization && `at ${member.currentOrganization}`}</span>
                   </div>
-                  <div className="flex items-center space-x-1.5">
-                    <Mail size={14} className="text-gray-400 shrink-0" />
-                    <span className="truncate max-w-[180px]">{member.email}</span>
-                  </div>
+                  {member.gender?.toLowerCase() === 'female' ? (
+                    <div className="text-[10px] text-slate-500 font-bold bg-slate-100 px-2 py-0.5 rounded border border-slate-200 w-fit mt-1">
+                      Contact Private
+                    </div>
+                  ) : (
+                    <>
+                      <div className="flex items-center space-x-1.5">
+                        <Mail size={14} className="text-gray-400 shrink-0" />
+                        <span className="truncate max-w-[180px] text-xs font-semibold">{member.email}</span>
+                      </div>
+                      {member.phone && (
+                        <div className="flex items-center space-x-1.5">
+                          <Phone size={14} className="text-gray-400 shrink-0" />
+                          <span className="text-xs font-semibold">{member.phone}</span>
+                        </div>
+                      )}
+                    </>
+                  )}
+
+                  {/* Social Links */}
+                  {(member.socialLinks?.facebook || member.socialLinks?.linkedin || member.socialLinks?.twitter || member.socialLinks?.website) && (
+                    <div className="flex space-x-2.5 pt-2 border-t border-slate-100 mt-2">
+                      {member.socialLinks?.facebook && (
+                        <a href={member.socialLinks.facebook.startsWith('http') ? member.socialLinks.facebook : `https://${member.socialLinks.facebook}`} target="_blank" rel="noreferrer" className="text-gray-400 hover:text-[#1877F2] transition-colors" title="Facebook">
+                          <Facebook size={14} />
+                        </a>
+                      )}
+                      {member.socialLinks?.linkedin && (
+                        <a href={member.socialLinks.linkedin.startsWith('http') ? member.socialLinks.linkedin : `https://${member.socialLinks.linkedin}`} target="_blank" rel="noreferrer" className="text-gray-400 hover:text-[#0A66C2] transition-colors" title="LinkedIn">
+                          <Linkedin size={14} />
+                        </a>
+                      )}
+                      {member.socialLinks?.twitter && (
+                        <a href={member.socialLinks.twitter.startsWith('http') ? member.socialLinks.twitter : `https://${member.socialLinks.twitter}`} target="_blank" rel="noreferrer" className="text-gray-400 hover:text-[#1DA1F2] transition-colors" title="Twitter/X">
+                          <Twitter size={14} />
+                        </a>
+                      )}
+                      {member.socialLinks?.website && (
+                        <a href={member.socialLinks.website.startsWith('http') ? member.socialLinks.website : `https://${member.socialLinks.website}`} target="_blank" rel="noreferrer" className="text-gray-400 hover:text-secondary transition-colors" title="Website">
+                          <Globe size={14} />
+                        </a>
+                      )}
+                    </div>
+                  )}
                 </div>
               </div>
 

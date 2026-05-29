@@ -46,9 +46,7 @@ const Navbar = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-3 shrink-0">
-            <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center text-white font-bold text-lg border-2 border-secondary shadow-md shrink-0">
-              প
-            </div>
+            <img src="/alumni_logo.png" className="w-10 h-10 rounded-full border-2 border-secondary shadow-md shrink-0 object-cover" alt="Logo" />
             <div className="flex flex-col">
               <span className="text-[13px] sm:text-base lg:text-[15px] xl:text-lg font-bold text-primary font-bn tracking-wide whitespace-nowrap">
                 {settings?.siteTitleBn || 'প্রাক্তন শিক্ষার্থী পরিষদ'}

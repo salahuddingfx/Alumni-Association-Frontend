@@ -49,9 +49,7 @@ const Footer = () => {
           {/* About Widget */}
           <div className="col-span-2 md:col-span-2 space-y-3">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-primary font-bold text-lg shrink-0">
-                প
-              </div>
+              <img src="/alumni_logo.png" className="w-10 h-10 rounded-full bg-white shrink-0 object-cover border border-white/20" alt="Logo" />
               <span className="text-xl font-bold font-bn tracking-wide leading-snug">
                 {settings?.siteTitleBn || 'প্রাক্তন শিক্ষার্থী পরিষদ'}
               </span>
