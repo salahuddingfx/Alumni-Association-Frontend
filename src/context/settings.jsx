@@ -15,6 +15,7 @@ export const defaultSettings = {
   facebook: 'https://facebook.com',
   linkedin: 'https://linkedin.com',
   youtube: 'https://youtube.com',
+  introVideoUrl: 'https://www.youtube.com/embed/9ycVq2kU7L0',
   bkash: '+880 1700 000000',
   nagad: '+880 1800 000000',
   rocket: '+880 1900 000000',
