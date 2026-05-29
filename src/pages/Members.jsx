@@ -139,7 +139,7 @@ const Members = () => {
               </div>
  
               {/* Avatar Image / Initial Circle */}
-              <div className="w-16 h-16 rounded-2xl bg-slate-100 overflow-hidden flex items-center justify-center font-extrabold text-xl shrink-0 border border-slate-100">
+              <Link to={`/members/${member._id}`} className="w-16 h-16 rounded-2xl bg-slate-100 overflow-hidden flex items-center justify-center font-extrabold text-xl shrink-0 border border-slate-100 hover:opacity-90 transition-opacity">
                 <img 
                   src={member.profilePhoto ? getImageUrl(member.profilePhoto) : `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(isBn ? member.name.bn : member.name.en)}`} 
                   className="w-full h-full object-cover" 
@@ -149,12 +149,14 @@ const Members = () => {
                     e.target.src = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%239ca3af'><rect width='100%' height='100%' fill='%23f3f4f6'/><path d='M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z'/></svg>";
                   }}
                 />
-              </div>
+              </Link>
 
               <div className="space-y-1.5 pr-12">
-                <h3 className="font-extrabold text-lg text-primary font-bn group-hover:text-secondary transition-colors">
-                  {isBn ? member.name.bn : member.name.en}
-                </h3>
+                <Link to={`/members/${member._id}`} className="hover:underline">
+                  <h3 className="font-extrabold text-lg text-primary font-bn group-hover:text-secondary transition-colors">
+                    {isBn ? member.name.bn : member.name.en}
+                  </h3>
+                </Link>
                 
                 <div className="flex items-center space-x-3 text-xs text-gray-500 font-bold">
                   <div className="flex items-center space-x-1">
