@@ -15,6 +15,7 @@ import Register from './pages/Register.jsx';
 import Developer from './pages/Developer.jsx';
 import Policies from './pages/Policies.jsx';
 import UserDashboard from './pages/UserDashboard.jsx';
+import Partners from './pages/Partners.jsx';
 import Blog from './pages/Blog.jsx';
 import BlogDetail from './pages/BlogDetail.jsx';
 import ScrollToTop from './components/ScrollToTop.jsx';
@@ -33,6 +34,7 @@ const App = () => {
         <Route path="/members" element={<Members />} />
         <Route path="/events" element={<Events />} />
         <Route path="/notices" element={<Notices />} />
+        <Route path="/partners" element={<Partners />} />
         <Route path="/gallery" element={<Gallery />} />
         <Route path="/donation" element={<Donation />} />
         <Route path="/blog" element={<Blog />} />
