@@ -133,6 +133,7 @@ const Home = () => {
   const [slides, setSlides] = useState([]);
   const [events, setEvents] = useState([]);
   const [blogs, setBlogs] = useState([]);
+  const [partners, setPartners] = useState([]);
   const isBn = i18n.language === 'bn';
   const currentLang = i18n.language;
 
@@ -207,6 +208,15 @@ const Home = () => {
         }
       })
       .catch(err => console.log('Error fetching blogs:', err));
+
+    // 7. Partners & Sponsors
+    api.get('/partners')
+      .then(res => {
+        if (res.data.success) {
+          setPartners(res.data.data);
+        }
+      })
+      .catch(err => console.log('Error fetching partners:', err));
   }, []);
 
   // Countdown timer effect
