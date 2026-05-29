@@ -67,6 +67,58 @@ import 'swiper/css';
 import 'swiper/css/effect-fade';
 import 'swiper/css/pagination';
 
+// Dynamic Video Player component supporting YouTube, Facebook, and Cloudinary/Local uploaded videos
+const VideoPlayer = ({ url }) => {
+  if (!url) return null;
+
+  // 1. YouTube
+  if (url.includes('youtube.com') || url.includes('youtu.be')) {
+    let videoId = '';
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    const match = url.match(regExp);
+    if (match && match[2].length === 11) {
+      videoId = match[2];
+    }
+    const embedUrl = videoId ? `https://www.youtube.com/embed/${videoId}` : url;
+    return (
+      <iframe
+        className="absolute inset-0 w-full h-full"
+        src={embedUrl}
+        title="Alumni Association Video"
+        frameBorder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowFullScreen
+      ></iframe>
+    );
+  }
+
+  // 2. Facebook
+  if (url.includes('facebook.com') || url.includes('fb.watch')) {
+    const embedUrl = `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(url)}&show_text=0`;
+    return (
+      <iframe
+        className="absolute inset-0 w-full h-full"
+        src={embedUrl}
+        title="Alumni Association Video"
+        frameBorder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowFullScreen
+        style={{ border: 'none', overflow: 'hidden' }}
+      ></iframe>
+    );
+  }
+
+  // 3. Direct/Cloudinary/Uploaded Video (raw video formats)
+  return (
+    <video
+      className="absolute inset-0 w-full h-full object-cover"
+      src={url}
+      controls
+      playsInline
+    />
+  );
+};
+
 const Home = () => {
   const { t, i18n } = useTranslation();
   const { settings } = useSettings();
