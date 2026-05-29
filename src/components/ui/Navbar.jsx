@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Menu, X, Globe, ChevronDown } from 'lucide-react';
+import { Menu, X, Globe, ChevronDown, Sun, Moon } from 'lucide-react';
 import { useSettings } from '../../context/settings.jsx';
+import { useTheme } from '../../context/theme.jsx';
 
 const Navbar = () => {
   const { t, i18n } = useTranslation();
   const { settings } = useSettings();
+  const { isDark, toggleTheme } = useTheme();
   const isBn = i18n.language === 'bn';
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [moreOpen, setMoreOpen] = useState(false);
@@ -126,6 +128,15 @@ const Navbar = () => {
               <span>{i18n.language === 'bn' ? 'English' : 'বাংলা'}</span>
             </button>
 
+            {/* Dark/Light Theme Toggle */}
+            <button
+              onClick={toggleTheme}
+              title={isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+              className="flex items-center justify-center w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 border border-gray-300 dark:border-slate-600 text-gray-700 dark:text-yellow-300 transition-all duration-200 shrink-0"
+            >
+              {isDark ? <Sun size={15} /> : <Moon size={15} />}
+            </button>
+
             {isLoggedIn ? (
               <div className="flex items-center space-x-1.5 xl:space-x-2">
                 <Link
@@ -167,6 +178,15 @@ const Navbar = () => {
               title={i18n.language === 'bn' ? 'English' : 'বাংলা'}
             >
               <Globe size={14} className="text-primary" />
+            </button>
+
+            {/* Mobile Dark Mode Toggle */}
+            <button
+              onClick={toggleTheme}
+              title={isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+              className="flex items-center justify-center w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 border border-gray-300 dark:border-slate-600 text-gray-700 dark:text-yellow-300 transition shrink-0"
+            >
+              {isDark ? <Sun size={14} /> : <Moon size={14} />}
             </button>
 
             <button
