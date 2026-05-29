@@ -105,8 +105,8 @@ const UserDashboard = () => {
           setMemberProfile(m);
           setNameEn(m.name?.en || '');
           setNameBn(m.name?.bn || '');
-          setBatch(m.batch || '');
-          setPscBatch(m.pscBatch || '');
+          setBatch(m.pscBatch || m.batch || '');
+          setPscBatch(m.pscBatch || m.batch || '');
           setBloodGroup(m.bloodGroup || 'O+');
           setGender(m.gender || 'Male');
           setProfession(m.profession || '');
@@ -222,7 +222,7 @@ const UserDashboard = () => {
       const token = localStorage.getItem('accessToken');
       const formData = new FormData();
       formData.append('name', JSON.stringify({ en: nameEn, bn: nameBn }));
-      formData.append('batch', batch);
+      formData.append('batch', pscBatch);
       formData.append('pscBatch', pscBatch);
       formData.append('bloodGroup', bloodGroup);
       formData.append('gender', gender);
@@ -743,11 +743,7 @@ const UserDashboard = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-              <div>
-                <label className="block text-xxs font-bold text-gray-500 uppercase mb-1">SSC/HSC Batch</label>
-                <input type="text" placeholder="e.g. 2016" className="w-full bg-slate-50 border border-gray-300 px-3 py-2 rounded-lg focus:outline-none focus:border-secondary text-sm font-bold" value={batch} onChange={e => setBatch(e.target.value)} required />
-              </div>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div>
                 <label className="block text-xxs font-bold text-gray-500 uppercase mb-1">PSC Batch</label>
                 <input type="text" placeholder="e.g. 2010" className="w-full bg-slate-50 border border-gray-300 px-3 py-2 rounded-lg focus:outline-none focus:border-secondary text-sm font-bold" value={pscBatch} onChange={e => setPscBatch(e.target.value)} required />
