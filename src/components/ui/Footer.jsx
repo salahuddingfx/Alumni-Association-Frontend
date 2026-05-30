@@ -54,7 +54,7 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="bg-dark text-white relative mt-16 pt-12">
+    <footer className="bg-dark text-white relative mt-0 pt-12">
       {/* Animated wave separator placeholder/SVG */}
       <div className="absolute top-0 left-0 right-0 w-full overflow-hidden leading-none transform -translate-y-[98%] pointer-events-none">
         <svg className="relative block w-full h-[60px] md:h-[80px]" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
