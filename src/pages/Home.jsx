@@ -777,11 +777,11 @@ const Home = () => {
               : "Register as an official alumnus today to access your digital ID card, connect with batchmates, and support community initiatives. Get in touch for any inquiries."
             }
           </p>
-          <div className="pt-4 flex flex-col sm:flex-row justify-center items-center gap-4">
-            <Link to="/register" className="bg-secondary hover:bg-yellow-500 text-white font-bold px-8 py-3 rounded-full transition shadow-lg w-full sm:w-auto uppercase tracking-wide text-sm font-english">
+          <div className="pt-4 flex flex-col sm:flex-row justify-center items-center gap-4 sm:gap-6">
+            <Link to="/register" className="bg-secondary hover:bg-yellow-500 text-white font-bold px-10 py-3.5 rounded-full transition shadow-lg w-full sm:w-auto uppercase tracking-wide text-sm font-english">
               {isBn ? "নিবন্ধন করুন" : "Register Now"}
             </Link>
-            <Link to="/contact" className="bg-transparent hover:bg-white/10 text-white border border-white/30 font-bold px-8 py-3 rounded-full transition w-full sm:w-auto uppercase tracking-wide text-sm font-english">
+            <Link to="/contact" className="bg-transparent hover:bg-white/10 text-white border-2 border-white/40 hover:border-white/60 font-bold px-10 py-3.5 rounded-full transition w-full sm:w-auto uppercase tracking-wide text-sm font-english">
               {isBn ? "যোগাযোগ করুন" : "Get In Touch"}
             </Link>
           </div>
