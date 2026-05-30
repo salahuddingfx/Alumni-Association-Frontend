@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Target, Eye, Heart, Users, Award, Globe, Shield, Handshake, BookOpen, Star } from 'lucide-react';
 import api from '../api/api';
+import { CountUp } from '../hooks/useCountUp';
 
 const About = () => {
   const { i18n } = useTranslation();
@@ -61,10 +62,10 @@ const About = () => {
   const displayAdvisors = advisors.length > 0 ? advisors : defaultAdvisors;
 
   const stats = [
-    { numEn: memberCount || '50+', numBn: `${memberCount || '৫০'}+`, labelEn: 'Registered Alumni', labelBn: 'নিবন্ধিত সদস্য', icon: <Users size={22} /> },
-    { numEn: '10+', numBn: '১০+', labelEn: 'Graduation Batches', labelBn: 'গ্র্যাজুয়েশন ব্যাচ', icon: <Award size={22} /> },
-    { numEn: '2025', numBn: '২০২৫', labelEn: 'Established', labelBn: 'প্রতিষ্ঠাকাল', icon: <Star size={22} /> },
-    { numEn: '3+', numBn: '৩+', labelEn: 'Events Organised', labelBn: 'আয়োজিত অনুষ্ঠান', icon: <Globe size={22} /> },
+    { val: memberCount || 50, suffix: '+', labelEn: 'Registered Alumni', labelBn: 'নিবন্ধিত সদস্য', icon: <Users size={22} /> },
+    { val: 10, suffix: '+', labelEn: 'Graduation Batches', labelBn: 'গ্র্যাজুয়েশন ব্যাচ', icon: <Award size={22} /> },
+    { val: 2025, suffix: '', labelEn: 'Established', labelBn: 'প্রতিষ্ঠাকাল', icon: <Star size={22} /> },
+    { val: 3, suffix: '+', labelEn: 'Events Organised', labelBn: 'আয়োজিত অনুষ্ঠান', icon: <Globe size={22} /> },
   ];
 
   const values = [
@@ -118,7 +119,7 @@ const About = () => {
               >
                 <div className="flex justify-center mb-2 text-secondary">{stat.icon}</div>
                 <div className="text-3xl font-extrabold text-white">
-                  {isBn ? stat.numBn : stat.numEn}
+                  <CountUp value={stat.val} suffix={stat.suffix} isBn={isBn} />
                 </div>
                 <div className="text-xs text-white/60 font-bn mt-1">
                   {isBn ? stat.labelBn : stat.labelEn}
