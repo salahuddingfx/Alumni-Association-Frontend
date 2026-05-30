@@ -3,6 +3,8 @@ import { useTranslation } from 'react-i18next';
 import api from '../api/api';
 import { Heart, Landmark, Smartphone, Trophy, UserCheck, ShieldAlert, Download, Award, BarChart3 } from 'lucide-react';
 import { useSettings } from '../context/settings.jsx';
+import { CountUp } from '../hooks/useCountUp';
+import { motion } from 'framer-motion';
 
 const Donation = () => {
   const { i18n } = useTranslation();
@@ -284,7 +286,7 @@ const Donation = () => {
               <div>
                 <span className="block text-xs text-gray-500 font-bold uppercase">{isBn ? 'মোট সংগ্রহ' : 'Raised So Far'}</span>
                 <span className="text-3xl font-extrabold text-secondary">
-                  ৳{currentStats.totalAmount.toLocaleString()} BDT
+                  <CountUp value={currentStats.totalAmount} prefix="৳" suffix=" BDT" isBn={isBn} />
                 </span>
               </div>
 
@@ -292,13 +294,13 @@ const Donation = () => {
                 <div>
                   <span className="block text-xs text-gray-500 font-bold uppercase">{isBn ? 'মোট দাতা' : 'Total Donors'}</span>
                   <span className="text-lg font-extrabold text-primary font-bn">
-                    {currentStats.totalCount} {isBn ? 'জন সদস্য' : 'Members'}
+                    <CountUp value={currentStats.totalCount} suffix={isBn ? ' জন সদস্য' : ' Members'} isBn={isBn} />
                   </span>
                 </div>
                 <div>
                   <span className="block text-xs text-gray-500 font-bold uppercase">{isBn ? 'বাকি লক্ষ্যমাত্রা' : 'Remaining Goal'}</span>
                   <span className="text-lg font-extrabold text-primary">
-                    ৳{remainingAmount.toLocaleString()} BDT
+                    <CountUp value={remainingAmount} prefix="৳" suffix=" BDT" isBn={isBn} />
                   </span>
                 </div>
               </div>
@@ -311,9 +313,12 @@ const Donation = () => {
                 <span>{isBn ? 'লক্ষ্য: ৳১০,০০,০০০' : 'Target: ৳1,000,000'}</span>
               </div>
               <div className="bg-slate-200 h-4 rounded-full overflow-hidden border border-slate-300">
-                <div 
-                  className="bg-secondary h-full rounded-full transition-all duration-1000" 
-                  style={{ width: `${progressPercent}%` }} 
+                <motion.div 
+                  initial={{ width: 0 }}
+                  whileInView={{ width: `${progressPercent}%` }}
+                  transition={{ duration: 1.2, ease: "easeOut" }}
+                  viewport={{ once: true }}
+                  className="bg-secondary h-full rounded-full" 
                 />
               </div>
             </div>
@@ -431,10 +436,18 @@ const Donation = () => {
                 <div key={i} className="space-y-1 text-xs">
                   <div className="flex justify-between font-bold text-gray-700">
                     <span className="font-bn">{bl.batch}</span>
-                    <span className="text-secondary font-mono">৳{bl.amount.toLocaleString()}</span>
+                    <span className="text-secondary font-mono">
+                      <CountUp value={bl.amount} prefix="৳" isBn={isBn} />
+                    </span>
                   </div>
                   <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
-                    <div className="bg-primary h-full rounded-full transition-all duration-500" style={{ width: `${bl.pct}%` }} />
+                    <motion.div 
+                      initial={{ width: 0 }}
+                      whileInView={{ width: `${bl.pct}%` }}
+                      transition={{ duration: 1, ease: "easeOut", delay: i * 0.1 }}
+                      viewport={{ once: true }}
+                      className="bg-primary h-full rounded-full" 
+                    />
                   </div>
                 </div>
               ))}
