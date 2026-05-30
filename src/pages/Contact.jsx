@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Mail, Phone, MapPin, Send } from 'lucide-react';
 import { useSettings } from '../context/settings.jsx';
+import api from '../api/api.js';
 
 const Contact = () => {
   const { i18n } = useTranslation();
@@ -11,15 +12,41 @@ const Contact = () => {
   const [subject, setSubject] = useState('');
   const [message, setMessage] = useState('');
   const [success, setSuccess] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const isBn = i18n.language === 'bn';
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setSuccess(isBn ? 'আপনার বার্তাটি সফলভাবে পাঠানো হয়েছে!' : 'Your message has been successfully sent!');
-    setName('');
-    setEmail('');
-    setSubject('');
-    setMessage('');
+    setLoading(true);
+    setError('');
+    setSuccess('');
+    try {
+      const res = await api.post('/contact', {
+        name,
+        email,
+        subject,
+        message,
+      });
+
+      if (res.data.success) {
+        setSuccess(isBn ? 'আপনার বার্তাটি সফলভাবে পাঠানো হয়েছে!' : 'Your message has been successfully sent!');
+        setName('');
+        setEmail('');
+        setSubject('');
+        setMessage('');
+      } else {
+        setError(res.data.message || (isBn ? 'বার্তা পাঠানো ব্যর্থ হয়েছে।' : 'Failed to send message.'));
+      }
+    } catch (err) {
+      console.error(err);
+      setError(
+        err.response?.data?.message ||
+        (isBn ? 'সার্ভার সংযোগে সমস্যা হয়েছে।' : 'An error occurred while connecting to the server.')
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -44,6 +71,12 @@ const Contact = () => {
           {success && (
             <div className="mb-6 p-4 bg-emerald-50 text-emerald-800 rounded-lg border border-emerald-200 text-sm font-semibold">
               {success}
+            </div>
+          )}
+
+          {error && (
+            <div className="mb-6 p-4 bg-red-50 text-red-800 rounded-lg border border-red-200 text-sm font-semibold">
+              {error}
             </div>
           )}
 
@@ -99,9 +132,10 @@ const Contact = () => {
 
             <button
               type="submit"
-              className="w-full bg-primary hover:bg-primary-dark text-white font-bold py-3 rounded-lg shadow-md transition"
+              disabled={loading}
+              className="w-full bg-primary hover:bg-primary-dark text-white font-bold py-3 rounded-lg shadow-md transition disabled:opacity-50"
             >
-              Send Message
+              {loading ? (isBn ? 'পাঠানো হচ্ছে...' : 'Sending Message...') : (isBn ? 'বার্তা পাঠান' : 'Send Message')}
             </button>
           </form>
         </div>
