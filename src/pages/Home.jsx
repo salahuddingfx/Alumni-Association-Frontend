@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, EffectFade, Pagination, Navigation, Keyboard } from 'swiper/modules';
 import { ArrowRight, Calendar, Users, Megaphone, Trophy, Heart } from 'lucide-react';
