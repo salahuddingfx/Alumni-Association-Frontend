@@ -260,7 +260,7 @@ const Home = () => {
 
   return (
     <div className="overflow-x-hidden font-english">
-      {/* 🖼️ HERO SECTION WITH ANIMATED SLIDER */}
+      {/* HERO SECTION WITH ANIMATED SLIDER */}
       <section className="relative h-[500px] w-full bg-dark">
         <Swiper
           modules={[Autoplay, EffectFade, Pagination, Navigation, Keyboard]}
@@ -399,7 +399,7 @@ const Home = () => {
           </div>
           <div className="absolute -bottom-6 -left-6 bg-white p-6 rounded-xl shadow-lg border border-gray-100 hidden sm:block">
             <span className="block text-3xl font-extrabold text-primary">
-              <AnimatedCounter value={membersCount > 0 ? membersCount : 100} suffix="+" isBn={isBn} />
+              <AnimatedCounter value={membersCount} suffix="+" isBn={isBn} />
             </span>
             <span className="text-sm text-gray-500 font-medium">Active Registered Members</span>
           </div>
@@ -413,7 +413,7 @@ const Home = () => {
           {[
             { 
               icon: <Users size={32} className="text-secondary" />, 
-              counter: <AnimatedCounter value={membersCount > 0 ? membersCount : 100} suffix="+" isBn={isBn} />, 
+              counter: <AnimatedCounter value={membersCount} suffix="+" isBn={isBn} />, 
               label: isBn ? 'মোট সদস্য' : 'Active Members' 
             },
             { 
