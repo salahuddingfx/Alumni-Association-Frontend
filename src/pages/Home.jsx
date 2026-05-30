@@ -282,7 +282,7 @@ const Home = () => {
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8 }}
-                  className="text-4xl sm:text-6xl font-extrabold font-bn leading-tight max-w-4xl"
+                  className="text-3xl sm:text-5xl font-extrabold font-bn leading-tight max-w-4xl"
                 >
                   {isBn ? slide.titleBn : slide.titleEn}
                 </motion.h1>
@@ -360,6 +360,18 @@ const Home = () => {
             </SwiperSlide>
           ))}
         </Swiper>
+
+        {/* Custom Navigation Arrows positioned together at the bottom right */}
+        <div className="absolute bottom-6 right-6 z-20 flex items-center space-x-3">
+          <button className="custom-swiper-prev w-11 h-11 rounded-full border border-white/20 bg-white/10 hover:bg-white/25 hover:scale-105 active:scale-95 text-white flex items-center justify-center transition-all duration-200 shadow-md backdrop-blur-sm cursor-pointer">
+            <span className="sr-only">Previous</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-5 h-5"><path d="M15 19l-7-7 7-7" strokeLinecap="round" strokeLinejoin="round" /></svg>
+          </button>
+          <button className="custom-swiper-next w-11 h-11 rounded-full border border-white/20 bg-white/10 hover:bg-white/25 hover:scale-105 active:scale-95 text-white flex items-center justify-center transition-all duration-200 shadow-md backdrop-blur-sm cursor-pointer">
+            <span className="sr-only">Next</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-5 h-5"><path d="M9 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" /></svg>
+          </button>
+        </div>
       </section>
 
       {/* 📖 ABOUT SECTION */}
