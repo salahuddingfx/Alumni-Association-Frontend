@@ -8,58 +8,20 @@ import { useTranslation } from 'react-i18next';
 import { useSettings } from '../context/settings.jsx';
 import api, { API_URL } from '../api/api';
 import { getImageUrl } from '../utils/image';
+import { CountUp } from '../hooks/useCountUp';
 
-// 60fps high-performance count-up counter component
+// Scroll-triggered count-up counter — wraps shared CountUp hook
 const AnimatedCounter = ({ value, suffix = '', isCurrency = false, isBn = false }) => {
-  const [displayCount, setDisplayCount] = useState(0);
-
-  useEffect(() => {
-    const numericValue = typeof value === 'number' 
-      ? value 
-      : parseInt(String(value).replace(/[^\d]/g, ''), 10);
-
-    if (isNaN(numericValue) || numericValue === 0) {
-      setDisplayCount(0);
-      return;
-    }
-
-    const end = numericValue;
-    const duration = 1500; 
-    const startTime = performance.now();
-
-    const animate = (currentTime) => {
-      const elapsedTime = currentTime - startTime;
-      const progress = Math.min(elapsedTime / duration, 1);
-      const easedProgress = progress * (2 - progress); // Ease out quad
-      const current = Math.floor(easedProgress * end);
-      
-      setDisplayCount(current);
-
-      if (progress < 1) {
-        requestAnimationFrame(animate);
-      } else {
-        setDisplayCount(end);
-      }
-    };
-
-    requestAnimationFrame(animate);
-  }, [value]);
-
-  const toBnNum = (num) => {
-    if (!isBn) return num.toLocaleString();
-    const bnDigits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
-    return num.toString().replace(/\d/g, d => bnDigits[d]);
-  };
-
-  const formattedCount = isCurrency 
-    ? (isBn ? '৳' + toBnNum(displayCount) : '৳' + displayCount.toLocaleString())
-    : toBnNum(displayCount);
-
+  const numericValue = typeof value === 'number' ? value : parseInt(String(value).replace(/[^\d]/g, ''), 10) || 0;
+  const prefix = isCurrency ? '৳' : '';
   return (
-    <span>
-      {formattedCount}
-      {suffix}
-    </span>
+    <CountUp
+      value={numericValue}
+      suffix={suffix}
+      prefix={prefix}
+      isBn={isBn}
+      duration={1800}
+    />
   );
 };
 
