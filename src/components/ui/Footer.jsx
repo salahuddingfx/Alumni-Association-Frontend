@@ -212,57 +212,39 @@ const Footer = () => {
             </div>
             <div className="flex flex-col items-center justify-center relative py-1 border-l border-r border-slate-800/65 px-4">
               <div className="w-full marquee-track mask-gradient">
-                {/* Row 1 */}
-                <div className="animate-marquee items-center py-1" style={{ gap: '12px' }}>
-                  {row1.map((p) => (
-                    <a
-                      key={p._id}
-                      href={p.website || '#'}
-                      target={p.website ? '_blank' : '_self'}
-                      rel="noreferrer"
-                      className="bg-white px-4 py-2 rounded-lg border border-slate-200/10 shadow-sm flex items-center justify-center min-w-[140px] max-w-[200px] h-11 shrink-0 select-none transition-transform duration-300 hover:scale-105 group"
-                    >
-                      <img src={getImageUrl(p.logo)} alt={isBn ? p.name?.bn : p.name?.en} className="max-h-full max-w-full object-contain" />
-                    </a>
-                  ))}
-                  {row1.map((p) => (
-                    <a
-                      key={`dup-1-${p._id}`}
-                      href={p.website || '#'}
-                      target={p.website ? '_blank' : '_self'}
-                      rel="noreferrer"
-                      className="bg-white px-4 py-2 rounded-lg border border-slate-200/10 shadow-sm flex items-center justify-center min-w-[140px] max-w-[200px] h-11 shrink-0 select-none transition-transform duration-300 hover:scale-105 group"
-                    >
-                      <img src={getImageUrl(p.logo)} alt={isBn ? p.name?.bn : p.name?.en} className="max-h-full max-w-full object-contain" />
-                    </a>
-                  ))}
+                {/* Row 1 — forward scroll */}
+                <div className="animate-marquee items-center py-1">
+                  {[...Array(4)].flatMap((_, i) =>
+                    row1.map((p) => (
+                      <a
+                        key={`r1-${i}-${p._id}`}
+                        href={p.website || '#'}
+                        target={p.website ? '_blank' : '_self'}
+                        rel="noreferrer"
+                        className="bg-white px-4 py-2 rounded-lg border border-slate-200/10 shadow-sm flex items-center justify-center min-w-[140px] max-w-[200px] h-11 shrink-0 select-none transition-transform duration-300 hover:scale-105"
+                      >
+                        <img src={getImageUrl(p.logo)} alt={isBn ? p.name?.bn : p.name?.en} className="max-h-full max-w-full object-contain" />
+                      </a>
+                    ))
+                  )}
                 </div>
 
-                {/* Row 2 */}
+                {/* Row 2 — reverse scroll */}
                 {row2.length > 0 && (
-                  <div className="animate-marquee-reverse items-center py-1 mt-1" style={{ gap: '12px' }}>
-                    {row2.map((p) => (
-                      <a
-                        key={p._id}
-                        href={p.website || '#'}
-                        target={p.website ? '_blank' : '_self'}
-                        rel="noreferrer"
-                        className="bg-white px-4 py-2 rounded-lg border border-slate-200/10 shadow-sm flex items-center justify-center min-w-[140px] max-w-[200px] h-11 shrink-0 select-none transition-transform duration-300 hover:scale-105 group"
-                      >
-                        <img src={getImageUrl(p.logo)} alt={isBn ? p.name?.bn : p.name?.en} className="max-h-full max-w-full object-contain" />
-                      </a>
-                    ))}
-                    {row2.map((p) => (
-                      <a
-                        key={`dup-2-${p._id}`}
-                        href={p.website || '#'}
-                        target={p.website ? '_blank' : '_self'}
-                        rel="noreferrer"
-                        className="bg-white px-4 py-2 rounded-lg border border-slate-200/10 shadow-sm flex items-center justify-center min-w-[140px] max-w-[200px] h-11 shrink-0 select-none transition-transform duration-300 hover:scale-105 group"
-                      >
-                        <img src={getImageUrl(p.logo)} alt={isBn ? p.name?.bn : p.name?.en} className="max-h-full max-w-full object-contain" />
-                      </a>
-                    ))}
+                  <div className="animate-marquee-reverse items-center py-1 mt-1">
+                    {[...Array(4)].flatMap((_, i) =>
+                      row2.map((p) => (
+                        <a
+                          key={`r2-${i}-${p._id}`}
+                          href={p.website || '#'}
+                          target={p.website ? '_blank' : '_self'}
+                          rel="noreferrer"
+                          className="bg-white px-4 py-2 rounded-lg border border-slate-200/10 shadow-sm flex items-center justify-center min-w-[140px] max-w-[200px] h-11 shrink-0 select-none transition-transform duration-300 hover:scale-105"
+                        >
+                          <img src={getImageUrl(p.logo)} alt={isBn ? p.name?.bn : p.name?.en} className="max-h-full max-w-full object-contain" />
+                        </a>
+                      ))
+                    )}
                   </div>
                 )}
               </div>
