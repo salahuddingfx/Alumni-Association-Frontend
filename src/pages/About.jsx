@@ -62,7 +62,7 @@ const About = () => {
   const displayAdvisors = advisors.length > 0 ? advisors : defaultAdvisors;
 
   const stats = [
-    { val: memberCount || 50, suffix: '+', labelEn: 'Registered Alumni', labelBn: 'নিবন্ধিত সদস্য', icon: <Users size={22} /> },
+    { val: memberCount, suffix: '+', labelEn: 'Registered Alumni', labelBn: 'নিবন্ধিত সদস্য', icon: <Users size={22} /> },
     { val: 10, suffix: '+', labelEn: 'Graduation Batches', labelBn: 'গ্র্যাজুয়েশন ব্যাচ', icon: <Award size={22} /> },
     { val: 2025, suffix: '', labelEn: 'Established', labelBn: 'প্রতিষ্ঠাকাল', icon: <Star size={22} /> },
     { val: 3, suffix: '+', labelEn: 'Events Organised', labelBn: 'আয়োজিত অনুষ্ঠান', icon: <Globe size={22} /> },
