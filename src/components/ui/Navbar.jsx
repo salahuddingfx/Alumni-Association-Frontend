@@ -38,6 +38,9 @@ const Navbar = () => {
     { path: '/committee', labelKey: 'committee' },
     { path: '/notices', labelKey: 'notices' },
     { path: '/blog', labelKey: 'blog' },
+    { path: '/partners', labelKey: 'partners' },
+    { path: '/gallery', labelKey: 'gallery' },
+    { path: '/donation', labelKey: 'donation' },
   ];
 
   const allNavItems = [...primaryNavItems, ...secondaryNavItems];
