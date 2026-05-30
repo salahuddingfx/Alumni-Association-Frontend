@@ -261,13 +261,16 @@ const Home = () => {
   return (
     <div className="overflow-x-hidden font-english">
       {/* 🖼️ HERO SECTION WITH ANIMATED SLIDER */}
-      <section className="relative h-screen min-h-[600px] w-full bg-dark">
+      <section className="relative h-[500px] w-full bg-dark">
         <Swiper
           modules={[Autoplay, EffectFade, Pagination, Navigation, Keyboard]}
           effect={'fade'}
           autoplay={{ delay: 6000, disableOnInteraction: false }}
           pagination={{ clickable: true }}
-          navigation={true}
+          navigation={{
+            prevEl: '.custom-swiper-prev',
+            nextEl: '.custom-swiper-next',
+          }}
           keyboard={{ enabled: true }}
           className="h-full w-full"
         >
