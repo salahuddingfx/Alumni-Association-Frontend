@@ -701,7 +701,7 @@ const Home = () => {
 
           {partners.length > 0 ? (
             <div className="w-full marquee-track mask-gradient py-4">
-              <div className="animate-marquee items-center space-x-8" style={{ gap: '2rem' }}>
+              <div className="animate-marquee items-center">
                 {/* Original items */}
                 {partners.map((partner) => (
                   <a
