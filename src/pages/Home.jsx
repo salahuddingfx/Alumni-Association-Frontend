@@ -292,34 +292,52 @@ const Home = () => {
                   {isBn ? slide.subtitleBn : slide.subtitleEn}
                 </motion.p>
 
-                {/* Countdown Board */}
-                {slide.hasCountdown && (
-                  <div className="mt-8 grid grid-cols-4 gap-4 max-w-lg">
-                    {[
-                      { label: isBn ? 'দিন' : 'Days', val: countdown.days },
-                      { label: isBn ? 'ঘণ্টা' : 'Hours', val: countdown.hours },
-                      { label: isBn ? 'মিনিট' : 'Mins', val: countdown.minutes },
-                      { label: isBn ? 'সেকেন্ড' : 'Secs', val: countdown.seconds },
-                    ].map((item, i) => (
-                      <div key={i} className="bg-white/10 backdrop-blur-md rounded-lg p-3 sm:p-5 border border-white/20">
-                        <span className="block text-2xl sm:text-4xl font-bold text-secondary">{toBnNum(item.val)}</span>
-                        <span className="text-xs uppercase text-gray-300 font-medium">{item.label}</span>
-                      </div>
-                    ))}
-                  </div>
-                )}
-
-                {/* Donation Progress */}
-                {slide.hasDonation && (
-                  <div className="mt-6 max-w-md w-full">
-                    <div className="bg-white/20 rounded-full h-4 overflow-hidden border border-white/10">
-                      <div className="bg-secondary h-full rounded-full transition-all duration-1000" style={{ width: `${progressPercent}%` }} />
-                    </div>
-                    <span className="text-sm mt-2 block text-gray-300 font-bn">
-                      {toBnNum(progressPercent.toFixed(1))}% {isBn ? 'লক্ষ্যমাত্রা' : 'of Target'} ৳{toBnNum(targetAmount)} {isBn ? 'টাকা সংগৃহীত হয়েছে' : 'BDT Raised'}
-                    </span>
-                  </div>
-                )}
+                 {/* Countdown Board */}
+                 {slide.hasCountdown && (
+                   <div className="mt-8 grid grid-cols-4 gap-4 max-w-lg">
+                     {[
+                       { label: isBn ? 'দিন' : 'Days', val: countdown.days },
+                       { label: isBn ? 'ঘণ্টা' : 'Hours', val: countdown.hours },
+                       { label: isBn ? 'মিনিট' : 'Mins', val: countdown.minutes },
+                       { label: isBn ? 'সেকেন্ড' : 'Secs', val: countdown.seconds },
+                     ].map((item, i) => (
+                       <div key={i} className="bg-white/10 backdrop-blur-md rounded-lg p-3 sm:p-5 border border-white/20 overflow-hidden flex flex-col items-center justify-center min-w-[70px] sm:min-w-[90px]">
+                         <span className="block text-2xl sm:text-4xl font-bold text-secondary h-8 sm:h-10 overflow-hidden relative w-full text-center">
+                           <AnimatePresence mode="popLayout">
+                             <motion.span
+                               key={item.val}
+                               initial={{ y: 15, opacity: 0 }}
+                               animate={{ y: 0, opacity: 1 }}
+                               exit={{ y: -15, opacity: 0 }}
+                               transition={{ duration: 0.25 }}
+                               className="absolute inset-0 flex items-center justify-center"
+                             >
+                               {toBnNum(item.val)}
+                             </motion.span>
+                           </AnimatePresence>
+                         </span>
+                         <span className="text-xs uppercase text-gray-300 font-medium mt-1">{item.label}</span>
+                       </div>
+                     ))}
+                   </div>
+                 )}
+ 
+                 {/* Donation Progress */}
+                 {slide.hasDonation && (
+                   <div className="mt-6 max-w-md w-full">
+                     <div className="bg-white/20 rounded-full h-4 overflow-hidden border border-white/10">
+                       <motion.div 
+                         initial={{ width: 0 }}
+                         animate={{ width: `${progressPercent}%` }}
+                         transition={{ duration: 1.2, ease: "easeOut" }}
+                         className="bg-secondary h-full rounded-full" 
+                       />
+                     </div>
+                     <span className="text-sm mt-2 block text-gray-300 font-bn">
+                       {toBnNum(progressPercent.toFixed(1))}% {isBn ? 'লক্ষ্যমাত্রা' : 'of Target'} ৳{toBnNum(targetAmount)} {isBn ? 'টাকা সংগৃহীত হয়েছে' : 'BDT Raised'}
+                     </span>
+                   </div>
+                 )}
 
                 {slide.btnLink && (
                   <motion.div
