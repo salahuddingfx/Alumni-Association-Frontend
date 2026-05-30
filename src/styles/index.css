@@ -200,24 +200,27 @@ html {
   display: flex;
   flex-wrap: nowrap;
   width: max-content;
+  gap: 14px;
   will-change: transform;
-  animation: marquee 35s linear infinite;
+  animation: marquee 30s linear infinite;
 }
 
 .animate-marquee-fast {
   display: flex;
   flex-wrap: nowrap;
   width: max-content;
+  gap: 14px;
   will-change: transform;
-  animation: marquee 20s linear infinite;
+  animation: marquee 18s linear infinite;
 }
 
 .animate-marquee-reverse {
   display: flex;
   flex-wrap: nowrap;
   width: max-content;
+  gap: 14px;
   will-change: transform;
-  animation: marquee-reverse 35s linear infinite;
+  animation: marquee-reverse 30s linear infinite;
 }
 
 /* Pause on hover */
