@@ -1,11 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
 
-/**
- * useCountUp — fires count-up animation only when the ref element enters the viewport.
- * @param {number} target  - the end value
- * @param {number} duration - animation duration in ms (default 1800)
- * @param {boolean} once   - only animate once (default true)
- */
 export const useCountUp = (target, duration = 1800, once = true) => {
   const [count, setCount] = useState(0);
   const [hasAnimated, setHasAnimated] = useState(false);
@@ -27,7 +21,6 @@ export const useCountUp = (target, duration = 1800, once = true) => {
           const tick = (now) => {
             const elapsed = now - startTime;
             const progress = Math.min(elapsed / duration, 1);
-            // Ease-out cubic
             const eased = 1 - Math.pow(1 - progress, 3);
             setCount(Math.floor(eased * numTarget));
             if (progress < 1) requestAnimationFrame(tick);
@@ -47,10 +40,6 @@ export const useCountUp = (target, duration = 1800, once = true) => {
   return { count, ref };
 };
 
-/**
- * useProgressBar — fires a CSS width animation only when the ref element enters the viewport.
- * Returns { progress (0→target), ref }
- */
 export const useProgressBar = (target, duration = 1200, once = true) => {
   const [progress, setProgress] = useState(0);
   const [hasAnimated, setHasAnimated] = useState(false);
@@ -88,10 +77,6 @@ export const useProgressBar = (target, duration = 1200, once = true) => {
   return { progress, ref };
 };
 
-/**
- * CountUp component — drop-in replacement for static numbers.
- * Wraps useCountUp internally.
- */
 export const CountUp = ({
   value,
   suffix = '',
